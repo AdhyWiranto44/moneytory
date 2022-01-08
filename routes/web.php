@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index']);
+Route::get('/registration/company', [RegistrationController::class, 'registerCompany']);
+Route::get('/registration/user', [RegistrationController::class, 'registerUser']);
