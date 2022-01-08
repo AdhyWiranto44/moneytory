@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             StatusesSeeder::class,
             UnitsSeeder::class,
+            UsersSeeder::class
         ]);
     }
 }
