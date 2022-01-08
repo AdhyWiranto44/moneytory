@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
@@ -13,6 +14,10 @@ class RegistrationController extends Controller
 
     public function registerUser()
     {
-        return view('user_registration');
+        $roles = Role::all();
+        $data = [
+            'roles' => $roles
+        ];
+        return view('user_registration', $data);
     }
 }

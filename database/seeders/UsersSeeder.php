@@ -28,18 +28,6 @@ class UsersSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'role_id' => 2,
-                'username' => 'staff 1',
-                'password' => Hash::make('12345', ['rounds' => 10]),
-                'name' => 'Minatozaki Sana',
-                'phone_number' => '088976685447',
-                'email' => null,
-                'address' => null,
-                'image' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
         ])->each(function($user) {
             DB::table('users')->insert($user);
         });
