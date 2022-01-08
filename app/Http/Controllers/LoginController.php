@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,11 @@ class LoginController extends Controller
 {
     public function index(Request $request)
     {
+        $companyProfile = CompanyProfile::first();
+        if ($companyProfile == null) {
+            return redirect('/registration/company');
+        }
+
         if ($request->session()->get('username')) {
             return redirect('/');
         }

@@ -27,8 +27,8 @@
                     <input class="form-control" type="file" id="image" name="image">
                 </div>
                 <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase">register</button>
-                <p class="mt-4 text-center small">Already have an account? <a href="/login">Login</a></p>
             </form>
         </div>
     </div>
 </div>
+@endsection
