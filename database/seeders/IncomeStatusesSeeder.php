@@ -17,9 +17,13 @@ class IncomeStatusesSeeder extends Seeder
         collect([
             [
               'name' => 'Belum Lunas',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
             [
               'name' => 'Lunas',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
           ])->each(function($incomeStatus) {
               DB::table('income_statuses')->insert($incomeStatus);

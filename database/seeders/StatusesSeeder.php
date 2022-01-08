@@ -17,9 +17,13 @@ class StatusesSeeder extends Seeder
         collect([
             [
               'name' => 'Nonaktif',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
             [
               'name' => 'Aktif',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
           ])->each(function($status) {
               DB::table('statuses')->insert($status);

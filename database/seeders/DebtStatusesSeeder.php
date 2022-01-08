@@ -17,9 +17,13 @@ class DebtStatusesSeeder extends Seeder
         collect([
             [
               'name' => 'Berhutang',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
             [
               'name' => 'Lunas',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
           ])->each(function($debt_status) {
               DB::table('debt_statuses')->insert($debt_status);

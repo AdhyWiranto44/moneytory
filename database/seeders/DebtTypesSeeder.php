@@ -17,9 +17,13 @@ class DebtTypesSeeder extends Seeder
         collect([
             [
               'name' => 'Terhutang',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
             [
               'name' => 'Penghutang',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
           ])->each(function($debt_type) {
               DB::table('debt_types')->insert($debt_type);

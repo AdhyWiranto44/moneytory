@@ -17,9 +17,13 @@ class RolesSeeder extends Seeder
         collect([
             [
               'name' => 'Administrator',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
             [
               'name' => 'Staff',
+              'created_at' => now(),
+              'updated_at' => now()
             ],
           ])->each(function($role) {
               DB::table('roles')->insert($role);
