@@ -12,7 +12,7 @@ class UserRegistrationController extends Controller
     {
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
-            return redirect('/registration/company');
+            return redirect('/welcome');
         }
         
         $roles = Role::all();

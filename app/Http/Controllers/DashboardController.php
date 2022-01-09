@@ -18,7 +18,7 @@ class DashboardController extends Controller
          */
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
-            return view('welcome');
+            return redirect('/welcome');
         }
 
         /**

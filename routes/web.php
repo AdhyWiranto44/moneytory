@@ -5,12 +5,18 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\UserRegistrationController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Dashboard Controller
  */
 Route::get('/', [DashboardController::class, 'index']);
+
+/**
+ * Welcome Controller
+ */
+Route::get('/welcome', [WelcomeController::class, 'index']);
 
 /**
  * Login Controller
