@@ -98,3 +98,13 @@ h1, h2, h3, h4, h5, h6 {
 .btn-outline-salmon:hover {
     color: #FFFFFF;
 }
+
+@keyframes toLeftAlert {
+    from { right: -1000px; }
+    to { right: 0px; }
+}
+
+.alert {
+    animation-name: toLeftAlert;
+    animation-duration: 1s;
+}
