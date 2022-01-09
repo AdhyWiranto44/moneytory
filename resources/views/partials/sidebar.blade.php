@@ -11,7 +11,7 @@
         <li class="sidebar-menu-section mt-3">
             <ul>
                 <li class="rounded-start menu-active">
-                    <a class="d-flex align-items-between" href="/dashboard.html" title="Dashboard">
+                    <a class="d-flex align-items-between" href="/" title="Dashboard">
                         <i class="bi bi-speedometer2 me-3 h4"></i>
                         <p class="mb-0">Dashboard</p>
                     </a>

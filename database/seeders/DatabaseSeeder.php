@@ -19,8 +19,7 @@ class DatabaseSeeder extends Seeder
             IncomeStatusesSeeder::class,
             RolesSeeder::class,
             StatusesSeeder::class,
-            UnitsSeeder::class,
-            UsersSeeder::class
+            UnitsSeeder::class
         ]);
     }
 }

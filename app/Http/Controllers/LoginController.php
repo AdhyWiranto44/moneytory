@@ -13,7 +13,7 @@ class LoginController extends Controller
     {
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
-            return redirect('/registration/company');
+            return redirect('/welcome');
         }
 
         if ($request->session()->get('username')) {
@@ -39,12 +39,12 @@ class LoginController extends Controller
         $userData = User::firstWhere('username', $username);
 
         if (!$userData) {
-            return redirect(url()->previous())->with('error', 'User tidak ditemukan!');
+            return redirect(url()->previous())->with('error', 'Username / password salah!');
         }
 
         if ($username == $userData['username'] && Hash::check($password, $userData['password'])) {
             $request->session()->put('username', $username);
-            return redirect('/');
+            return redirect('/')->with('success', 'Login berhasil!');
         } else {
             return redirect('/login')->with('error', 'Username / password salah!');
         }

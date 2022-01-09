@@ -10,11 +10,20 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        /** 
+         * Halaman sambutan untuk registrasi perusahaan
+         * Akan tampil secara otomatis
+         * Saat membuka root route
+         * Dan belum ada data profil perusahaan di database
+         */
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
-            return view('welcome');
+            return redirect('/welcome');
         }
 
+        /**
+         * Redirect ke halaman login jika belum login
+         */
         if (!$request->session()->get('username')) {
             return redirect('/login');
         }
