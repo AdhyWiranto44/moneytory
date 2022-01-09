@@ -29,9 +29,10 @@ class DashboardController extends Controller
         }
 
         $company = CompanyProfile::first();
-        $username = User::firstWhere('username', $request->session()->get('username'))->username;
+        $user = User::firstWhere('username', $request->session()->get('username'));
         $data = [
-            'username' => $username,
+            'username' => $user->username,
+            'userImage' => $user->image,
             'companyName' => $company->name,
             'companyLogo' => $company->image,
         ];
