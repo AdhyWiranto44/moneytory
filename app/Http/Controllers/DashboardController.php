@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
-            return redirect('/registration/company');
+            return view('welcome');
         }
 
         if (!$request->session()->get('username')) {

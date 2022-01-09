@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container-fluid mt-5">
+<div class="container-fluid my-5">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 d-flex align-items-center justify-content-center">
             <form action="/user_registration" method="POST" enctype="multipart/form-data" class="login-form">

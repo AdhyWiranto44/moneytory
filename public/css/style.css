@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 8px 16px 48px rgba(138, 138, 138, 0.15) !important;
 }
 
-.btn, .form-control, .form-select, .card, .input-group-text {
+.btn, .form-control, .form-select, .card, .input-group-text, .welcome-card {
     border-radius: 8px;
 }
 
