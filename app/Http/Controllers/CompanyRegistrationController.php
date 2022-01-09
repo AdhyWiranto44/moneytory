@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyProfile;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,28 +38,32 @@ class CompanyRegistrationController extends Controller
             ]
         );
         
-        $formInput = [
-            'name' => $request->input('name'),
-            'phone_number' => $request->input('phone_number'),
-            'email' => $request->input('email'),
-            'address' => $request->input('address')
-        ];
-
-        // Kalau ada gambar yang di-upload
-        if ($request->image) {
-            $imgName = strtotime('now') . '-' . $request->image->getClientOriginalName();
-            $formInput['image'] = $imgName;
-            $request->image->storeAs('./public/img', $imgName);
+        try {
+            $formInput = [
+                'name' => $request->input('name'),
+                'phone_number' => $request->input('phone_number'),
+                'email' => $request->input('email'),
+                'address' => $request->input('address')
+            ];
+    
+            // Kalau ada gambar yang di-upload
+            if ($request->image) {
+                $imgName = strtotime('now') . '-' . $request->image->getClientOriginalName();
+                $formInput['image'] = $imgName;
+                $request->image->storeAs('./public/img', $imgName);
+            }
+    
+            // Simpan data perusahaan
+            $companyProfile = CompanyProfile::create($formInput);
+            $companyProfile->save();
+    
+            // Mendaftarkan user admin default
+            $this->registerDefaultUser();
+    
+            return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
+        } catch (QueryException $ex) {
+            return redirect('/registration/company');
         }
-
-        // Simpan data perusahaan
-        $companyProfile = CompanyProfile::create($formInput);
-        $companyProfile->save();
-
-        // Mendaftarkan user admin default
-        $this->registerDefaultUser();
-
-        return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
     }
 
     private function registerDefaultUser()
