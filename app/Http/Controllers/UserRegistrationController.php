@@ -6,14 +6,9 @@ use App\Models\CompanyProfile;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class RegistrationController extends Controller
+class UserRegistrationController extends Controller
 {
-    public function registerCompany()
-    {
-        return view('company_registration');
-    }
-
-    public function registerUser()
+    public function index()
     {
         $companyProfile = CompanyProfile::first();
         if ($companyProfile == null) {
