@@ -44,7 +44,7 @@ class LoginController extends Controller
 
         if ($username == $userData['username'] && Hash::check($password, $userData['password'])) {
             $request->session()->put('username', $username);
-            return redirect('/');
+            return redirect('/')->with('success', 'Login berhasil!');
         } else {
             return redirect('/login')->with('error', 'Username / password salah!');
         }

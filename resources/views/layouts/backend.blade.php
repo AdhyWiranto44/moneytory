@@ -22,6 +22,7 @@
         @include('../partials/sidebar')
         <div id="navbar" class="marginLeft">
             @include('../partials/navbar')
+            @include('partials.alert')
             @yield('content')
         </div>
 
