@@ -15,6 +15,11 @@
         <!-- Bootstrap 5 Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
+        {{-- Datatables.net CDN --}}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+
         <title>MoneyTory | {{ $title }}</title>
     </head>
     <body>
@@ -47,6 +52,11 @@
                     console.log(e);
                 });
         </script>
+        <script>
+            $(document).ready( function () {
+              $('#example').DataTable();
+            });
+          </script>
 
         <!-- Option 2: Separate Popper and Bootstrap JS -->
         <!--

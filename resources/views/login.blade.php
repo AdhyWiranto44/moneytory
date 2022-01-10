@@ -6,7 +6,10 @@
         <div class="col-lg-6 login d-flex align-items-center justify-content-center">
             <form action="/login" method="POST" class="login-form">
                 @csrf
-                <h2 class="text-center fw-bold text-uppercase mb-3">login</h1>
+                <div class="text-center text-uppercase" style="letter-spacing: 3px;">
+                    @include('partials.title')
+                </div>
+                {{-- <h2 class="text-center fw-bold text-uppercase mb-3">login</h1> --}}
                 <div class="mb-3">
                     <label for="username" class="form-label small mb-1">username</label>
                     <input type="text" class="form-control p-3 @error('username') is-invalid @enderror" id="username" name="username" required autofocus>
@@ -26,7 +29,6 @@
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase">login</button>
-                <p class="mt-4 text-center small">Don’t have an account? <a href="/registration/user">Register</a></p>
             </form>
         </div>
         <div class="col-lg-6 d-none d-lg-block p-0 overflow-hidden">
