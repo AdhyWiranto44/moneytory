@@ -19,7 +19,11 @@ class LoginController extends Controller
         if ($request->session()->get('username')) {
             return redirect('/');
         }
-        return view('login');
+
+        $data = [
+            'title' => 'Login'
+        ];
+        return view('login', $data);
     }
 
     public function login(Request $request)

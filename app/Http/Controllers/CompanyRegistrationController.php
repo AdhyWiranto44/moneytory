@@ -17,7 +17,10 @@ class CompanyRegistrationController extends Controller
             return redirect('/login');
         }
         
-        return view('company_registration');
+        $data = [
+            'title' => 'Company Registration'
+        ];
+        return view('company_registration', $data);
     }
 
     public function store(Request $request)

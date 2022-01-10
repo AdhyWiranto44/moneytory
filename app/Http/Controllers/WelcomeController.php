@@ -13,6 +13,10 @@ class WelcomeController extends Controller
         if ($companyProfile != null) {
             return redirect('/login');
         }
-        return view('welcome');
+
+        $data = [
+            'title' => 'Welcome Page'
+        ];
+        return view('welcome', $data);
     }
 }

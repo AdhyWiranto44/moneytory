@@ -17,6 +17,7 @@ class UserRegistrationController extends Controller
         
         $roles = Role::all();
         $data = [
+            'title' => 'User Registration',
             'roles' => $roles
         ];
         return view('user_registration', $data);
