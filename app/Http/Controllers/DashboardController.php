@@ -46,8 +46,8 @@ class DashboardController extends Controller
         $debts = $this->getDebt($dateMin, $dateMax);
         
 
-        $company = CompanyProfile::first();
-        $user = User::firstWhere('username', $request->session()->get('username'));
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
         $data = [
             'title' => 'Dashboard',
             'username' => $user->username,

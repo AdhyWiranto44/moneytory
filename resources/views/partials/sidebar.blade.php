@@ -10,60 +10,60 @@
     <ul class="sidebar-menu-container">
         <li class="sidebar-menu-section mt-3">
             <ul>
-                <li class="rounded-start menu-active">
+                <li class="rounded-start @if($title == 'Dashboard') menu-active @endif">
                     <a class="d-flex align-items-between" href="/" title="Dashboard">
                         <i class="bi bi-speedometer2 me-3 h4"></i>
                         <p class="mb-0">Dashboard</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Bahan Mentah') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Bahan Mentah">
                         <i class="bi bi-cart4 me-3 h4"></i>
                         <p class="mb-0">Bahan Mentah</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Bahan Dalam Proses') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Bahan Dalam Proses">
                         <i class="bi bi-cpu me-3 h4"></i>
                         <p class="mb-0">Bahan Dalam Proses</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Barang Jadi') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Barang Jadi">
                         <i class="bi bi-bag-check me-3 h4"></i>
                         <p class="mb-0">Barang Jadi</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Pemasukan') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Pemasukan">
                         <i class="bi bi-arrow-down-circle me-3 h4"></i>
                         <p class="mb-0">Pemasukan</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Pengeluaran') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Pengeluaran">
                         <i class="bi bi-arrow-up-circle me-3 h4"></i>
                         <p class="mb-0">Pengeluaran</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Hutang') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Hutang">
                         <i class="bi bi-emoji-dizzy me-3 h4"></i>
                         <p class="mb-0">Hutang</p>
                     </a>
                 </li>
-                <li class="rounded-start">
+                <li class="rounded-start @if($title == 'Pengguna') menu-active @endif">
+                    <a class="d-flex align-items-between" href="/users" title="Pengguna">
+                        <i class="bi bi-people me-3 h4"></i>
+                        <p class="mb-0">Pengguna</p>
+                    </a>
+                </li>
+                <li class="rounded-start @if($title == 'Pengaturan') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Pengaturan">
                         <i class="bi bi-gear me-3 h4"></i>
                         <p class="mb-0">Pengaturan</p>
                     </a>
                 </li>
-                {{-- <li class="rounded-start">
-                    <a class="d-flex align-items-between" href="#" title="Logout">
-                        <i class="bi bi-box-arrow-right me-3 h4"></i>
-                        <p class="mb-0">Logout</p>
-                    </a>
-                </li> --}}
             </ul>
         </li>
     </ul>

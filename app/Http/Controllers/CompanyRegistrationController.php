@@ -61,18 +61,9 @@ class CompanyRegistrationController extends Controller
             $companyProfile->save();
     
             // Mendaftarkan user admin default
-            $this->registerDefaultUser();
-    
-            return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
-        } catch (QueryException $ex) {
-            return redirect('/registration/company');
-        }
-    }
-
-    private function registerDefaultUser()
-    {
-        $user = User::create([
-            'role_id' => 1,
+            $user = User::create([
+                'role_id' => 1,
+                'status_id' => 2,
                 'username' => 'admin',
                 'password' => Hash::make('12345', ['rounds' => 10]),
                 'name' => 'Administrator',
@@ -82,7 +73,12 @@ class CompanyRegistrationController extends Controller
                 'image' => null,
                 'created_at' => now(),
                 'updated_at' => now()
-        ]);
-        $user->save();
+            ]);
+            $user->save();
+    
+            return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
+        } catch (QueryException $ex) {
+            return redirect('/registration/company');
+        }
     }
 }

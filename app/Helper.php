@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Models\CompanyProfile;
+use App\Models\User;
+use Illuminate\Http\Request;
+
 class Helper
 {
     public static function getCurrentDate()
@@ -14,5 +18,17 @@ class Helper
         }
 
         return [$dateMin, $dateMax];
+    }
+
+    public static function getUserLogin(Request $request)
+    {
+        $user = User::firstWhere('username', $request->session()->get('username'));
+        return $user;
+    }
+
+    public static function getCompanyProfile()
+    {
+        $company = CompanyProfile::first();
+        return $company;
     }
 }
