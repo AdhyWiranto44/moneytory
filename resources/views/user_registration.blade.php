@@ -12,12 +12,12 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <form action="/registration/user" method="POST" class="login-form">
+                <form action="/users/register" method="POST" class="login-form" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="full_name" class="form-label small mb-1 text-capitalize">nama lengkap</label>
-                        <input type="text" class="form-control p-3 @error('full_name') is-invalid @enderror" id="full_name" name="full_name" value="{{ old('full_name') }}">
-                        @error('full_name')
+                        <label for="name" class="form-label small mb-1 text-capitalize">nama lengkap</label>
+                        <input type="text" class="form-control p-3 @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}">
+                        @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>    
@@ -27,6 +27,24 @@
                         <label for="phone_number" class="form-label small mb-1 text-capitalize">no. telepon</label>
                         <input type="text" class="form-control p-3 @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number') }}">
                         @error('phone_number')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>    
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label small mb-1 text-capitalize">email</label>
+                        <input type="email" class="form-control p-3 @error('email') is-invalid @enderror" id="email" name="email">
+                        @error('email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>    
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label small mb-1 text-capitalize">address</label>
+                        <input type="text" class="form-control p-3 @error('address') is-invalid @enderror" id="address" name="address">
+                        @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>    
@@ -68,6 +86,15 @@
                             @endforeach
                         </select>
                         @error('role')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>    
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label small mb-1 text-capitalize">photo</label>
+                        <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
+                        @error('image')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>    
