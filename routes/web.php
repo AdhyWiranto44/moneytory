@@ -37,12 +37,14 @@ Route::get('/registration/company', [CompanyRegistrationController::class, 'inde
 Route::post('/registration/company', [CompanyRegistrationController::class, 'store']);
 
 /**
- * User Registration Controller
- */
-Route::get('/registration/user', [UserRegistrationController::class, 'index']);
-Route::post('/registration/user', [UserRegistrationController::class, 'store']);
-
-/**
  * User Controller
  */
 Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/register', [UserController::class, 'create']);
+Route::post('/users/register', [UserController::class, 'store']);
+Route::patch('/users/deactivate/{username}', [UserController::class, 'deactivate']);
+Route::patch('/users/activate/{username}', [UserController::class, 'activate']);
+Route::delete('/users/{username}/delete', [UserController::class, 'destroy']);
+Route::get('/users/{username}/edit', [UserController::class, 'edit']);
+Route::patch('/users/{username}/edit', [UserController::class, 'update']);
+Route::patch('/users/{username}/update-password', [UserController::class, 'updatePassword']);

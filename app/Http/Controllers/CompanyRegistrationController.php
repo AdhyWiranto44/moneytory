@@ -51,7 +51,7 @@ class CompanyRegistrationController extends Controller
     
             // Kalau ada gambar yang di-upload
             if ($request->image) {
-                $imgName = strtotime('now') . '-' . $request->image->getClientOriginalName();
+                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', ' ', $request->image->getClientOriginalName());
                 $formInput['image'] = $imgName;
                 $request->image->storeAs('./public/img', $imgName);
             }
