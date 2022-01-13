@@ -44,9 +44,16 @@ class LoginController extends Controller
 
         if (!$userData) {
             return redirect(url()->previous())->with('error', 'Username / password salah!');
+        } 
+        
+        if($userData->status_id == 1) {
+            return redirect('/login')->with('error', 'Akun tersebut tidak aktif!');
         }
-
-        if ($username == $userData['username'] && Hash::check($password, $userData['password'])) {
+        
+        if (
+            $username == $userData['username'] 
+            && Hash::check($password, $userData['password'])
+        ) {
             $request->session()->put('username', $username);
             return redirect('/')->with('success', 'Login berhasil!');
         } else {
