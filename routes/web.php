@@ -43,7 +43,7 @@ Route::post('/registration/company', [CompanyRegistrationController::class, 'sto
 /**
  * User Controller
  */
-Route::get('/users', [UserController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/users', [UserController::class, 'index'])->middleware(IsAdmin::class);
 Route::get('/users/register', [UserController::class, 'create'])->middleware(IsAdmin::class);
 Route::post('/users/register', [UserController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/users/deactivate/{username}', [UserController::class, 'deactivate'])->middleware(IsAdmin::class);
@@ -52,6 +52,9 @@ Route::delete('/users/{username}/delete', [UserController::class, 'destroy'])->m
 Route::get('/users/{username}/edit', [UserController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/users/{username}/edit', [UserController::class, 'update'])->middleware(IsAdmin::class);
 Route::patch('/users/{username}/update-password', [UserController::class, 'updatePassword'])->middleware(IsAdmin::class);
+Route::get('/settings/user-profile/{username}', [UserController::class, 'editProfile'])->middleware(IsLoggedIn::class);
+Route::patch('/settings/user-profile/{username}', [UserController::class, 'updateProfile'])->middleware(IsLoggedIn::class);
+Route::patch('/settings/user-profile/{username}/update-password', [UserController::class, 'updateProfilePassword'])->middleware(IsLoggedIn::class);
 
 /**
  * SettingController

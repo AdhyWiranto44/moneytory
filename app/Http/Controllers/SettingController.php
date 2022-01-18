@@ -14,7 +14,12 @@ class SettingController extends Controller
         $data = [
             'title' => 'Pengaturan',
             'username' => $user->username,
+            'userFullName' => $user->name,
+            'userPhoneNumber' => $user->phone_number,
+            'userEmail' => $user->email,
+            'userAddress' => $user->address,
             'userImage' => $user->image,
+            'userRole' => $user->role_id,
             'companyName' => $company->name,
             'companyPhoneNumber' => $company->phone_number,
             'companyEmail' => $company->email,

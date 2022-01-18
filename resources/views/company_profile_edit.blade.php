@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a class="text-salmon" href="/settings">Pengaturan</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Ubah Profil Perusahaan</li>
+          <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
         </ol>
     </nav>
     <div class="col-md-12">
@@ -56,7 +56,11 @@
                         <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
                         <div class="previous-image">
                             <p class="mb-0">Logo Sekarang</p>
-                            <img src="{{ asset('storage/img/' . $company->image) }}" alt="Logo Perusahaan" width="36" height="36">
+                            @if ($company->image)
+                                <img class="rounded-circle me-2 d-none d-md-block" src="{{ asset('storage/img/' . $company->image) }}" alt="Company Logo" width="36" height="36">
+                            @else
+                                <img class="rounded-circle me-2 d-none d-md-block" src="/img/default.jpg" alt="default" width="36" height="36">
+                            @endif
                         </div>
                         @error('image')
                             <div class="invalid-feedback">

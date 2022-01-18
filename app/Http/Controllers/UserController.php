@@ -230,4 +230,98 @@ class UserController extends Controller
             return redirect('/users')->with('error', 'Ubah Password Gagal!');
         }
     }
+
+    public function editProfile(Request $request, $username)
+    {
+        $userUpdate = User::firstWhere('username', $username);
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
+        $data = [
+            'title' => 'Ubah Profil Pengguna',
+            'userUpdate' => $userUpdate,
+            'username' => $user->username,
+            'userImage' => $user->image,
+            'companyName' => $company->name,
+            'companyLogo' => $company->image,
+        ];
+
+        return view('user_profile_edit', $data);
+    }
+
+    public function updateProfile(Request $request, $username)
+    {
+        $user = User::firstWhere('username', $username);
+        $request->validate(
+            [
+                'name' => 'required',
+                'phone_number' => 'required|min:8|max:14',
+                'username' => [
+                    'required',
+                    'min:5',
+                    Rule::unique('users')->ignore($user->id),
+                ],
+                'image' => 'image|max:1024'
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'min' => 'Kolom ini harus berisi minimal :min karakter!',
+                'unique' => 'Username sudah ada!',  
+                'phone_number.max' => 'Kolom ini harus berisi maximal :max karakter!',
+                'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
+                'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
+            ]
+        );
+
+        try {
+            $formInput = [
+                'username' => $request->input('username') != null ? $request->input('username') : $user->username,
+                'name' => $request->input('name') != null ? $request->input('name') : $user->name,
+                'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $user->phone_number,
+                'email' => $request->input('email') != null ? $request->input('email') : $user->email,
+                'address' => $request->input('address') != null ? $request->input('address') : $user->address,
+                'updated_at' => now()
+            ];
+    
+            // Kalau ada gambar yang di-upload
+            if ($request->image) {
+                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
+                $formInput['image'] = $imgName;
+                $request->image->storeAs('./public/img', $imgName);
+            }
+    
+            User::where('username', $username)->update($formInput);
+            return redirect('/settings')->with('success', 'Ubah profil pengguna berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/settings')->with('error', 'Ubah profil pengguna gagal!');
+        }
+    }
+
+    public function updateProfilePassword(Request $request, $username)
+    {
+        $request->validate(
+            [
+                'password' => 'required|min:8',
+                'password_confirmation' => 'required|same:password',
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'min' => 'Kolom ini harus berisi minimal :min karakter!',
+                'same' => 'Kolom konfirmasi password tidak sama!',
+            ]
+        );
+
+        try {
+            $formInput = [
+                'password' => Hash::make($request->input('password'), ['rounds' => 10]),
+                'updated_at' => now()
+            ];
+            User::where('username', $username)->update($formInput);
+
+            // Hapus session login
+            $request->session()->flush();
+            return redirect('/login')->with('success', 'Ubah password berhasil! Silakan login kembali.');
+        } catch(QueryException $ex) {
+            return redirect('/settings')->with('error', 'Ubah password gagal!');
+        }
+    }
 }

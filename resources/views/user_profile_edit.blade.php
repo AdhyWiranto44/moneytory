@@ -4,15 +4,15 @@
 <div class="row p-4 w-100 h-100">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a class="text-salmon" href="/users">Pengguna</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Ubah</li>
+          <li class="breadcrumb-item"><a class="text-salmon" href="/settings">Pengaturan</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
         </ol>
     </nav>
     <div class="col-md-12">
         @include('partials.title')
         <div class="row">
             <div class="col-md-6">
-                <form action="/users/{{ $userUpdate->username }}/edit" method="POST" enctype="multipart/form-data">
+                <form action="/settings/user-profile/{{ $username }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
@@ -61,20 +61,6 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="role_id" class="form-label small mb-1 text-capitalize">role</label>
-                        <select class="form-select p-3 @error('role_id') is-invalid @enderror" aria-label="Default select example" id="role_id" name="role_id" required>
-                            <option value="">-- Pilih Role --</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->id }}" @if($userUpdate->role_id == $role->id) selected @endif>{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('role')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>    
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="image" class="form-label small mb-1 text-capitalize">photo</label>
                         <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
                         <div class="previous-image">
@@ -91,11 +77,11 @@
                             </div>    
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-salmon w-100 p-3 my-3 fw-bold text-uppercase">ubah</button>
+                    <button type="submit" class="btn btn-salmon w-100 p-3 my-3 fw-bold text-uppercase"><i class="bi bi-pencil me-md-2"></i> ubah</button>
                 </form>
             </div>
             <div class="col-md-6">
-                <form action="/users/{{ $userUpdate->username }}/update-password" method="POST">
+                <form action="/settings/user-profile/{{ $username }}/update-password" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
@@ -116,7 +102,7 @@
                             </div>    
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase">ubah password</button>
+                    <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase"><i class="bi bi-pencil me-md-2"></i> ubah password</button>
                 </form>
             </div>
         </div>
