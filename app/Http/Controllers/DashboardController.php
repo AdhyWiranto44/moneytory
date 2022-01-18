@@ -24,13 +24,6 @@ class DashboardController extends Controller
         if ($companyProfile == null) {
             return redirect('/welcome');
         }
-
-        /**
-         * Redirect ke halaman login jika belum login
-         */
-        if (!$request->session()->get('username')) {
-            return redirect('/login');
-        }
         
         [$dateMin, $dateMax] = Helper::getCurrentDate();
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {

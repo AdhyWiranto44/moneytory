@@ -9,10 +9,6 @@ class SettingController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->session()->get('username')) {
-            return redirect('/login');
-        }
-        
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $data = [

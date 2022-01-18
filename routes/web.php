@@ -9,12 +9,14 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRegistrationController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsLoggedIn;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Dashboard Controller
  */
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->middleware(IsLoggedIn::class);
 
 /**
  * Welcome Controller
@@ -41,23 +43,23 @@ Route::post('/registration/company', [CompanyRegistrationController::class, 'sto
 /**
  * User Controller
  */
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/register', [UserController::class, 'create']);
-Route::post('/users/register', [UserController::class, 'store']);
-Route::patch('/users/deactivate/{username}', [UserController::class, 'deactivate']);
-Route::patch('/users/activate/{username}', [UserController::class, 'activate']);
-Route::delete('/users/{username}/delete', [UserController::class, 'destroy']);
-Route::get('/users/{username}/edit', [UserController::class, 'edit']);
-Route::patch('/users/{username}/edit', [UserController::class, 'update']);
-Route::patch('/users/{username}/update-password', [UserController::class, 'updatePassword']);
+Route::get('/users', [UserController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/users/register', [UserController::class, 'create'])->middleware(IsAdmin::class);
+Route::post('/users/register', [UserController::class, 'store'])->middleware(IsAdmin::class);
+Route::patch('/users/deactivate/{username}', [UserController::class, 'deactivate'])->middleware(IsAdmin::class);
+Route::patch('/users/activate/{username}', [UserController::class, 'activate'])->middleware(IsAdmin::class);
+Route::delete('/users/{username}/delete', [UserController::class, 'destroy'])->middleware(IsAdmin::class);
+Route::get('/users/{username}/edit', [UserController::class, 'edit'])->middleware(IsAdmin::class);
+Route::patch('/users/{username}/edit', [UserController::class, 'update'])->middleware(IsAdmin::class);
+Route::patch('/users/{username}/update-password', [UserController::class, 'updatePassword'])->middleware(IsAdmin::class);
 
 /**
  * SettingController
  */
-Route::get('/settings', [SettingController::class, 'index']);
+Route::get('/settings', [SettingController::class, 'index'])->middleware(IsLoggedIn::class);
 
 /**
  * CompanyProfileController
  */
-Route::get('/settings/company-profile', [CompanyProfileController::class, 'edit']);
-Route::patch('/settings/company-profile', [CompanyProfileController::class, 'update']);
+Route::get('/settings/company-profile', [CompanyProfileController::class, 'edit'])->middleware(IsAdmin::class);
+Route::patch('/settings/company-profile', [CompanyProfileController::class, 'update'])->middleware(IsAdmin::class);

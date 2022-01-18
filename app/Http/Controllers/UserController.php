@@ -14,11 +14,7 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     public function index(Request $request)
-    {
-        if (!$request->session()->get('username')) {
-            return redirect('/login');
-        }
-        
+    {   
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $users = DB::table('users')
