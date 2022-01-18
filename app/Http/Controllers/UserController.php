@@ -15,6 +15,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        if (!$request->session()->get('username')) {
+            return redirect('/login');
+        }
+        
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $users = DB::table('users')
@@ -89,7 +93,7 @@ class UserController extends Controller
 
             // Kalau ada gambar yang di-upload
             if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', ' ', $request->image->getClientOriginalName());
+                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
                 $formInput['image'] = $imgName;
                 $request->image->storeAs('./public/img', $imgName);
             }
@@ -192,7 +196,7 @@ class UserController extends Controller
     
             // Kalau ada gambar yang di-upload
             if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', ' ', $request->image->getClientOriginalName());
+                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
                 $formInput['image'] = $imgName;
                 $request->image->storeAs('./public/img', $imgName);
             }

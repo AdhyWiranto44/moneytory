@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li class="rounded-start @if($title == 'Pengaturan') menu-active @endif">
-                    <a class="d-flex align-items-between" href="#" title="Pengaturan">
+                    <a class="d-flex align-items-between" href="/settings" title="Pengaturan">
                         <i class="bi bi-gear me-3 h4"></i>
                         <p class="mb-0">Pengaturan</p>
                     </a>
