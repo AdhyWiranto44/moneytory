@@ -11,8 +11,10 @@ class SettingController extends Controller
     {
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
+        $menus = $this->getMenus($request);
         $data = [
             'title' => 'Pengaturan',
+            'menus' => $menus,
             'username' => $user->username,
             'userFullName' => $user->name,
             'userPhoneNumber' => $user->phone_number,
@@ -27,5 +29,11 @@ class SettingController extends Controller
             'companyLogo' => $company->image,
         ];
         return view('setting', $data);
+    }
+
+    private function getMenus(Request $request)
+    {
+        $menus = Helper::getMenus($request);
+        return $menus;
     }
 }

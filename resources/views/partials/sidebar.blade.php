@@ -10,13 +10,15 @@
     <ul class="sidebar-menu-container">
         <li class="sidebar-menu-section mt-3">
             <ul>
-                <li class="rounded-start @if($title == 'Dashboard') menu-active @endif">
-                    <a class="d-flex align-items-between" href="/" title="Dashboard">
-                        <i class="bi bi-speedometer2 me-3 h4"></i>
-                        <p class="mb-0">Dashboard</p>
-                    </a>
-                </li>
-                <li class="rounded-start @if($title == 'Bahan Mentah') menu-active @endif">
+                @foreach ($menus as $menu)
+                    <li class="rounded-start @if($title == $menu->name) menu-active @endif">
+                        <a class="d-flex align-items-between" href="{{ $menu->url }}" title="{{ $menu->name }}">
+                            <i class="{{ $menu->icon }} me-3 h4"></i>
+                            <p class="mb-0">{{ $menu->name }}</p>
+                        </a>
+                    </li>
+                @endforeach
+                {{-- <li class="rounded-start @if($title == 'Bahan Mentah') menu-active @endif">
                     <a class="d-flex align-items-between" href="#" title="Bahan Mentah">
                         <i class="bi bi-cart4 me-3 h4"></i>
                         <p class="mb-0">Bahan Mentah</p>
@@ -63,7 +65,7 @@
                         <i class="bi bi-gear me-3 h4"></i>
                         <p class="mb-0">Pengaturan</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
     </ul>

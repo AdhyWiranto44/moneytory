@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\CompanyProfile;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -30,5 +31,12 @@ class Helper
     {
         $company = CompanyProfile::first();
         return $company;
+    }
+
+    public static function getMenus(Request $request)
+    {
+        $role_id = $request->session()->get('role_id');
+        $menus = Menu::where('role_id', '>=', $role_id)->get();
+        return $menus;
     }
 }

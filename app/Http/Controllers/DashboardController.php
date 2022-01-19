@@ -7,6 +7,7 @@ use App\Models\CompanyProfile;
 use App\Models\Debt;
 use App\Models\Expense;
 use App\Models\Income;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -41,8 +42,10 @@ class DashboardController extends Controller
 
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
+        $menus = $this->getMenus($request);
         $data = [
             'title' => 'Dashboard',
+            'menus' => $menus,
             'username' => $user->username,
             'userImage' => $user->image,
             'companyName' => $company->name,
@@ -71,5 +74,11 @@ class DashboardController extends Controller
     private function getDebt($from, $to)
     {
         Debt::where([["debt_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('price');
+    }
+
+    private function getMenus(Request $request)
+    {
+        $menus = Helper::getMenus($request);
+        return $menus;
     }
 }
