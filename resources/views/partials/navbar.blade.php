@@ -9,7 +9,7 @@
             @else
                 <img class="rounded-circle me-2 d-none d-md-block" src="/img/default.jpg" alt="default" width="36" height="36">
             @endif
-            <small class="me-3 d-none d-md-inline">Selamat datang, <br /><b>{{ $username }}!</b></small>
+            <small class="me-3 d-none d-md-inline">Selamat datang! <br /><b>{{ $username }}</b></small>
             <a class="btn btn-salmon px-3 py-2 ms-md-3 fw-bold" href="#"><i class="bi bi-card-checklist me-2"></i> Order</a>
         </div>
         <div class="navbar-nav ms-auto d-flex align-items-center">
