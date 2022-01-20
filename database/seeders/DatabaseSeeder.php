@@ -20,7 +20,12 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             StatusesSeeder::class,
             UnitsSeeder::class,
-            MenusSeeder::class
+            MenusSeeder::class,
+            CompanyProfilesSeeder::class,
+            UsersSeeder::class,
+            RawIngredientsSeeder::class,
+            OnProcessIngredientsSeeder::class,
+            ProductsSeeder::class
         ]);
     }
 }
