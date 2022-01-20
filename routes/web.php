@@ -5,6 +5,8 @@ use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\OnProcessIngredientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RawIngredientController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
@@ -72,3 +74,13 @@ Route::patch('/settings/company-profile', [CompanyProfileController::class, 'upd
  * RawIngredientController
  */
 Route::get('/raw-ingredients', [RawIngredientController::class, 'index'])->middleware(IsAdmin::class);
+
+/**
+ * OnProcessIngredientController
+ */
+Route::get('/on-process-ingredients', [OnProcessIngredientController::class, 'index'])->middleware(IsAdmin::class);
+
+/**
+ * ProductController
+ */
+Route::get('/products', [ProductController::class, 'index'])->middleware(IsAdmin::class);

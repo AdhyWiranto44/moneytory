@@ -6,7 +6,7 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/raw-ingredients/add-new"><i class="bi bi-person me-2"></i> Tambah Baru</a>
+                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/on-process-ingredients/add-new"><i class="bi bi-person me-2"></i> Tambah Baru</a>
                 <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
@@ -15,65 +15,57 @@
                                 <th class="text-center">Gambar</th>
                                 <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">Stok</th>
-                                <th class="text-center">Stok Min.</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">Tujuan</th>
+                                <th class="text-center">Jumlah</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $i = 1; ?>
-                            @foreach ($rawIngredients as $rawIngredient)
+                            @foreach ($onProcessIngredients as $onProcessIngredient)
                             <tr>
                                 <td class="text-center fw-bold"><?= $i++; ?></td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->image)
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $rawIngredient->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
+                                    @if ($onProcessIngredient->image)
+                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $onProcessIngredient->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
                                     @else
                                         <img class="rounded-circle d-none d-md-block mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->code)
-                                        {{ $rawIngredient->code }}
+                                    @if ($onProcessIngredient->code)
+                                        {{ $onProcessIngredient->code }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->name)
-                                        {{ $rawIngredient->name }}
+                                    @if ($onProcessIngredient->raw_ingredient)
+                                        {{ $onProcessIngredient->raw_ingredient }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->stock)
-                                        {{ $rawIngredient->stock . ' ' . $rawIngredient->unit }}
+                                    @if ($onProcessIngredient->purpose)
+                                        {{ $onProcessIngredient->purpose }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->minimum_stock)
-                                        {{ $rawIngredient->minimum_stock . ' ' . $rawIngredient->unit }}
+                                    @if ($onProcessIngredient->amount)
+                                        {{ $onProcessIngredient->amount . ' ' . $onProcessIngredient->unit }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->status)
-                                        {{ $rawIngredient->status }}
-                                    @else
-                                        <small class="text-secondary">(Kosong)</small>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/raw-ingredients/{{$rawIngredient->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
-                                    <form action="/raw-ingredients/{{$rawIngredient->code}}/delete" method="POST">
+                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/on-process-ingredients/{{$onProcessIngredient->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
+                                    <form action="/on-process-ingredients/{{$onProcessIngredient->code}}/delete" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus bahan mentah ini? {{ $rawIngredient->code }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus bahan dalam proses ini? {{ $onProcessIngredient->code }}. Data jumlahnya akan dikembalikan ke Bahan Mentah.');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
                                     </form>
                                 </td>
                             </tr>
@@ -85,9 +77,8 @@
                                 <th class="text-center">Gambar</th>
                                 <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">Stok</th>
-                                <th class="text-center">Stok Min.</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">Tujuan</th>
+                                <th class="text-center">Jumlah</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </tfoot>
