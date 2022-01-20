@@ -6,109 +6,74 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/users/register"><i class="bi bi-person me-2"></i> Registrasi</a>
+                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/raw-ingredients/add-new"><i class="bi bi-person me-2"></i> Tambah Baru</a>
                 <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th class="text-center">Foto</th>
-                                <th class="text-center">Username</th>
-                                <th class="text-center">Role</th>
+                                <th class="text-center">Gambar</th>
+                                <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">No. Telepon</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Alamat</th>
+                                <th class="text-center">Stok</th>
+                                <th class="text-center">Stok Min.</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $i = 1; ?>
-                            @foreach ($users as $user)
+                            @foreach ($rawIngredients as $rawIngredient)
                             <tr>
                                 <td class="text-center fw-bold"><?= $i++; ?></td>
                                 <td class="text-center">
-                                    @if ($user->image)
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $user->image) }}" alt="Foto Pengguna" width="36" height="36">
+                                    @if ($rawIngredient->image)
+                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $rawIngredient->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
                                     @else
                                         <img class="rounded-circle d-none d-md-block mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->username)
-                                        {{ $user->username }}
+                                    @if ($rawIngredient->code)
+                                        {{ $rawIngredient->code }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->role_name)
-                                        {{ $user->role_name }}
+                                    @if ($rawIngredient->name)
+                                        {{ $rawIngredient->name }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->name)
-                                        {{ $user->name }}
+                                    @if ($rawIngredient->stock)
+                                        {{ $rawIngredient->stock . ' ' . $rawIngredient->unit }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->phone_number)
-                                        {{ $user->phone_number }}
+                                    @if ($rawIngredient->minimum_stock)
+                                        {{ $rawIngredient->minimum_stock . ' ' . $rawIngredient->unit }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->email)
-                                        {{ $user->email }}
+                                    @if ($rawIngredient->status)
+                                        {{ $rawIngredient->status }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->address)
-                                        {{ $user->address }}
-                                    @else
-                                        <small class="text-secondary">(Kosong)</small>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    {{-- @if ($user->status_id == 2)
-                                        <form action="/users/deactivate/{{$user->username}}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit">Nonaktifkan</button>
-                                        </form>
-                                    @else
-                                        <form action="/users/activate/{{$user->username}}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit">Aktifkan</button>
-                                        </form>
-                                    @endif --}}
-                                    <div class="form-check form-switch">
-                                        @csrf
-                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$user->username}}" @if($user->status_id == 2) checked @endif>
-                                        <label class="form-check-label" for="status" name="status">
-                                            @if ($user->status_id == 2)
-                                                Aktif
-                                            @else
-                                                Nonaktif
-                                            @endif
-                                        </label>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/users/{{$user->username}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
-                                    <form action="/users/{{$user->username}}/delete" method="POST">
+                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/raw-ingredients/{{$rawIngredient->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
+                                    <form action="/users/{{$rawIngredient->code}}/delete" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus pengguna dengan username {{ $user->username }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus bahan mentah ini? {{ $rawIngredient->code }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
                                     </form>
                                 </td>
                             </tr>
@@ -117,13 +82,11 @@
                         <tfoot>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th class="text-center">Foto</th>
-                                <th class="text-center">Username</th>
-                                <th class="text-center">Role</th>
+                                <th class="text-center">Gambar</th>
+                                <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">No. Telepon</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Alamat</th>
+                                <th class="text-center">Stok</th>
+                                <th class="text-center">Stok Min.</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>

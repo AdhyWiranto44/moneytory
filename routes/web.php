@@ -5,6 +5,7 @@ use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\RawIngredientController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRegistrationController;
@@ -66,3 +67,8 @@ Route::get('/settings', [SettingController::class, 'index'])->middleware(IsLogge
  */
 Route::get('/settings/company-profile', [CompanyProfileController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/settings/company-profile', [CompanyProfileController::class, 'update'])->middleware(IsAdmin::class);
+
+/**
+ * RawIngredientController
+ */
+Route::get('/raw-ingredients', [RawIngredientController::class, 'index'])->middleware(IsAdmin::class);
