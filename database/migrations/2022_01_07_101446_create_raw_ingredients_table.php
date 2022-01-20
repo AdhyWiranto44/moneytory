@@ -15,13 +15,13 @@ class CreateRawIngredientsTable extends Migration
     {
         Schema::create('raw_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('role_id')->constrained('roles');
+            $table->foreignId('status_id')->constrained('statuses');
+            $table->foreignId('unit_id')->constrained('units');
             $table->string('code', 10)->unique();
             $table->string('name')->unique();
-            $table->integer('stock');
-            $table->integer('minimum_stock');
-            $table->foreignId('unit_id')->constrained('units');
-            $table->string('image');
+            $table->float('stock');
+            $table->float('minimum_stock');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

@@ -21,9 +21,9 @@ class CreateProductsTable extends Migration
             $table->string('name')->unique();
             $table->integer('base_price');
             $table->integer('profit');
-            $table->integer('stock');
-            $table->integer('minimum_stock');
-            $table->string('image');
+            $table->float('stock');
+            $table->float('minimum_stock');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

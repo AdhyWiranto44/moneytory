@@ -19,7 +19,7 @@ class CreateOnProcessIngredientsTable extends Migration
             $table->foreignId('raw_ingredient_id')->constrained('raw_ingredients');
             $table->string('code', 10)->unique();
             $table->string('purpose');
-            $table->integer('amount');
+            $table->float('amount');
             $table->timestamps();
         });
     }
