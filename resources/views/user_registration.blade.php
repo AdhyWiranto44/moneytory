@@ -51,21 +51,25 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="username" class="form-label small mb-1 text-capitalize">username</label>
+                        <label for="username" class="form-label small mb-1 text-capitalize">username <div class="text-danger d-inline">*</div></label>
                         <input type="text" class="form-control p-3 @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}">
                         @error('username')
                             <div class="invalid-feedback">
                                 {{ $message }}
-                            </div>    
+                            </div>        
+                        @else
+                            <small class="text-danger">* Username minimal 5 karakter.</small>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label small mb-1 text-capitalize">password</label>
+                        <label for="password" class="form-label small mb-1 text-capitalize">password <div class="text-danger d-inline">**</div></label>
                         <input type="password" class="form-control p-3 @error('password') is-invalid @enderror" id="password" name="password">
                         @error('password')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>    
+                        @else
+                            <small class="text-danger">** Password minimal 8 karakter.</small>
                         @enderror
                     </div>
                     <div class="mb-3">
