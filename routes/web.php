@@ -80,6 +80,7 @@ Route::patch('/raw-ingredients/deactivate/{code}', [RawIngredientController::cla
 Route::patch('/raw-ingredients/activate/{code}', [RawIngredientController::class, 'activate'])->middleware(IsAdmin::class);
 Route::get('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'update'])->middleware(IsAdmin::class);
+Route::delete('/raw-ingredients/{code}/delete', [RawIngredientController::class, 'destroy'])->middleware(IsAdmin::class);
 
 /**
  * OnProcessIngredientController

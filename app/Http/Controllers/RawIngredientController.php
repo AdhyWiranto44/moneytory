@@ -183,6 +183,16 @@ class RawIngredientController extends Controller
         return redirect('/raw-ingredients');
     }
 
+    public function destroy($code)
+    {
+        try {
+            RawIngredient::where('code', $code)->delete();
+            return redirect('/raw-ingredients')->with('success', 'Penghapusan bahan mentah berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/raw-ingredients')->with('error', 'Penghapusan bahan mentah gagal!');
+        }
+    }
+
     private function getMenus(Request $request)
     {
         $menus = Helper::getMenus($request);
