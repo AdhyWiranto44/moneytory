@@ -78,6 +78,8 @@ Route::get('/raw-ingredients/add-new', [RawIngredientController::class, 'create'
 Route::post('/raw-ingredients/add-new', [RawIngredientController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/raw-ingredients/deactivate/{code}', [RawIngredientController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/raw-ingredients/activate/{code}', [RawIngredientController::class, 'activate'])->middleware(IsAdmin::class);
+Route::get('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'edit'])->middleware(IsAdmin::class);
+Route::patch('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'update'])->middleware(IsAdmin::class);
 
 /**
  * OnProcessIngredientController

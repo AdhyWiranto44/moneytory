@@ -12,11 +12,12 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <form action="/raw-ingredients/add-new" method="POST" class="login-form" enctype="multipart/form-data">
+                <form action="/raw-ingredients/{{ $rawIngredient->code }}/edit" method="POST" class="login-form" enctype="multipart/form-data">
                     @csrf
+                    @method('PATCH')
                     <div class="mb-3">
                         <label for="name" class="form-label small mb-1 text-capitalize">nama bahan mentah</label>
-                        <input type="text" class="form-control p-3 @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" autofocus required>
+                        <input type="text" class="form-control p-3 @error('name') is-invalid @enderror" id="name" name="name" value="{{ $rawIngredient->name }}" autofocus required>
                         @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -25,7 +26,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="code" class="form-label small mb-1 text-capitalize">kode bahan mentah</label>
-                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" placeholder="misal: RAW001" required>
+                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ $rawIngredient->code }}" placeholder="misal: RAW001" required>
                         @error('code')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -37,7 +38,11 @@
                         <select class="form-select p-3 @error('unit') is-invalid @enderror" aria-label="Default select example" id="unit" name="unit" required>
                             <option value="" selected>-- Pilih Satuan --</option>
                             @foreach ($units as $unit)
-                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                @if ($rawIngredient->unit_id == $unit->id)
+                                    <option value="{{ $unit->id }}" selected>{{ $unit->name }}</option>
+                                @else
+                                    <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                @endif
                             @endforeach
                         </select>
                         @error('unit')
@@ -48,7 +53,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="stock" class="form-label small mb-1 text-capitalize">stok</label>
-                        <input type="text" class="form-control p-3 @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock') }}" placeholder="contoh: 4.4 (pakai titik)" required>
+                        <input type="text" class="form-control p-3 @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ $rawIngredient->stock }}" placeholder="contoh: 4.4 (pakai titik)" required>
                         @error('stock')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -57,7 +62,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="minimum_stock" class="form-label small mb-1 text-capitalize">stok minimum</label>
-                        <input type="text" class="form-control p-3 @error('minimum_stock') is-invalid @enderror" id="minimum_stock" name="minimum_stock" value="{{ old('minimum_stock') }}" placeholder="contoh: 4.4 (pakai titik)" required>
+                        <input type="text" class="form-control p-3 @error('minimum_stock') is-invalid @enderror" id="minimum_stock" name="minimum_stock" value="{{ $rawIngredient->minimum_stock }}" placeholder="contoh: 4.4 (pakai titik)" required>
                         @error('minimum_stock')
                             <div class="invalid-feedback">
                                 {{ $message }}
