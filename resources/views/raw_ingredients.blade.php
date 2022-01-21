@@ -6,7 +6,7 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/raw-ingredients/add-new"><i class="bi bi-person me-2"></i> Tambah Baru</a>
+                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/raw-ingredients/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a>
                 <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
@@ -62,11 +62,17 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($rawIngredient->status)
-                                        {{ $rawIngredient->status }}
-                                    @else
-                                        <small class="text-secondary">(Kosong)</small>
-                                    @endif
+                                    <div class="form-check form-switch">
+                                        @csrf
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$rawIngredient->code}}" @if($rawIngredient->status_id == 2) checked @endif>
+                                        <label class="form-check-label" for="status" name="status">
+                                            @if ($rawIngredient->status_id == 2)
+                                                Aktif
+                                            @else
+                                                Nonaktif
+                                            @endif
+                                        </label>
+                                    </div>
                                 </td>
                                 <td class="text-center">
                                     <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/raw-ingredients/{{$rawIngredient->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
@@ -135,17 +141,17 @@
     statusToggle.addEventListener('change', function() {
         var status = this.checked == true ? 2 : 1;
         const statusLabel = document.querySelector('.form-check-label');
-        var username = this.value;
+        var code = this.value;
         var csrf = document.getElementsByName('_token')[0].value;
 
         if (status == 2) {
-            activate(`/users/activate/${username}`, { status_id: 2, '_token': csrf })
+            activate(`/raw-ingredients/activate/${code}`, { status_id: 2, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });
             statusLabel.innerHTML = 'Aktif';
         } else if (status == 1) {
-            deactivate(`/users/deactivate/${username}`, { status_id: 1, '_token': csrf })
+            deactivate(`/raw-ingredients/deactivate/${code}`, { status_id: 1, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });

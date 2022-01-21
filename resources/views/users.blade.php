@@ -78,19 +78,6 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    {{-- @if ($user->status_id == 2)
-                                        <form action="/users/deactivate/{{$user->username}}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit">Nonaktifkan</button>
-                                        </form>
-                                    @else
-                                        <form action="/users/activate/{{$user->username}}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit">Aktifkan</button>
-                                        </form>
-                                    @endif --}}
                                     <div class="form-check form-switch">
                                         @csrf
                                         <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$user->username}}" @if($user->status_id == 2) checked @endif>

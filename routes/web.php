@@ -74,6 +74,10 @@ Route::patch('/settings/company-profile', [CompanyProfileController::class, 'upd
  * RawIngredientController
  */
 Route::get('/raw-ingredients', [RawIngredientController::class, 'index'])->middleware(IsAdmin::class);
+Route::get('/raw-ingredients/add-new', [RawIngredientController::class, 'create'])->middleware(IsAdmin::class);
+Route::post('/raw-ingredients/add-new', [RawIngredientController::class, 'store'])->middleware(IsAdmin::class);
+Route::patch('/raw-ingredients/deactivate/{code}', [RawIngredientController::class, 'deactivate'])->middleware(IsAdmin::class);
+Route::patch('/raw-ingredients/activate/{code}', [RawIngredientController::class, 'activate'])->middleware(IsAdmin::class);
 
 /**
  * OnProcessIngredientController

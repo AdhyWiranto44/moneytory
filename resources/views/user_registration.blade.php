@@ -104,7 +104,7 @@
                             </div>    
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase">register</button>
+                    @include('partials.add_button')
                 </form>
             </div>
         </div>
