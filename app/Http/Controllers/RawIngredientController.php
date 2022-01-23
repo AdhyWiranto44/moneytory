@@ -41,7 +41,7 @@ class RawIngredientController extends Controller
         $menus = $this->getMenus($request);
         $units = Unit::all();
         $data = [
-            'title' => 'Tambah Bahan Mentah',
+            'title' => 'Tambah',
             'menus' => $menus,
             'units' => $units,
             'username' => $user->username,
@@ -108,7 +108,7 @@ class RawIngredientController extends Controller
         $rawIngredient = RawIngredient::firstWhere('code', $code);
         $menus = $this->getMenus($request);
         $data = [
-            'title' => 'Ubah Bahan Mentah',
+            'title' => 'Ubah',
             'rawIngredient' => $rawIngredient,
             'units' => $units,
             'menus' => $menus,

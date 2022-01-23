@@ -8,11 +8,11 @@
           <li class="breadcrumb-item active" aria-current="page">Registrasi</li>
         </ol>
     </nav>
-    <div class="col-md-12">
+    <div class="col-lg-6">
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <form action="/users/register" method="POST" class="login-form" enctype="multipart/form-data">
+                <form action="/users/register" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label small mb-1 text-capitalize">nama lengkap</label>

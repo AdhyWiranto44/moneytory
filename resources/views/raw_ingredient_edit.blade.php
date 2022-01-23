@@ -8,15 +8,15 @@
           <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
         </ol>
     </nav>
-    <div class="col-md-12">
+    <div class="col-lg-6">
         @include('partials.title')
         <div class="row">
             <div class="col-md">
-                <form action="/raw-ingredients/{{ $rawIngredient->code }}/edit" method="POST" class="login-form" enctype="multipart/form-data">
+                <form action="/raw-ingredients/{{ $rawIngredient->code }}/edit" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
-                        <label for="name" class="form-label small mb-1 text-capitalize">nama bahan mentah</label>
+                        <label for="name" class="form-label small mb-1 text-capitalize">nama</label>
                         <input type="text" class="form-control p-3 @error('name') is-invalid @enderror" id="name" name="name" value="{{ $rawIngredient->name }}" autofocus required>
                         @error('name')
                             <div class="invalid-feedback">
@@ -25,7 +25,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="code" class="form-label small mb-1 text-capitalize">kode bahan mentah</label>
+                        <label for="code" class="form-label small mb-1 text-capitalize">kode</label>
                         <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ $rawIngredient->code }}" placeholder="misal: RAW001" required>
                         @error('code')
                             <div class="invalid-feedback">
