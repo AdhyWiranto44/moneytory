@@ -12,6 +12,7 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md-6">
+                <h5 class="text-secondary">Profil</h5>
                 <form action="/users/{{ $userUpdate->username }}/edit" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
@@ -93,10 +94,11 @@
                             </div>    
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-salmon w-100 p-3 my-3 fw-bold text-uppercase">ubah</button>
+                    @include('partials.edit_button')
                 </form>
             </div>
             <div class="col-md-6">
+                <h5 class="text-secondary">Password</h5>
                 <form action="/users/{{ $userUpdate->username }}/update-password" method="POST">
                     @csrf
                     @method('PATCH')
@@ -120,7 +122,7 @@
                             </div>    
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-salmon w-100 p-3 mt-3 fw-bold text-uppercase">ubah password</button>
+                    @include('partials.edit_button')
                 </form>
             </div>
         </div>
