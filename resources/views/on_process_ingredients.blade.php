@@ -17,6 +17,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Tujuan</th>
                                 <th class="text-center">Jumlah</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -61,6 +62,19 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
+                                    <div class="form-check form-switch">
+                                        @csrf
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$onProcessIngredient->code}}" @if($onProcessIngredient->status_id == 2) checked @endif>
+                                        <label class="form-check-label" for="status" name="status">
+                                            @if ($onProcessIngredient->status_id == 2)
+                                                Dalam Proses
+                                            @else
+                                                Selesai
+                                            @endif
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="text-center">
                                     <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/on-process-ingredients/{{$onProcessIngredient->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
                                     <form action="/on-process-ingredients/{{$onProcessIngredient->code}}/delete" method="POST">
                                         @csrf
@@ -80,6 +94,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Tujuan</th>
                                 <th class="text-center">Jumlah</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </tfoot>
@@ -127,21 +142,21 @@
     statusToggle.addEventListener('change', function() {
         var status = this.checked == true ? 2 : 1;
         const statusLabel = document.querySelector('.form-check-label');
-        var username = this.value;
+        var code = this.value;
         var csrf = document.getElementsByName('_token')[0].value;
 
         if (status == 2) {
-            activate(`/users/activate/${username}`, { status_id: 2, '_token': csrf })
+            activate(`/on-process-ingredients/${code}/activate`, { status_id: 2, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });
-            statusLabel.innerHTML = 'Aktif';
+            statusLabel.innerHTML = 'Sedang Diproses';
         } else if (status == 1) {
-            deactivate(`/users/deactivate/${username}`, { status_id: 1, '_token': csrf })
+            deactivate(`/on-process-ingredients/${code}/deactivate`, { status_id: 1, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });
-            statusLabel.innerHTML = 'Nonaktif';
+            statusLabel.innerHTML = 'Selesai';
         }
     });
 </script>

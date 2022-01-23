@@ -117,6 +117,20 @@ class OnProcessIngredientController extends Controller
         }
     }
 
+    public function deactivate($code)
+    {
+        $status = 1;
+        OnProcessIngredient::where('code', $code)->update(['status_id' => $status]);
+        return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses selesai diproses');
+    }
+
+    public function activate($code)
+    {
+        $status = 2;
+        OnProcessIngredient::where('code', $code)->update(['status_id' => $status]);
+        return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses sedang diproses');
+    }
+
     private function getMenus(Request $request)
     {
         $menus = Helper::getMenus($request);
