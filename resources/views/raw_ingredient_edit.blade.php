@@ -78,7 +78,7 @@
                             </div>    
                         @enderror
                     </div>
-                    @include('partials.add_button')
+                    @include('partials.edit_button')
                 </form>
             </div>
         </div>

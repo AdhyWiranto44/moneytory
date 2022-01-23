@@ -8,6 +8,7 @@ use App\Models\RawIngredient;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class OnProcessIngredientController extends Controller
 {
@@ -75,7 +76,7 @@ class OnProcessIngredientController extends Controller
         $amount = (float) $request->input('amount');
         $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
         if ($rawIngredient->stock - $amount < 0) {
-            return redirect('/on-process-ingredients/add-new')->with('error', 'Input jumlah melebihi stok!');
+            return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
         }
 
         try {
@@ -99,6 +100,76 @@ class OnProcessIngredientController extends Controller
             return redirect('/on-process-ingredients')->with('success', 'Tambah Bahan Dalam Proses Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/on-process-ingredients')->with('error', 'Tambah Bahan Dalam Proses Gagal!');
+        }
+    }
+
+    public function edit(Request $request, $code)
+    {
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
+        $rawIngredients = DB::table('raw_ingredients')
+                        ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
+                        ->select('raw_ingredients.*', 'units.name as unit')
+                        ->where('raw_ingredients.status_id', '=', '2')
+                        ->get();
+        $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
+        $menus = $this->getMenus($request);
+        $data = [
+            'title' => 'Ubah',
+            'onProcessIngredient' => $onProcessIngredient,
+            'rawIngredients' => $rawIngredients,
+            'menus' => $menus,
+            'username' => $user->username,
+            'userImage' => $user->image,
+            'companyName' => $company->name,
+            'companyLogo' => $company->image,
+        ];
+
+        return view('on_process_ingredient_edit', $data);
+    }
+
+    public function update(Request $request, $code)
+    {
+        $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
+        $request->validate(
+            [
+                'raw_ingredient' => 'required',
+                'code' => [
+                    'required',
+                    Rule::unique('on_process_ingredients')->ignore($onProcessIngredient->id),
+                ],
+                'purpose' => 'required',
+                'amount' => 'required|numeric',
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
+                'unique' => 'Kode barang sudah ada!',
+            ]
+        );
+
+        $amount = (float) $request->input('amount');
+        $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
+        $initialStock = $rawIngredient->stock + $onProcessIngredient->amount;
+        $stockUpdate = $initialStock - $amount;
+        if ($stockUpdate < 0) {
+            return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
+        }
+
+        try {
+            $formInput = [
+                'raw_ingredient_id' => $request->input('raw_ingredient') != null ? $request->input('raw_ingredient') : $onProcessIngredient->raw_ingredient_id,
+                'code' => $request->input('code') != null ? $request->input('code') : $onProcessIngredient->code,
+                'purpose' => $request->input('purpose') != null ? $request->input('purpose') : $onProcessIngredient->purpose,
+                'amount' => $request->input('amount') != null ? $request->input('amount') : $onProcessIngredient->amount,
+                'updated_at' => now()
+            ];
+    
+            $rawIngredient->update(['stock' => $stockUpdate]);
+            OnProcessIngredient::where('code', $code)->update($formInput);
+            return redirect('/on-process-ingredients')->with('success', 'Ubah bahan dalam proses berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Ubah bahan dalam proses gagal!');
         }
     }
 
