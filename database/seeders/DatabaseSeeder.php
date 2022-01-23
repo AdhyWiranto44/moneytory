@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             IncomeStatusesSeeder::class,
             RolesSeeder::class,
             StatusesSeeder::class,
+            ProcessStatusesSeeder::class,
             UnitsSeeder::class,
             MenusSeeder::class,
             CompanyProfilesSeeder::class,

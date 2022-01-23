@@ -15,7 +15,7 @@ class CreateOnProcessIngredientsTable extends Migration
     {
         Schema::create('on_process_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('status_id')->constrained('statuses');
+            $table->foreignId('status_id')->constrained('process_statuses');
             $table->foreignId('raw_ingredient_id')->constrained('raw_ingredients');
             $table->string('code', 10)->unique();
             $table->string('purpose');
