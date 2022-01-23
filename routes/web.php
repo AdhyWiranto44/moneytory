@@ -88,6 +88,7 @@ Route::delete('/raw-ingredients/{code}/delete', [RawIngredientController::class,
 Route::get('/on-process-ingredients', [OnProcessIngredientController::class, 'index'])->middleware(IsAdmin::class);
 Route::get('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'create'])->middleware(IsAdmin::class);
 Route::post('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'store'])->middleware(IsAdmin::class);
+Route::delete('/on-process-ingredients/{code}/delete', [OnProcessIngredientController::class, 'destroy'])->middleware(IsAdmin::class);
 
 /**
  * ProductController

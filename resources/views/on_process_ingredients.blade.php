@@ -65,6 +65,7 @@
                                     <form action="/on-process-ingredients/{{$onProcessIngredient->code}}/delete" method="POST">
                                         @csrf
                                         @method('DELETE')
+                                        <input type="hidden" name="raw_ingredient" id="raw_ingredient" value="{{ $onProcessIngredient->raw_ingredient_id }}">
                                         <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus bahan dalam proses ini? {{ $onProcessIngredient->code }}. Data jumlahnya akan dikembalikan ke Bahan Mentah.');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
                                     </form>
                                 </td>

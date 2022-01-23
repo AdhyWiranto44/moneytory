@@ -102,6 +102,21 @@ class OnProcessIngredientController extends Controller
         }
     }
 
+    public function destroy(Request $request, $code)
+    {
+        try {
+            $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
+            $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
+            $rawIngredient->update(['stock' => $rawIngredient->stock + $onProcessIngredient->amount]);
+            $rawIngredient->save();
+            $onProcessIngredient->delete();
+
+            return redirect('/on-process-ingredients')->with('success', 'Penghapusan bahan dalam proses berhasil! Stock dikembalikan.');
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Penghapusan bahan dalam proses gagal!');
+        }
+    }
+
     private function getMenus(Request $request)
     {
         $menus = Helper::getMenus($request);
