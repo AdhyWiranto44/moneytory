@@ -64,7 +64,7 @@
                                 <td class="text-center">
                                     <div class="form-check form-switch">
                                         @csrf
-                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$rawIngredient->code}}" @if($rawIngredient->status_id == 2) checked @endif>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$rawIngredient->code}}" @if($rawIngredient->status_id == 2) checked @endif onclick="return confirm('Yakin ingin mengganti status?');">
                                         <label class="form-check-label" for="status" name="status">
                                             @if ($rawIngredient->status_id == 2)
                                                 Aktif
