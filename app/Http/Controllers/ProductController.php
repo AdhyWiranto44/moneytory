@@ -117,6 +117,16 @@ class ProductController extends Controller
         return redirect('/products');
     }
 
+    public function destroy($code)
+    {
+        try {
+            Product::where('code', $code)->delete();
+            return redirect('/products')->with('success', 'Penghapusan barang jadi berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/products')->with('error', 'Penghapusan barang jadi gagal!');
+        }
+    }
+
     private function getMenus(Request $request)
     {
         $menus = Helper::getMenus($request);

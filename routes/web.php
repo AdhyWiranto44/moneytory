@@ -102,3 +102,4 @@ Route::get('/products/add-new', [ProductController::class, 'create'])->middlewar
 Route::post('/products/add-new', [ProductController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/products/{code}/deactivate', [ProductController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/products/{code}/activate', [ProductController::class, 'activate'])->middleware(IsAdmin::class);
+Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])->middleware(IsAdmin::class);
