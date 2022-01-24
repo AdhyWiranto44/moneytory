@@ -98,5 +98,7 @@ Route::patch('/on-process-ingredients/{code}/edit', [OnProcessIngredientControll
  * ProductController
  */
 Route::get('/products', [ProductController::class, 'index'])->middleware(IsAdmin::class);
+Route::get('/products/add-new', [ProductController::class, 'create'])->middleware(IsAdmin::class);
+Route::post('/products/add-new', [ProductController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/products/{code}/deactivate', [ProductController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/products/{code}/activate', [ProductController::class, 'activate'])->middleware(IsAdmin::class);
