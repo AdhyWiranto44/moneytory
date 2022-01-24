@@ -80,7 +80,7 @@
                                 <td class="text-center">
                                     <div class="form-check form-switch">
                                         @csrf
-                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$product->code}}" @if($product->status_id == 2) checked @endif>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$product->code}}" @if($product->status_id == 2) checked @endif onclick="return confirm('Yakin ingin mengganti status?');">
                                         <label class="form-check-label" for="status" name="status">
                                             @if ($product->status_id == 2)
                                                 Aktif
@@ -91,11 +91,11 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/raw-ingredients/{{$product->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
-                                    <form action="/raw-ingredients/{{$product->code}}/delete" method="POST">
+                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/products/{{$product->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
+                                    <form action="/products/{{$product->code}}/delete" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus bahan mentah ini: {{ $product->code }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus barang jadi ini: {{ $product->code }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>
                                     </form>
                                 </td>
                             </tr>
@@ -163,13 +163,13 @@
         var csrf = document.getElementsByName('_token')[0].value;
 
         if (status == 2) {
-            activate(`/raw-ingredients/activate/${code}`, { status_id: 2, '_token': csrf })
+            activate(`/products/${code}/activate`, { status_id: 2, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });
             statusLabel.innerHTML = 'Aktif';
         } else if (status == 1) {
-            deactivate(`/raw-ingredients/deactivate/${code}`, { status_id: 1, '_token': csrf })
+            deactivate(`/products/${code}/deactivate`, { status_id: 1, '_token': csrf })
             .then(() => {
                 console.log("Changed!");
             });

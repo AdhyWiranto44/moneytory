@@ -31,6 +31,20 @@ class ProductController extends Controller
         return view('products', $data);
     }
 
+    public function deactivate(Request $request, $code)
+    {
+        $status = 1;
+        Product::where('code', $code)->update(['status_id' => $status]);
+        return redirect('/products');
+    }
+
+    public function activate(Request $request, $code)
+    {
+        $status = 2;
+        Product::where('code', $code)->update(['status_id' => $status]);
+        return redirect('/products');
+    }
+
     private function getMenus(Request $request)
     {
         $menus = Helper::getMenus($request);
