@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\OnProcessIngredientController;
@@ -105,3 +106,8 @@ Route::patch('/products/{code}/activate', [ProductController::class, 'activate']
 Route::get('/products/{code}/edit', [ProductController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/products/{code}/edit', [ProductController::class, 'update'])->middleware(IsAdmin::class);
 Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])->middleware(IsAdmin::class);
+
+/**
+ * IncomeController
+ */
+Route::get('/incomes', [IncomeController::class, 'index'])->middleware(IsAdmin::class);
