@@ -21,7 +21,7 @@ class ProductController extends Controller
                 ->join('units', 'products.unit_id', '=', 'units.id')
                 ->select('products.*', 'statuses.name as status', 'units.name as unit')
                 ->get();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Barang Jadi',
             'menus' => $menus,
@@ -38,7 +38,7 @@ class ProductController extends Controller
     {
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $units = Unit::all();
         $data = [
             'title' => 'Tambah',
@@ -110,7 +110,7 @@ class ProductController extends Controller
         $company = Helper::getCompanyProfile();
         $units = Unit::all();
         $product = Product::firstWhere('code', $code);
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah',
             'product' => $product,
@@ -199,11 +199,5 @@ class ProductController extends Controller
         } catch(QueryException $ex) {
             return redirect('/products')->with('error', 'Penghapusan barang jadi gagal!');
         }
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }

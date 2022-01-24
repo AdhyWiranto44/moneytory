@@ -23,7 +23,7 @@ class UserController extends Controller
                 ->select('users.*', 'roles.name as role_name', 'statuses.name as status_name')
                 ->where('users.username', '!=', $user->username)
                 ->get();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Pengguna',
             'users' => $users,
@@ -41,7 +41,7 @@ class UserController extends Controller
         $roles = Role::all();
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Registrasi Pengguna',
             'roles' => $roles,
@@ -145,7 +145,7 @@ class UserController extends Controller
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $roles = Role::all();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah Pengguna',
             'roles' => $roles,
@@ -242,7 +242,7 @@ class UserController extends Controller
         $userUpdate = User::firstWhere('username', $username);
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah Profil Pengguna',
             'menus' => $menus,
@@ -331,11 +331,5 @@ class UserController extends Controller
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah password gagal!');
         }
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }

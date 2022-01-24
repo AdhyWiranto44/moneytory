@@ -17,7 +17,7 @@ class CompanyProfileController extends Controller
 
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah Profil Perusahaan',
             'menus' => $menus,
@@ -73,11 +73,5 @@ class CompanyProfileController extends Controller
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil perusahaan gagal!');
         }
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }

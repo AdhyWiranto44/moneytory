@@ -22,7 +22,7 @@ class OnProcessIngredientController extends Controller
                         ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
                         ->select('on_process_ingredients.*', 'statuses.name as status', 'raw_ingredients.name as raw_ingredient', 'raw_ingredients.image as image', 'units.name as unit')
                         ->get();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Bahan Dalam Proses',
             'menus' => $menus,
@@ -39,7 +39,7 @@ class OnProcessIngredientController extends Controller
     {
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $rawIngredients = DB::table('raw_ingredients')
                         ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
                         ->select('raw_ingredients.*', 'units.name as unit')
@@ -113,7 +113,7 @@ class OnProcessIngredientController extends Controller
                         ->where('raw_ingredients.status_id', '=', '2')
                         ->get();
         $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah',
             'onProcessIngredient' => $onProcessIngredient,
@@ -200,11 +200,5 @@ class OnProcessIngredientController extends Controller
         $status = 2;
         OnProcessIngredient::where('code', $code)->update(['status_id' => $status]);
         return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses sedang diproses');
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }

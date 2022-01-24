@@ -21,7 +21,7 @@ class RawIngredientController extends Controller
                         ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
                         ->select('raw_ingredients.*', 'statuses.name as status', 'units.name as unit')
                         ->get();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Bahan Mentah',
             'menus' => $menus,
@@ -38,7 +38,7 @@ class RawIngredientController extends Controller
     {
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $units = Unit::all();
         $data = [
             'title' => 'Tambah',
@@ -106,7 +106,7 @@ class RawIngredientController extends Controller
         $company = Helper::getCompanyProfile();
         $units = Unit::all();
         $rawIngredient = RawIngredient::firstWhere('code', $code);
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Ubah',
             'rawIngredient' => $rawIngredient,
@@ -191,11 +191,5 @@ class RawIngredientController extends Controller
         } catch(QueryException $ex) {
             return redirect('/raw-ingredients')->with('error', 'Penghapusan bahan mentah gagal!');
         }
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }

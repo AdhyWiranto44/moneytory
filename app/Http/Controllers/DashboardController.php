@@ -42,7 +42,7 @@ class DashboardController extends Controller
 
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $menus = $this->getMenus($request);
+        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Dashboard',
             'menus' => $menus,
@@ -74,11 +74,5 @@ class DashboardController extends Controller
     private function getDebt($from, $to)
     {
         Debt::where([["debt_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('price');
-    }
-
-    private function getMenus(Request $request)
-    {
-        $menus = Helper::getMenus($request);
-        return $menus;
     }
 }
