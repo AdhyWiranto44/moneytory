@@ -8,6 +8,7 @@ use App\Models\Unit;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -100,6 +101,79 @@ class ProductController extends Controller
             return redirect('/products')->with('success', 'Tambah Barang Jadi Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/products')->with('error', 'Tambah Barang Jadi Gagal!');
+        }
+    }
+
+    public function edit(Request $request, $code)
+    {
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
+        $units = Unit::all();
+        $product = Product::firstWhere('code', $code);
+        $menus = $this->getMenus($request);
+        $data = [
+            'title' => 'Ubah',
+            'product' => $product,
+            'units' => $units,
+            'menus' => $menus,
+            'username' => $user->username,
+            'userImage' => $user->image,
+            'companyName' => $company->name,
+            'companyLogo' => $company->image,
+        ];
+
+        return view('product_edit', $data);
+    }
+
+    public function update(Request $request, $code)
+    {
+        $product = Product::firstWhere('code', $code);
+        $request->validate(
+            [
+                'name' => 'required',
+                'code' => [
+                    'required',
+                    Rule::unique('products')->ignore($product->id),
+                ],
+                'base_price' => 'required|numeric',
+                'profit' => 'required|numeric',
+                'stock' => 'required|numeric',
+                'minimum_stock' => 'required|numeric',
+                'unit' => 'required',
+                'image' => 'image|max:1024'
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
+                'unique' => 'Kode barang sudah ada!',
+                'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
+                'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
+            ]
+        );
+
+        try {
+            $formInput = [
+                'unit_id' => $request->input('unit') != null ? $request->input('unit') : $product->unit_id,
+                'name' => $request->input('name') != null ? $request->input('name') : $product->name,
+                'code' => $request->input('code') != null ? $request->input('code') : $product->code,
+                'stock' => $request->input('stock') != null ? $request->input('stock') : $product->stock,
+                'minimum_stock' => $request->input('minimum_stock') != null ? $request->input('minimum_stock') : $product->minimum_stock,
+                'base_price' => $request->input('base_price') != null ? $request->input('base_price') : $product->base_price,
+                'profit' => $request->input('profit') != null ? $request->input('profit') : $product->profit,
+                'updated_at' => now()
+            ];
+    
+            // Kalau ada gambar yang di-upload
+            if ($request->image) {
+                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
+                $formInput['image'] = $imgName;
+                $request->image->storeAs('./public/img', $imgName);
+            }
+    
+            Product::where('code', $code)->update($formInput);
+            return redirect('/products')->with('success', 'Ubah barang jadi berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/products')->with('error', 'Ubah barang jadi gagal!');
         }
     }
 
