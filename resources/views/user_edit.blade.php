@@ -80,7 +80,7 @@
                     <div class="mb-3">
                         <label for="image" class="form-label small mb-1 text-capitalize">photo</label>
                         <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
-                        <div class="previous-image">
+                        <div class="previous-image mt-3">
                             <p class="mb-0">Foto Sekarang</p>
                             @if ($userUpdate->image)
                                 <img class="rounded-circle me-2 d-none d-md-block" src="{{ asset('storage/img/' . $userUpdate->image) }}" alt="Company Logo" width="36" height="36">
