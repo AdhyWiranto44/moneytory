@@ -128,3 +128,4 @@ Route::get('/expenses/add-new', [ExpenseController::class, 'create'])->middlewar
 Route::post('/expenses/add-new', [ExpenseController::class, 'store'])->middleware(IsAdmin::class);
 Route::get('/expenses/{code}/edit', [ExpenseController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/expenses/{code}/edit', [ExpenseController::class, 'update'])->middleware(IsAdmin::class);
+Route::delete('/expenses/{code}/delete', [ExpenseController::class, 'destroy'])->middleware(IsAdmin::class);

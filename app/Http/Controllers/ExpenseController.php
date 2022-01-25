@@ -153,4 +153,14 @@ class ExpenseController extends Controller
             return redirect('/expenses')->with('error', 'Ubah pengeluaran gagal!');
         }
     }
+    
+    public function destroy($code)
+    {
+        try {
+            Expense::where('code', $code)->delete();
+            return redirect('/expenses')->with('success', 'Penghapusan pengeluaran berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/expenses')->with('error', 'Penghapusan pengeluaran gagal!');
+        }
+    }
 }
