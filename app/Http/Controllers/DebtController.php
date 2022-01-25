@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper;
+use App\Models\Debt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,5 +29,19 @@ class DebtController extends Controller
             'companyLogo' => $company->image,
         ];
         return view('debts', $data);
+    }
+
+    public function deactivate(Request $request, $code)
+    {
+        $status = 1;
+        Debt::where('code', $code)->update(['debt_status_id' => $status]);
+        return redirect('/debts');
+    }
+
+    public function activate(Request $request, $code)
+    {
+        $status = 2;
+        Debt::where('code', $code)->update(['debt_status_id' => $status]);
+        return redirect('/debts');
     }
 }

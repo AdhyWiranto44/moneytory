@@ -135,3 +135,5 @@ Route::delete('/expenses/{code}/delete', [ExpenseController::class, 'destroy'])-
  * DebtController
  */
 Route::get('/debts', [DebtController::class, 'index'])->middleware(IsAdmin::class);
+Route::patch('/debts/{code}/deactivate', [DebtController::class, 'deactivate'])->middleware(IsAdmin::class);
+Route::patch('/debts/{code}/activate', [DebtController::class, 'activate'])->middleware(IsAdmin::class);
