@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoginController;
@@ -129,3 +130,8 @@ Route::post('/expenses/add-new', [ExpenseController::class, 'store'])->middlewar
 Route::get('/expenses/{code}/edit', [ExpenseController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/expenses/{code}/edit', [ExpenseController::class, 'update'])->middleware(IsAdmin::class);
 Route::delete('/expenses/{code}/delete', [ExpenseController::class, 'destroy'])->middleware(IsAdmin::class);
+
+/**
+ * DebtController
+ */
+Route::get('/debts', [DebtController::class, 'index'])->middleware(IsAdmin::class);
