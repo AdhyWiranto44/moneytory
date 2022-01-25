@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helper;
 use App\Models\Debt;
+use App\Models\DebtStatus;
+use App\Models\DebtType;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +32,70 @@ class DebtController extends Controller
             'companyLogo' => $company->image,
         ];
         return view('debts', $data);
+    }
+
+    public function create(Request $request)
+    {
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
+        $menus = Helper::getMenus($request);
+        $debtTypes = DebtType::all();
+        $debtStatuses = DebtStatus::all();
+        $data = [
+            'title' => 'Tambah',
+            'menus' => $menus,
+            'debtTypes' => $debtTypes,
+            'debtStatuses' => $debtStatuses,
+            'username' => $user->username,
+            'userImage' => $user->image,
+            'companyName' => $company->name,
+            'companyLogo' => $company->image,
+        ];
+        return view('debt_add', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(
+            [
+                'name' => 'required',
+                'code' => 'required|unique:debts',
+                'price' => 'required|numeric',
+                'on_behalf_of' => 'required',
+                'phone_number' => 'required',
+                'address' => 'required',
+                'debt_type' => 'required',
+                'debt_status' => 'required',
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
+                'unique' => 'Kode barang sudah ada!',
+            ]
+        );
+
+        try {
+            $formInput = [
+                'debt_type_id' => $request->input('debt_type'),
+                'debt_status_id' => $request->input('debt_status'),
+                'name' => $request->input('name'),
+                'code' => $request->input('code'),
+                'description' => $request->input('description'),
+                'price' => $request->input('price'),
+                'on_behalf_of' => $request->input('on_behalf_of'),
+                'phone_number' => $request->input('phone_number'),
+                'address' => $request->input('address'),
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $debt = Debt::create($formInput);
+            $debt->save();
+    
+            return redirect('/debts')->with('success', 'Tambah Hutang Berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/debts')->with('error', 'Tambah Hutang Gagal!');
+        }
     }
 
     public function deactivate(Request $request, $code)
