@@ -111,4 +111,14 @@ class DebtController extends Controller
         Debt::where('code', $code)->update(['debt_status_id' => $status]);
         return redirect('/debts');
     }
+
+    public function destroy($code)
+    {
+        try {
+            Debt::where('code', $code)->delete();
+            return redirect('/debts')->with('success', 'Penghapusan hutang berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/debts')->with('error', 'Penghapusan hutang gagal!');
+        }
+    }
 }
