@@ -60,7 +60,7 @@ class ProductController extends Controller
                 'code' => 'required|unique:products',
                 'unit' => 'required',
                 'base_price' => 'required|numeric',
-                'base_price' => 'required|numeric',
+                'profit' => 'required|numeric',
                 'stock' => 'required|numeric',
                 'minimum_stock' => 'required|numeric',
                 'image' => 'image|max:1024'

@@ -76,6 +76,11 @@
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
                             <input type="number" class="form-control p-3 @error('profit') is-invalid @enderror" placeholder="contoh: 5000" aria-label="profit" aria-describedby="basic-addon1" id="profit" name="profit" value="{{ old('profit') }}">
+                            @error('profit')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
