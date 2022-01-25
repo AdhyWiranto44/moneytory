@@ -126,3 +126,5 @@ Route::delete('/incomes/{code}/delete', [IncomeController::class, 'destroy'])->m
 Route::get('/expenses', [ExpenseController::class, 'index'])->middleware(IsAdmin::class);
 Route::get('/expenses/add-new', [ExpenseController::class, 'create'])->middleware(IsAdmin::class);
 Route::post('/expenses/add-new', [ExpenseController::class, 'store'])->middleware(IsAdmin::class);
+Route::get('/expenses/{code}/edit', [ExpenseController::class, 'edit'])->middleware(IsAdmin::class);
+Route::patch('/expenses/{code}/edit', [ExpenseController::class, 'update'])->middleware(IsAdmin::class);
