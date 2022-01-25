@@ -139,4 +139,6 @@ Route::get('/debts/add-new', [DebtController::class, 'create'])->middleware(IsAd
 Route::post('/debts/add-new', [DebtController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/debts/{code}/deactivate', [DebtController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/debts/{code}/activate', [DebtController::class, 'activate'])->middleware(IsAdmin::class);
+Route::get('/debts/{code}/edit', [DebtController::class, 'edit'])->middleware(IsAdmin::class);
+Route::patch('/debts/{code}/edit', [DebtController::class, 'update'])->middleware(IsAdmin::class);
 Route::delete('/debts/{code}/delete', [DebtController::class, 'destroy'])->middleware(IsAdmin::class);

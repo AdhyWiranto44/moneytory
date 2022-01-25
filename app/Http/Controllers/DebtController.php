@@ -9,6 +9,7 @@ use App\Models\DebtType;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class DebtController extends Controller
 {
@@ -95,6 +96,74 @@ class DebtController extends Controller
             return redirect('/debts')->with('success', 'Tambah Hutang Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Tambah Hutang Gagal!');
+        }
+    }
+
+    public function edit(Request $request, $code)
+    {
+        $user = Helper::getUserLogin($request);
+        $company = Helper::getCompanyProfile();
+        $debtTypes = DebtType::all();
+        $debtStatuses = DebtStatus::all();
+        $debt = Debt::firstWhere('code', $code);
+        $menus = Helper::getMenus($request);
+        $data = [
+            'title' => 'Ubah',
+            'debt' => $debt,
+            'debtTypes' => $debtTypes,
+            'debtStatuses' => $debtStatuses,
+            'menus' => $menus,
+            'username' => $user->username,
+            'userImage' => $user->image,
+            'companyName' => $company->name,
+            'companyLogo' => $company->image,
+        ];
+
+        return view('debt_edit', $data);
+    }
+
+    public function update(Request $request, $code)
+    {
+        $debt = Debt::firstWhere('code', $code);
+        $request->validate(
+            [
+                'name' => 'required',
+                'code' => [
+                    'required',
+                    Rule::unique('debts')->ignore($debt->id),
+                ],
+                'price' => 'required|numeric',
+                'on_behalf_of' => 'required',
+                'phone_number' => 'required',
+                'address' => 'required',
+                'debt_type' => 'required',
+                'debt_status' => 'required'
+            ],
+            [
+                'required' => 'Kolom ini harus diisi!',
+                'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
+                'unique' => 'Kode barang sudah ada!'
+            ]
+        );
+
+        try {
+            $formInput = [
+                'debt_type_id' => $request->input('debt_type') != null ? $request->input('debt_type') : $debt->debt_type_id,
+                'debt_status_id' => $request->input('debt_status') != null ? $request->input('debt_status') : $debt->debt_status_id,
+                'name' => $request->input('name') != null ? $request->input('name') : $debt->name,
+                'code' => $request->input('code') != null ? $request->input('code') : $debt->code,
+                'description' => $request->input('description') != null ? $request->input('description') : $debt->description,
+                'price' => $request->input('price') != null ? $request->input('price') : $debt->price,
+                'on_behalf_of' => $request->input('on_behalf_of') != null ? $request->input('on_behalf_of') : $debt->on_behalf_of,
+                'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $debt->phone_number,
+                'address' => $request->input('address') != null ? $request->input('address') : $debt->address,
+                'updated_at' => now()
+            ];
+    
+            Debt::where('code', $code)->update($formInput);
+            return redirect('/debts')->with('success', 'Ubah hutang berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/debts')->with('error', 'Ubah hutang gagal!');
         }
     }
 
