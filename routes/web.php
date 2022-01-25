@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -118,3 +119,8 @@ Route::patch('/incomes/{code}/edit', [IncomeController::class, 'update'])->middl
 Route::patch('/incomes/{code}/deactivate', [IncomeController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/incomes/{code}/activate', [IncomeController::class, 'activate'])->middleware(IsAdmin::class);
 Route::delete('/incomes/{code}/delete', [IncomeController::class, 'destroy'])->middleware(IsAdmin::class);
+
+/**
+ * ExpenseController
+ */
+Route::get('/expenses', [ExpenseController::class, 'index'])->middleware(IsAdmin::class);
