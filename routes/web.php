@@ -111,5 +111,7 @@ Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])-
  * IncomeController
  */
 Route::get('/incomes', [IncomeController::class, 'index'])->middleware(IsAdmin::class);
+Route::get('/incomes/add-new', [IncomeController::class, 'create'])->middleware(IsAdmin::class);
+Route::post('/incomes/add-new', [IncomeController::class, 'store'])->middleware(IsAdmin::class);
 Route::patch('/incomes/{code}/deactivate', [IncomeController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/incomes/{code}/activate', [IncomeController::class, 'activate'])->middleware(IsAdmin::class);
