@@ -56,7 +56,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if ($income->total_price)
-                                        {{ $income->total_price }}
+                                        Rp {{ number_format($income->total_price, 0, ',', '.') }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
