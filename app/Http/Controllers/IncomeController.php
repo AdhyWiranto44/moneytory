@@ -156,4 +156,14 @@ class IncomeController extends Controller
         Income::where('code', $code)->update(['income_status_id' => $status]);
         return redirect('/incomes');
     }
+
+    public function destroy($code)
+    {
+        try {
+            Income::where('code', $code)->delete();
+            return redirect('/incomes')->with('success', 'Penghapusan pemasukan berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/incomes')->with('error', 'Penghapusan pemasukan gagal!');
+        }
+    }
 }

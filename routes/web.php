@@ -117,3 +117,4 @@ Route::get('/incomes/{code}/edit', [IncomeController::class, 'edit'])->middlewar
 Route::patch('/incomes/{code}/edit', [IncomeController::class, 'update'])->middleware(IsAdmin::class);
 Route::patch('/incomes/{code}/deactivate', [IncomeController::class, 'deactivate'])->middleware(IsAdmin::class);
 Route::patch('/incomes/{code}/activate', [IncomeController::class, 'activate'])->middleware(IsAdmin::class);
+Route::delete('/incomes/{code}/delete', [IncomeController::class, 'destroy'])->middleware(IsAdmin::class);
