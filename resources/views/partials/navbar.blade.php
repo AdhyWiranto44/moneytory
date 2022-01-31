@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white py-3 sticky-top py-3 border-bottom border-light border-2">
     <div class="container-fluid">
         <div class="navbarLeftMenu">
-            <button type="button" class="border-0 me-3 bg-transparent" onclick="return toggleSidebar()">
-                <span class="navbar-toggler-icon me-3"></span>
+            <button type="button" class="border-0 bg-transparent" onclick="return toggleSidebar()">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="btn btn-salmon px-3 py-2 ms-md-3 fw-bold" href="#"><i class="bi bi-card-checklist me-2"></i> Order</a>
+            <a class="btn btn-salmon px-3 py-2 ms-md-2 fw-bold" href="#"><i class="bi bi-card-checklist me-2"></i> Order</a>
         </div>
         <div class="userProfile d-flex align-items-center">
             <small class="d-none d-md-inline text-end">Selamat datang! <br /><b>{{ $username }}</b></small>
