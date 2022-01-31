@@ -5,7 +5,7 @@
     <div class="col-md-12">
         @include('partials.title')
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-3">
                 @include('partials.user_profile')
             </div>
             <div class="col-md-6 mb-3">
