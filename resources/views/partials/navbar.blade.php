@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white py-3 sticky-top py-3 border-bottom border-light border-2">
+<nav class="navbar navbar-expand-md navbar-light py-3 sticky-top py-3 border-bottom border-light border-2">
     <div class="container-fluid">
         <div class="navbarLeftMenu">
             <button type="button" class="border-0 bg-transparent" onclick="return toggleSidebar()">
