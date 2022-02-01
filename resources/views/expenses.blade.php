@@ -22,6 +22,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Deskripsi</th>
                                 <th class="text-center">Biaya</th>
+                                <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -66,6 +67,13 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
+                                    @if ($expense->created_at)
+                                        {{ $expense->created_at }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
                                     <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/expenses/{{$expense->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
                                     <form action="/expenses/{{$expense->code}}/delete" method="POST">
                                         @csrf
@@ -84,6 +92,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Deskripsi</th>
                                 <th class="text-center">Biaya</th>
+                                <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </tfoot>

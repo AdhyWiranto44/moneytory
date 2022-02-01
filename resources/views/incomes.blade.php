@@ -22,6 +22,7 @@
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
                                 <th class="text-center">Total Harga</th>
+                                <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -67,6 +68,13 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
+                                    @if ($income->created_at)
+                                        {{ $income->created_at }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
                                     <div class="form-check form-switch">
                                         @csrf
                                         <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$income->code}}" @if($income->income_status_id == 2) checked @endif onclick="return confirm('Yakin ingin mengganti status?');">
@@ -98,6 +106,7 @@
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
                                 <th class="text-center">Total Harga</th>
+                                <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
