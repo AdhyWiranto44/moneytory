@@ -122,59 +122,37 @@
     </div>
 </div>
 <script>
-    const statusToggle = document.querySelector('.form-check-input');
-
-    // Example POST method implementation:
-    async function activate(url = '', data = {}) {
-        // Default options are marked with *
+    const formChecks = document.getElementsByClassName('form-check');
+    
+    async function changeStatus(url = '', data = {}) {
         const response = await fetch(url, {
-            method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
+            method: 'PATCH',
             mode: 'cors',
             headers: {
-            'Content-Type': 'application/json',
-            // 'Accept': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: JSON.stringify(data)
         });
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json();
     }
 
-    // Example POST method implementation:
-    async function deactivate(url = '', data = {}) {
-        // Default options are marked with *
-        const response = await fetch(url, {
-            method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors',
-            headers: {
-            'Content-Type': 'application/json',
-            // 'Accept': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
+    Array.from(formChecks).forEach(formCheck => {
+        const statusToggle = formCheck.querySelector('.form-check-input');
+        const statusLabel = formCheck.querySelector('.form-check-label');
+        const csrf = formCheck.querySelector('input[name="_token"]').value;
+
+        statusToggle.addEventListener('change', function() {
+            var status = this.checked == true ? 2 : 1;
+            var code = this.value;
+
+            if (status == 2) {
+                changeStatus(`/products/${code}/activate`, { status_id: 2, '_token': csrf });
+                statusLabel.innerHTML = 'Aktif';
+            } else if (status == 1) {
+                changeStatus(`/products/${code}/deactivate`, { status_id: 1, '_token': csrf });
+                statusLabel.innerHTML = 'Nonaktif';
+            }
         });
-        return response.json(); // parses JSON response into native JavaScript objects
-    }
-
-    statusToggle.addEventListener('change', function() {
-        var status = this.checked == true ? 2 : 1;
-        const statusLabel = document.querySelector('.form-check-label');
-        var code = this.value;
-        var csrf = document.getElementsByName('_token')[0].value;
-
-        if (status == 2) {
-            activate(`/products/${code}/activate`, { status_id: 2, '_token': csrf })
-            .then(() => {
-                console.log("Changed!");
-            });
-            statusLabel.innerHTML = 'Aktif';
-        } else if (status == 1) {
-            deactivate(`/products/${code}/deactivate`, { status_id: 1, '_token': csrf })
-            .then(() => {
-                console.log("Changed!");
-            });
-            statusLabel.innerHTML = 'Nonaktif';
-        }
     });
 </script>
 @endsection
