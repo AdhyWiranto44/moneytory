@@ -18,7 +18,11 @@
                             <h5 class="fw-bold mb-0">Pemasukan</h5>
                         </div>
                         <h3 class="py-3">Rp {{ number_format($incomes, 0, ",", ".") }}</h3>
-                        <a href="#" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @if (request()->query('tanggal_dari') || request()->query('tanggal_ke'))
+                            <a href="/incomes/?tanggal_dari={{ request()->query('tanggal_dari') }}&tanggal_ke={{ request()->query ('tanggal_ke') }}" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @else
+                            <a href="/incomes" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @endif
                     </div>
                     </div>
             </div>
@@ -30,7 +34,11 @@
                             <h5 class="fw-bold mb-0">Pengeluaran</h5>
                         </div>
                         <h3 class="py-3">Rp {{ number_format($expenses, 0, ",", ".") }}</h3>
-                        <a href="#" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @if (request()->query('tanggal_dari') || request()->query('tanggal_ke'))
+                            <a href="/expenses/?tanggal_dari={{ request()->query('tanggal_dari') }}&tanggal_ke={{ request()->query ('tanggal_ke') }}" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @else
+                            <a href="/expenses" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @endif
                     </div>
                     </div>
             </div>
@@ -42,7 +50,11 @@
                             <h5 class="fw-bold mb-0">Hutang</h5>
                         </div>
                         <h3 class="py-3">Rp {{ number_format($debts, 0, ",", ".") }}</h3>
-                        <a href="#" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @if (request()->query('tanggal_dari') || request()->query('tanggal_ke'))
+                            <a href="/debts/?tanggal_dari={{ request()->query('tanggal_dari') }}&tanggal_ke={{ request()->query ('tanggal_ke') }}" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @else
+                            <a href="/debts" class=" btn btn-light px-3 text-decoration-none text-secondary"><small>Detail</small></a>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -15,12 +15,24 @@ class DebtController extends Controller
 {
     public function index(Request $request)
     {
+        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
+            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
+        } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
+            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
+        } else if ($request->query('tanggal_dari') && $request->query('tanggal_ke')) {
+            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
+            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
+        }
+
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $debts = DB::table('debts')
                 ->join('debt_types', 'debts.debt_type_id', '=', 'debt_types.id')
                 ->join('debt_statuses', 'debts.debt_status_id', '=', 'debt_statuses.id')
                 ->select('debts.*', 'debt_types.name as type', 'debt_statuses.name as status')
+                ->where("debts.created_at", ">=", $dateMin)
+                ->where("debts.created_at", "<=", $dateMax)
                 ->get();
         $menus = Helper::getMenus($request);
         $data = [

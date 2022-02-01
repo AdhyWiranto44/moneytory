@@ -12,9 +12,19 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
+        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
+            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
+        } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
+            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
+        } else if ($request->query('tanggal_dari') && $request->query('tanggal_ke')) {
+            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
+            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
+        }
+
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
-        $expenses = Expense::all();
+        $expenses = Expense::where([["created_at", ">=", $dateMin], ["created_at", "<=", $dateMax]])->get();
         $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Pengeluaran',

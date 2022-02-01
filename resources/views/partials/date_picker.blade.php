@@ -1,6 +1,6 @@
 @if (request()->query("tanggal_dari") || request()->query("tanggal_ke"))
     <h4 class="mb-3">
-        <span class="badge text-dark shadow-sm">
+        <span class="badge bg-light-secondary border-light-secondary text-secondary">
             @if (request()->query("tanggal_dari"))
                 Dari {{ request()->query("tanggal_dari") }}
             @endif
@@ -10,10 +10,10 @@
         </span>
     </h4>
 @else
-    <h4 class="mb-3"><span class="badge text-dark shadow-sm">Hari ini: {{ date('d F Y') }}</span></h4>
+    <h4 class="mb-3"><span class="badge bg-light-secondary border-light-secondary text-secondary">Hari ini: {{ date('d F Y') }}</span></h4>
 @endif
 <small>Cari berdasarkan tanggal</small>
-<form action="/" method="GET">
+<form action="{{ url()->current() }}" method="GET">
     <div class="row g-2">
         <div class="col input-group">
             <div class="input-group-text bg-light-secondary border-light-secondary text-secondary">Dari</div>

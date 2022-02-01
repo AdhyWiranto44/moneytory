@@ -6,6 +6,11 @@
         @include('partials.title')
         <div class="row">
             <div class="col-md">
+                <div class="row mb-5">
+                    <div class="col-md-8">
+                        @include('partials.date_picker')
+                    </div>
+                </div>
                 <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/expenses/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a>
                 <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
