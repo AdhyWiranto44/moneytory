@@ -73,6 +73,8 @@ class DashboardController extends Controller
 
     private function getDebt($from, $to)
     {
-        Debt::where([["debt_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('price');
+        $debts = Debt::where([["debt_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('price');
+
+        return $debts;
     }
 }
