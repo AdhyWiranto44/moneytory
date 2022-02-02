@@ -40,9 +40,9 @@
                                 </td>
                                 <td class="text-center">
                                     @if ($expense->image)
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $expense->image) }}" alt="Bukti Pengeluaran" width="36" height="36">
+                                        <img class="rounded-circle mx-auto" src="{{ asset('storage/img/' . $expense->image) }}" alt="Bukti Pengeluaran" width="36" height="36">
                                     @else
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
+                                        <img class="rounded-circle mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
                                     @endif
                                 </td>
                                 <td class="text-center">

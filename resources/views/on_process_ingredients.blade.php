@@ -28,9 +28,9 @@
                                 <td class="text-center fw-bold"><?= $i++; ?></td>
                                 <td class="text-center">
                                     @if ($onProcessIngredient->image)
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $onProcessIngredient->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
+                                        <img class="rounded-circle mx-auto" src="{{ asset('storage/img/' . $onProcessIngredient->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
                                     @else
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
+                                        <img class="rounded-circle mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
                                     @endif
                                 </td>
                                 <td class="text-center">
