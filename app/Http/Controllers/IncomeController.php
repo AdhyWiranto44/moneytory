@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper;
 use App\Models\Income;
+use App\Models\Product;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,16 @@ class IncomeController extends Controller
         );
 
         try {
+            $products = explode(',', $request->input('products'));
+            $amounts = explode(',', $request->input('amounts'));
+
+            // Mengurangi stok tiap produk yang dibeli
+            for ($i = 0; $i < count($products); $i++) {
+                $product = Product::firstWhere('code', $products[$i]);
+                $stock = $product->stock;
+                $product->update(['stock' => $stock - $amounts[$i]]);
+            }
+
             $formInput = [
                 'income_status_id' => 2,
                 'code' => $request->input('code'),
