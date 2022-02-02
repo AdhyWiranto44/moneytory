@@ -183,7 +183,18 @@ class IncomeController extends Controller
     public function destroy($code)
     {
         try {
-            Income::where('code', $code)->delete();
+            $income = Income::firstWhere('code', $code);
+            $products = explode(',', $income->products);
+            $amounts = explode(',', $income->amounts);
+
+            // Mengurangi stok tiap produk yang dibeli
+            for ($i = 0; $i < count($products); $i++) {
+                $product = Product::firstWhere('code', $products[$i]);
+                $stock = $product->stock;
+                $product->update(['stock' => $stock + $amounts[$i]]);
+            }
+
+            $income->delete();
             return redirect('/incomes')->with('success', 'Penghapusan pemasukan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/incomes')->with('error', 'Penghapusan pemasukan gagal!');
