@@ -8,10 +8,11 @@
           <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
         </ol>
     </nav>
-    <div class="col-lg-6">
+    <div class="col-md-12">
         @include('partials.title')
         <div class="row">
-            <div class="col-md">
+            <div class="col-md-6 order-2 order-md-1">
+                <h5 class="text-secondary">Data Pemasukan</h5>
                 <form action="/incomes/add-new" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
@@ -67,6 +68,76 @@
                     <small class="text-danger">*** Input harga dalam bentuk angka.</small>
                     @include('partials.add_button')
                 </form>
+            </div>
+            <div class="col-md-6 order-1 order-md-2">
+                <h5 class="text-secondary">Daftar Produk</h5>
+                <div class="table-responsive">
+                    <table id="example" class="display overflow-scroll">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Gambar</th>
+                                <th class="text-center">Kode</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Harga + Untung</th>
+                                <th class="text-center">Stok</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $i = 1; ?>
+                            @foreach ($products as $product)
+                            <tr>
+                                <td class="text-center fw-bold"><?= $i++; ?></td>
+                                <td class="text-center">
+                                    @if ($product->image)
+                                        <img class="rounded-circle mx-auto" src="{{ asset('storage/img/' . $product->image) }}" alt="Gambar Bahan Mentah" width="36" height="36">
+                                    @else
+                                        <img class="rounded-circle mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($product->code)
+                                        {{ $product->code }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($product->name)
+                                        {{ $product->name }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($product->base_price && $product->profit)
+                                        Rp {{ number_format($product->base_price + $product->profit, 0, ',', '.') }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($product->stock)
+                                        {{ $product->stock . ' ' . $product->unit }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Gambar</th>
+                                <th class="text-center">Kode</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Harga + Untung</th>
+                                <th class="text-center">Stok</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

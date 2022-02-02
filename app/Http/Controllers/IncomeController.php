@@ -50,9 +50,14 @@ class IncomeController extends Controller
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $menus = Helper::getMenus($request);
+        $products = DB::table('products')
+                ->join('units', 'products.unit_id', '=', 'units.id')
+                ->select('products.*', 'units.name as unit')
+                ->get();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
+            'products' => $products,
             'username' => $user->username,
             'userImage' => $user->image,
             'companyName' => $company->name,
