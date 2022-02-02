@@ -9,7 +9,10 @@
         </ol>
     </nav>
     <div class="col-lg-6 order-2 order-lg-1">
-        @include('partials.title')
+        <div class="d-flex align-items-center">
+            @include('partials.title')
+            <h6 class="text-secondary fw-bold ms-2">Bahan Dalam Proses</h6>
+        </div>
         <div class="row">
             <div class="col-md">
                 <form action="/on-process-ingredients/add-new" method="POST">

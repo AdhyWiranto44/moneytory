@@ -9,7 +9,10 @@
         </ol>
     </nav>
     <div class="col-md-12">
-        @include('partials.title')
+        <div class="d-flex align-items-center">
+            @include('partials.title')
+            <h6 class="text-secondary fw-bold ms-2">Pemasukan</h6>
+        </div>
         <div class="row">
             <div class="col-md-6 order-2 order-md-1">
                 <h5 class="text-secondary">Data Pemasukan</h5>

@@ -9,7 +9,10 @@
         </ol>
     </nav>
     <div class="col-lg-6">
-        @include('partials.title')
+        <div class="d-flex align-items-center">
+            @include('partials.title')
+            <h6 class="text-secondary fw-bold ms-2">Pengeluaran</h6>
+        </div>
         <div class="row">
             <div class="col-md">
                 <form action="/expenses/add-new" method="POST" enctype="multipart/form-data">
