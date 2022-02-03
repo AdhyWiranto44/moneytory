@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
             ProcessStatusesSeeder::class,
             UnitsSeeder::class,
             MenusSeeder::class,
-            CompanyProfilesSeeder::class,
-            UsersSeeder::class,
-            RawIngredientsSeeder::class,
-            OnProcessIngredientsSeeder::class,
-            ProductsSeeder::class
+            // CompanyProfilesSeeder::class,
+            // UsersSeeder::class,
+            // RawIngredientsSeeder::class,
+            // OnProcessIngredientsSeeder::class,
+            // ProductsSeeder::class
         ]);
     }
 }
