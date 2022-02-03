@@ -229,7 +229,8 @@ Inventory & Money Management
     - pindah ke direktori C:\moneytory\
     - tekan tombol Shift + Klik Kanan lalu pilih menu Open PowerShell menu here
     - ketikkan perintah "composer install" tanpa kutip dua, maka aplikasi composer akan menginstall beberapa package (semacam plugin) pada proyek, tunggu saja beberapa saat
-    - lalu ketikkan "php artisan key:generate".
+    - ketikkan "php artisan key:generate"
+    - ketikkan "php artisan storage:link"
 6. Menjalankan aplikasi
     - masih pada direktori yang sama di PowerShell, ketikkan perintah "php artisan serve" tanpa kutip dua, untuk menjalankan proyek
     - buka web browser favoritmu dan ketikkan 127.0.0.1:8000 pada kolom pencarian
