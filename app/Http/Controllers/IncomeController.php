@@ -24,6 +24,7 @@ class IncomeController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
+        $code = $request->query('code');
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $incomes = DB::table('incomes')
@@ -31,17 +32,41 @@ class IncomeController extends Controller
                         ->select('incomes.*', 'income_statuses.name as status')
                         ->where("incomes.created_at", ">=", $dateMin)
                         ->where("incomes.created_at", "<=", $dateMax)
+                        ->where("incomes.products", "LIKE", "%".$code."%")
                         ->get();
         $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Pemasukan',
             'menus' => $menus,
             'incomes' => $incomes,
+            'productIncome' => null,
             'username' => $user->username,
             'userImage' => $user->image,
             'companyName' => $company->name,
             'companyLogo' => $company->image,
         ];
+
+        if ($code != null) {
+            $productIncome = [
+                'code' => $code,
+                'amount' => 0,
+                'income' => 0
+            ];
+            foreach ($incomes as $income) {
+                $products = explode(',', $income->products);
+                $amounts = explode(',', $income->amounts);
+                $prices = explode(',', $income->prices);
+
+                for ($i = 0; $i < count($products); $i++) {
+                    if ($code == $products[$i]) {
+                        $productIncome['amount'] += $amounts[$i];
+                        $productIncome['income'] += $prices[$i];
+                    }
+                }
+            }
+            $data['productIncome'] = $productIncome;
+        }
+
         return view('incomes', $data);
     }
 

@@ -11,8 +11,21 @@
                         @include('partials.date_picker')
                     </div>
                 </div>
+                @if ($productIncome != null)
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card p-2 border-0 shadow mb-3">
+                                <div class="card-body">
+                                    <h5 class="fw-bold mb-0">Kode: {{ $productIncome['code'] }}</h5>
+                                    <h6 class="text-secondary mb-0">Terjual: {{ $productIncome['amount'] }}</h6>
+                                    <h3 class="py-3">Rp {{ number_format($productIncome['income'], 0, ",", ".") }}</h3>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                @endif
                 <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/incomes/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a>
-                <div class="table-responsive">
+                <div class="table-responsdd($productIncome);ive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
                             <tr>
