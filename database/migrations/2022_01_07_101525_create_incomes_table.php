@@ -19,6 +19,7 @@ class CreateIncomesTable extends Migration
             $table->string('code', 10)->unique();
             $table->string('products');
             $table->string('amounts');
+            $table->string('base_prices');
             $table->string('prices');
             $table->integer('total_price');
             $table->timestamps();

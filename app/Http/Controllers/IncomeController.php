@@ -84,26 +84,39 @@ class IncomeController extends Controller
         );
 
         try {
-            $products = explode(',', $request->input('products'));
-            $amounts = explode(',', $request->input('amounts'));
+            // untuk input base_prices data incomes
+            $basePrices = [];
 
-            // Mengurangi stok tiap produk yang dibeli
-            for ($i = 0; $i < count($products); $i++) {
-                $product = Product::firstWhere('code', $products[$i]);
-                $stock = $product->stock;
-                $product->update(['stock' => $stock - $amounts[$i]]);
-            }
+            $inputProducts = $request->input('products');
+            $inputAmounts = $request->input('amounts');
+            $products = explode(',', $inputProducts);
+            $amounts = explode(',', $inputAmounts);
 
             $formInput = [
                 'income_status_id' => 2,
                 'code' => $request->input('code'),
-                'products' => $request->input('products'),
-                'amounts' => $request->input('amounts'),
+                'products' => $inputProducts,
+                'amounts' => $inputAmounts,
                 'prices' => $request->input('prices'),
                 'total_price' => $request->input('total_price'),
                 'created_at' => now(),
                 'updated_at' => now()
             ];
+
+            // Mengurangi stok tiap produk yang dibeli
+            for ($i = 0; $i < count($products); $i++) {
+                $product = Product::firstWhere('code', $products[$i]);
+                $stock = $product->stock;
+                $basePrice = $product->base_price;
+
+                // mengurangi stok barang jadi
+                $product->update(['stock' => $stock - $amounts[$i]]);
+
+                array_push($basePrices, $basePrice);
+            }
+
+            // tambahkan data harga modal pada form
+            $formInput['base_prices'] = implode(",", $basePrices);
 
             $income = Income::create($formInput);
             $income->save();

@@ -13,6 +13,7 @@ class Income extends Model
         'code',
         'products',
         'amounts',
+        'base_prices',
         'prices',
         'total_price',
         'created_at',
