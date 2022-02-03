@@ -26,7 +26,7 @@
             <th>:</th>
             <td>
                 @if ($companyLogo)
-                    <img class="rounded-circle me-2 d-block" src="{{ asset('storage/img/' . $companyLogo) }}" alt="Company Logo" width="36" height="36">
+                    <img class="rounded-circle me-2 d-block" src="{{ asset('storage/img/' . $companyLogo) }}" alt="Company Logo" width="36" height="36" onclick="window.open('{{ asset('storage/img/' . $companyLogo) }}')">
                 @else
                     <img class="rounded-circle me-2 d-block" src="/img/default.jpg" alt="default" width="36" height="36">
                 @endif

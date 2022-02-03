@@ -65,8 +65,8 @@
             <th>Foto</th>
             <th>:</th>
             <td>
-                @if ($userImage)
-                    <img class="rounded-circle me-2 d-block" src="{{ asset('storage/img/' . $userImage) }}" alt="Company Logo" width="36" height="36">
+            @if ($userImage)
+                    <img class="rounded-circle me-2 d-block" src="{{ asset('storage/img/' . $userImage) }}" alt="Company Logo" width="36" height="36" onclick="window.open('{{ asset('storage/img/' . $userImage) }}')">
                 @else
                     <img class="rounded-circle me-2 d-block" src="/img/default.jpg" alt="default" width="36" height="36">
                 @endif

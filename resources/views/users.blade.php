@@ -30,7 +30,7 @@
                                 <td class="text-center fw-bold"><?= $i++; ?></td>
                                 <td class="text-center">
                                     @if ($user->image)
-                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $user->image) }}" alt="Foto Pengguna" width="36" height="36">
+                                        <img class="rounded-circle d-none d-md-block mx-auto" src="{{ asset('storage/img/' . $user->image) }}" alt="Foto Pengguna" width="36" height="36" onclick="window.open('{{ asset('storage/img/' . $user->image) }}')">
                                     @else
                                         <img class="rounded-circle d-none d-md-block mx-auto" src="/img/default.jpg" alt="default" width="36" height="36">
                                     @endif
