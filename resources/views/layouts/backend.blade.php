@@ -32,7 +32,7 @@
         </div>
 
         <footer class="text-secondary text-center py-3 marginLeftMinimized" style="margin-top: 250px">
-            Moneytory v1.0 &copy; {{ date("Y") }}. 
+            Moneytory v{{ env('APP_VERSION', '1.0.0') }} &copy; {{ date("Y") }}. 
         </footer>
         <!-- Optional JavaScript; choose one of the two! -->
 
