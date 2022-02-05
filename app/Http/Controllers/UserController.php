@@ -298,6 +298,7 @@ class UserController extends Controller
             }
     
             User::where('username', $username)->update($formInput);
+            $request->session()->put(['username' => $formInput['username']]);
             return redirect('/settings')->with('success', 'Ubah profil pengguna berhasil!');
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil pengguna gagal!');
