@@ -108,7 +108,7 @@
     
     async function changeStatus(url = '', data = {}) {
         const response = await fetch(url, {
-            method: 'PATCH',
+            method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,10 +128,10 @@
             var code = this.value;
 
             if (status == 2) {
-                changeStatus(`/raw-ingredients/${code}/activate`, { status_id: 2, '_token': csrf });
+                changeStatus(`/raw-ingredients/${code}/activate`, { status_id: 2, '_token': csrf, '_method': 'PATCH' });
                 statusLabel.innerHTML = 'Aktif';
             } else if (status == 1) {
-                changeStatus(`/raw-ingredients/${code}/deactivate`, { status_id: 1, '_token': csrf });
+                changeStatus(`/raw-ingredients/${code}/deactivate`, { status_id: 1, '_token': csrf, '_method': 'PATCH' });
                 statusLabel.innerHTML = 'Nonaktif';
             }
         });

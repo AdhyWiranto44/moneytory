@@ -79,8 +79,8 @@ Route::patch('/settings/company-profile', [CompanyProfileController::class, 'upd
 Route::get('/raw-ingredients', [RawIngredientController::class, 'index'])->middleware(IsAdmin::class);
 Route::get('/raw-ingredients/add-new', [RawIngredientController::class, 'create'])->middleware(IsAdmin::class);
 Route::post('/raw-ingredients/add-new', [RawIngredientController::class, 'store'])->middleware(IsAdmin::class);
-Route::patch('/raw-ingredients/deactivate/{code}', [RawIngredientController::class, 'deactivate'])->middleware(IsAdmin::class);
-Route::patch('/raw-ingredients/activate/{code}', [RawIngredientController::class, 'activate'])->middleware(IsAdmin::class);
+Route::patch('/raw-ingredients/{code}/deactivate', [RawIngredientController::class, 'deactivate'])->middleware(IsAdmin::class);
+Route::patch('/raw-ingredients/{code}/activate', [RawIngredientController::class, 'activate'])->middleware(IsAdmin::class);
 Route::get('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'edit'])->middleware(IsAdmin::class);
 Route::patch('/raw-ingredients/{code}/edit', [RawIngredientController::class, 'update'])->middleware(IsAdmin::class);
 Route::delete('/raw-ingredients/{code}/delete', [RawIngredientController::class, 'destroy'])->middleware(IsAdmin::class);

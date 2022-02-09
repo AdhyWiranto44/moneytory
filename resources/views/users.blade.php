@@ -80,7 +80,7 @@
                                 <td class="text-center">
                                     <div class="form-check form-switch">
                                         @csrf
-                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$user->username}}" @if($user->status_id == 2) checked @endif>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="{{$user->username}}" @if($user->status_id == 2) checked @endif onclick="return confirm('Yakin ingin mengganti status?');">
                                         <label class="form-check-label" for="status" name="status">
                                             @if ($user->status_id == 2)
                                                 Aktif
@@ -125,26 +125,10 @@
     const statusToggle = document.querySelector('.form-check-input');
 
     // Example POST method implementation:
-    async function activate(url = '', data = {}) {
+    async function changeStatus(url = '', data = {}) {
         // Default options are marked with *
         const response = await fetch(url, {
-            method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors',
-            headers: {
-            'Content-Type': 'application/json',
-            // 'Accept': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
-    }
-
-    // Example POST method implementation:
-    async function deactivate(url = '', data = {}) {
-        // Default options are marked with *
-        const response = await fetch(url, {
-            method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors',
             headers: {
             'Content-Type': 'application/json',
@@ -163,16 +147,10 @@
         var csrf = document.getElementsByName('_token')[0].value;
 
         if (status == 2) {
-            activate(`/users/activate/${username}`, { status_id: 2, '_token': csrf })
-            .then(() => {
-                console.log("Changed!");
-            });
+            changeStatus(`/users/activate/${username}`, { status_id: 2, '_token': csrf, '_method': 'PATCH' });
             statusLabel.innerHTML = 'Aktif';
         } else if (status == 1) {
-            deactivate(`/users/deactivate/${username}`, { status_id: 1, '_token': csrf })
-            .then(() => {
-                console.log("Changed!");
-            });
+            changeStatus(`/users/deactivate/${username}`, { status_id: 1, '_token': csrf, '_method': 'PATCH' });
             statusLabel.innerHTML = 'Nonaktif';
         }
     });
