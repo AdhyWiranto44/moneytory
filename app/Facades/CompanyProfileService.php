@@ -7,6 +7,26 @@ use App\Repositories\CompanyProfileRepository;
 
 class CompanyProfileService
 {
+    static function insert()
+    {
+        $formInput = [
+            'name' => request()->input('name'),
+            'phone_number' => request()->input('phone_number'),
+            'email' => request()->input('email'),
+            'address' => request()->input('address')
+        ];
+
+        // Kalau ada gambar yang di-upload
+        if (request()->image) {
+            $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
+            $formInput['image'] = $imgName;
+            
+            Helper::uploadfile($imgName);
+        }
+
+        CompanyProfileRepository::insert($formInput);
+    }
+
     static function update($company, $request)
     {
         $formInput = [
@@ -30,7 +50,8 @@ class CompanyProfileService
 
     static function getOne()
     {
-        $company = CompanyProfileRepository::getAll();
-        return $company[0];
+        $company = CompanyProfileRepository::getFirst();
+        if (!isset($company)) return null;
+        return $company;
     }
 }

@@ -6,8 +6,13 @@ use App\Models\User;
 
 class UserRepository
 {
-    static function getOne(String $username = "")
+    static function insert($data)
     {
-        return User::firstWhere('username', $username);
+        User::create($data)->save();
+    }
+    
+    static function get($params)
+    {
+        return User::where($params)->get();
     }
 }
