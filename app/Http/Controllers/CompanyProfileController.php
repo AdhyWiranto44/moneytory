@@ -48,26 +48,10 @@ class CompanyProfileController extends Controller
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]
         );
-
-        $company = CompanyProfileService::getOne();
-
+        
         try {
-            $formInput = [
-                'name' => $request->input('name') != null ? $request->input('name') : $company->name,
-                'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $company->phone_number,
-                'email' => $request->input('email') != null ? $request->input('email') : $company->email,
-                'address' => $request->input('address') != null ? $request->input('address') : $company->address,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            CompanyProfileService::update($formInput);
+            $company = CompanyProfileService::getOne();
+            CompanyProfileService::update($company, $request);
             return redirect('/settings')->with('success', 'Ubah profil perusahaan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil perusahaan gagal!');

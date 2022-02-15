@@ -2,13 +2,30 @@
 
 namespace App\Facades;
 
+use App\Helper;
 use App\Repositories\CompanyProfileRepository;
 
 class CompanyProfileService
 {
-    static function update($data)
+    static function update($company, $request)
     {
-        CompanyProfileRepository::update($data);
+        $formInput = [
+            'name' => $request->input('name') != null ? $request->input('name') : $company->name,
+            'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $company->phone_number,
+            'email' => $request->input('email') != null ? $request->input('email') : $company->email,
+            'address' => $request->input('address') != null ? $request->input('address') : $company->address,
+            'updated_at' => now()
+        ];
+
+        // Kalau ada gambar yang di-upload
+        if ($request->image) {
+            $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
+            $formInput['image'] = $imgName;
+            
+            Helper::uploadfile($imgName);
+        }
+
+        CompanyProfileRepository::update($formInput);
     }
 
     static function getOne()
