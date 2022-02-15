@@ -6,8 +6,13 @@ use App\Models\CompanyProfile;
 
 class CompanyProfileRepository
 {
-    static function getOne()
+    static function update($data)
     {
-        return CompanyProfile::first();
+        CompanyProfile::first()->update($data);
+    }
+
+    static function getAll()
+    {
+        return CompanyProfile::all();
     }
 }

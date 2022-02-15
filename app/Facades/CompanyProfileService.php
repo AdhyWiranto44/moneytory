@@ -6,8 +6,14 @@ use App\Repositories\CompanyProfileRepository;
 
 class CompanyProfileService
 {
+    static function update($data)
+    {
+        CompanyProfileRepository::update($data);
+    }
+
     static function getOne()
     {
-        return CompanyProfileRepository::getOne();
+        $company = CompanyProfileRepository::getAll();
+        return $company[0];
     }
 }

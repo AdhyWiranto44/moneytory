@@ -49,7 +49,7 @@ class CompanyProfileController extends Controller
             ]
         );
 
-        $company = Helper::getCompanyProfile();
+        $company = CompanyProfileService::getOne();
 
         try {
             $formInput = [
@@ -67,7 +67,7 @@ class CompanyProfileController extends Controller
                 $request->image->storeAs('./public/img', $imgName);
             }
     
-            CompanyProfile::first()->update($formInput);
+            CompanyProfileService::update($formInput);
             return redirect('/settings')->with('success', 'Ubah profil perusahaan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil perusahaan gagal!');
