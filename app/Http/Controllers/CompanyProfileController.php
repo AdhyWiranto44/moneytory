@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\UserService;
 use App\Helper;
 use App\Models\CompanyProfile;
 use Illuminate\Database\QueryException;
@@ -11,7 +12,7 @@ class CompanyProfileController extends Controller
 {
     public function edit(Request $request)
     {
-        $user = Helper::getUserLogin($request);
+        $user = UserService::getUserLogin($request->session()->get('username'));
         $company = Helper::getCompanyProfile();
         $menus = Helper::getMenus($request);
         $data = [
