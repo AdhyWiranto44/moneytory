@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\CompanyProfileService;
+use App\Facades\MenuService;
+use App\Facades\UserService;
 use App\Helper;
 use App\Models\Debt;
 use App\Models\DebtStatus;
@@ -25,8 +28,8 @@ class DebtController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
+        $user = UserService::getUserLogin($request->session()->get('username'));
+        $company = CompanyProfileService::getOne();
         $debts = DB::table('debts')
                 ->join('debt_types', 'debts.debt_type_id', '=', 'debt_types.id')
                 ->join('debt_statuses', 'debts.debt_status_id', '=', 'debt_statuses.id')
@@ -34,7 +37,7 @@ class DebtController extends Controller
                 ->where("debts.created_at", ">=", $dateMin)
                 ->where("debts.created_at", "<=", $dateMax)
                 ->get();
-        $menus = Helper::getMenus($request);
+        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Hutang',
             'menus' => $menus,
