@@ -11,10 +11,6 @@ class CompanyProfileController extends Controller
 {
     public function edit(Request $request)
     {
-        if (!$request->session()->get('username')) {
-            return redirect('/login');
-        }
-
         $user = Helper::getUserLogin($request);
         $company = Helper::getCompanyProfile();
         $menus = Helper::getMenus($request);
