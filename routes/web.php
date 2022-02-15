@@ -88,57 +88,57 @@ Route::delete('/raw-ingredients/{code}/delete', [RawIngredientController::class,
 /**
  * OnProcessIngredientController
  */
-Route::get('/on-process-ingredients', [OnProcessIngredientController::class, 'index'])->middleware(IsAdmin::class);
-Route::get('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'create'])->middleware(IsAdmin::class);
-Route::post('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'store'])->middleware(IsAdmin::class);
-Route::delete('/on-process-ingredients/{code}/delete', [OnProcessIngredientController::class, 'destroy'])->middleware(IsAdmin::class);
-Route::patch('/on-process-ingredients/{code}/deactivate', [OnProcessIngredientController::class, 'deactivate'])->middleware(IsAdmin::class);
-Route::patch('/on-process-ingredients/{code}/activate', [OnProcessIngredientController::class, 'activate'])->middleware(IsAdmin::class);
-Route::get('/on-process-ingredients/{code}/edit', [OnProcessIngredientController::class, 'edit'])->middleware(IsAdmin::class);
-Route::patch('/on-process-ingredients/{code}/edit', [OnProcessIngredientController::class, 'update'])->middleware(IsAdmin::class);
+Route::get('/on-process-ingredients', [OnProcessIngredientController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'create'])->middleware(IsLoggedIn::class);
+Route::post('/on-process-ingredients/add-new', [OnProcessIngredientController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::delete('/on-process-ingredients/{code}/delete', [OnProcessIngredientController::class, 'destroy'])->middleware(IsLoggedIn::class);
+Route::patch('/on-process-ingredients/{code}/deactivate', [OnProcessIngredientController::class, 'deactivate'])->middleware(IsLoggedIn::class);
+Route::patch('/on-process-ingredients/{code}/activate', [OnProcessIngredientController::class, 'activate'])->middleware(IsLoggedIn::class);
+Route::get('/on-process-ingredients/{code}/edit', [OnProcessIngredientController::class, 'edit'])->middleware(IsLoggedIn::class);
+Route::patch('/on-process-ingredients/{code}/edit', [OnProcessIngredientController::class, 'update'])->middleware(IsLoggedIn::class);
 
 /**
  * ProductController
  */
-Route::get('/products', [ProductController::class, 'index'])->middleware(IsAdmin::class);
-Route::get('/products/add-new', [ProductController::class, 'create'])->middleware(IsAdmin::class);
-Route::post('/products/add-new', [ProductController::class, 'store'])->middleware(IsAdmin::class);
-Route::patch('/products/{code}/deactivate', [ProductController::class, 'deactivate'])->middleware(IsAdmin::class);
-Route::patch('/products/{code}/activate', [ProductController::class, 'activate'])->middleware(IsAdmin::class);
-Route::get('/products/{code}/edit', [ProductController::class, 'edit'])->middleware(IsAdmin::class);
-Route::patch('/products/{code}/edit', [ProductController::class, 'update'])->middleware(IsAdmin::class);
-Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])->middleware(IsAdmin::class);
+Route::get('/products', [ProductController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/products/add-new', [ProductController::class, 'create'])->middleware(IsLoggedIn::class);
+Route::post('/products/add-new', [ProductController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::patch('/products/{code}/deactivate', [ProductController::class, 'deactivate'])->middleware(IsLoggedIn::class);
+Route::patch('/products/{code}/activate', [ProductController::class, 'activate'])->middleware(IsLoggedIn::class);
+Route::get('/products/{code}/edit', [ProductController::class, 'edit'])->middleware(IsLoggedIn::class);
+Route::patch('/products/{code}/edit', [ProductController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])->middleware(IsLoggedIn::class);
 
 /**
  * IncomeController
  */
-Route::get('/incomes', [IncomeController::class, 'index'])->middleware(IsAdmin::class);
-Route::get('/incomes/add-new', [IncomeController::class, 'create'])->middleware(IsAdmin::class);
-Route::post('/incomes/add-new', [IncomeController::class, 'store'])->middleware(IsAdmin::class);
-Route::get('/incomes/{code}/edit', [IncomeController::class, 'edit'])->middleware(IsAdmin::class);
-Route::patch('/incomes/{code}/edit', [IncomeController::class, 'update'])->middleware(IsAdmin::class);
-Route::patch('/incomes/{code}/deactivate', [IncomeController::class, 'deactivate'])->middleware(IsAdmin::class);
-Route::patch('/incomes/{code}/activate', [IncomeController::class, 'activate'])->middleware(IsAdmin::class);
-Route::delete('/incomes/{code}/delete', [IncomeController::class, 'destroy'])->middleware(IsAdmin::class);
+Route::get('/incomes', [IncomeController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/incomes/add-new', [IncomeController::class, 'create'])->middleware(IsLoggedIn::class);
+Route::post('/incomes/add-new', [IncomeController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::get('/incomes/{code}/edit', [IncomeController::class, 'edit'])->middleware(IsLoggedIn::class);
+Route::patch('/incomes/{code}/edit', [IncomeController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::patch('/incomes/{code}/deactivate', [IncomeController::class, 'deactivate'])->middleware(IsLoggedIn::class);
+Route::patch('/incomes/{code}/activate', [IncomeController::class, 'activate'])->middleware(IsLoggedIn::class);
+Route::delete('/incomes/{code}/delete', [IncomeController::class, 'destroy'])->middleware(IsLoggedIn::class);
 
 /**
  * ExpenseController
  */
-Route::get('/expenses', [ExpenseController::class, 'index'])->middleware(IsAdmin::class);
-Route::get('/expenses/add-new', [ExpenseController::class, 'create'])->middleware(IsAdmin::class);
-Route::post('/expenses/add-new', [ExpenseController::class, 'store'])->middleware(IsAdmin::class);
-Route::get('/expenses/{code}/edit', [ExpenseController::class, 'edit'])->middleware(IsAdmin::class);
-Route::patch('/expenses/{code}/edit', [ExpenseController::class, 'update'])->middleware(IsAdmin::class);
-Route::delete('/expenses/{code}/delete', [ExpenseController::class, 'destroy'])->middleware(IsAdmin::class);
+Route::get('/expenses', [ExpenseController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/expenses/add-new', [ExpenseController::class, 'create'])->middleware(IsLoggedIn::class);
+Route::post('/expenses/add-new', [ExpenseController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::get('/expenses/{code}/edit', [ExpenseController::class, 'edit'])->middleware(IsLoggedIn::class);
+Route::patch('/expenses/{code}/edit', [ExpenseController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::delete('/expenses/{code}/delete', [ExpenseController::class, 'destroy'])->middleware(IsLoggedIn::class);
 
 /**
  * DebtController
  */
-Route::get('/debts', [DebtController::class, 'index'])->middleware(IsAdmin::class);
-Route::get('/debts/add-new', [DebtController::class, 'create'])->middleware(IsAdmin::class);
-Route::post('/debts/add-new', [DebtController::class, 'store'])->middleware(IsAdmin::class);
-Route::patch('/debts/{code}/deactivate', [DebtController::class, 'deactivate'])->middleware(IsAdmin::class);
-Route::patch('/debts/{code}/activate', [DebtController::class, 'activate'])->middleware(IsAdmin::class);
-Route::get('/debts/{code}/edit', [DebtController::class, 'edit'])->middleware(IsAdmin::class);
-Route::patch('/debts/{code}/edit', [DebtController::class, 'update'])->middleware(IsAdmin::class);
-Route::delete('/debts/{code}/delete', [DebtController::class, 'destroy'])->middleware(IsAdmin::class);
+Route::get('/debts', [DebtController::class, 'index'])->middleware(IsLoggedIn::class);
+Route::get('/debts/add-new', [DebtController::class, 'create'])->middleware(IsLoggedIn::class);
+Route::post('/debts/add-new', [DebtController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::patch('/debts/{code}/deactivate', [DebtController::class, 'deactivate'])->middleware(IsLoggedIn::class);
+Route::patch('/debts/{code}/activate', [DebtController::class, 'activate'])->middleware(IsLoggedIn::class);
+Route::get('/debts/{code}/edit', [DebtController::class, 'edit'])->middleware(IsLoggedIn::class);
+Route::patch('/debts/{code}/edit', [DebtController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::delete('/debts/{code}/delete', [DebtController::class, 'destroy'])->middleware(IsLoggedIn::class);
