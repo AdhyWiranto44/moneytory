@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\UserService;
 use App\Facades\CompanyProfileService;
+use App\Facades\MenuService;
 use App\Helper;
 use App\Models\CompanyProfile;
 use Illuminate\Database\QueryException;
@@ -15,7 +16,7 @@ class CompanyProfileController extends Controller
     {
         $user = UserService::getUserLogin($request->session()->get('username'));
         $company = CompanyProfileService::getOne();
-        $menus = Helper::getMenus($request);
+        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Ubah Profil Perusahaan',
             'menus' => $menus,
