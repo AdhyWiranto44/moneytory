@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\CompanyProfileService;
+use App\Facades\ExpenseService;
+use App\Facades\IncomeService;
+use App\Facades\DebtService;
+use App\Facades\MenuService;
+use App\Facades\UserService;
 use App\Helper;
 use App\Models\CompanyProfile;
 use App\Models\Debt;
@@ -21,10 +27,8 @@ class DashboardController extends Controller
          * Saat membuka root route
          * Dan belum ada data profil perusahaan di database
          */
-        $companyProfile = CompanyProfile::first();
-        if ($companyProfile == null) {
-            return redirect('/welcome');
-        }
+        $companyProfile = CompanyProfileService::getOne();
+        if ($companyProfile == null) return redirect('/welcome');
         
         [$dateMin, $dateMax] = Helper::getCurrentDate();
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
@@ -35,14 +39,13 @@ class DashboardController extends Controller
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
-        $incomes = $this->getIncome($dateMin, $dateMax);
-        $expenses = $this->getExpense($dateMin, $dateMax);
-        $debts = $this->getDebt($dateMin, $dateMax);
-        
+        $incomes = IncomeService::getByDate($dateMin, $dateMax);
+        $expenses = ExpenseService::getByDate($dateMin, $dateMax);
+        $debts = DebtService::getByDate($dateMin, $dateMax);
 
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        $user = UserService::getUserLogin($request->session()->get('username'));
+        $company = CompanyProfileService::getOne();
+        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Dashboard',
             'menus' => $menus,
@@ -55,26 +58,5 @@ class DashboardController extends Controller
             'debts' => $debts,
         ];
         return view('dashboard', $data);
-    }
-
-    private function getIncome($from, $to)
-    {
-        $incomes = Income::where([["income_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('total_price');
-
-        return $incomes;
-    }
-
-    private function getExpense($from, $to)
-    {
-        $expenses = Expense::where([["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('cost');
-
-        return $expenses;
-    }
-
-    private function getDebt($from, $to)
-    {
-        $debts = Debt::where([["debt_status_id", "=", 2], ["created_at", ">=", $from], ["created_at", "<=", $to]])->sum('price');
-
-        return $debts;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\CompanyProfileService;
+use App\Facades\UserService;
 use App\Models\CompanyProfile;
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -12,14 +14,10 @@ class CompanyRegistrationController extends Controller
 {
     public function index()
     {
-        $companyProfile = CompanyProfile::first();
-        if ($companyProfile != null) {
-            return redirect('/login');
-        }
+        $companyProfile = CompanyProfileService::getOne();
+        if ($companyProfile != null) return redirect('/login');
         
-        $data = [
-            'title' => 'Company Registration'
-        ];
+        $data = [ 'title' => 'Company Registration' ];
         return view('company_registration', $data);
     }
 
@@ -40,42 +38,16 @@ class CompanyRegistrationController extends Controller
                 'max' => 'Ukuran gambar maksimal yang diterima adalah sebesar:max MB'
             ]
         );
+
+        try {
+            CompanyProfileService::insert();
+        } catch (QueryException $ex) {
+            return redirect('/registration/company');
+        }
         
         try {
-            $formInput = [
-                'name' => $request->input('name'),
-                'phone_number' => $request->input('phone_number'),
-                'email' => $request->input('email'),
-                'address' => $request->input('address')
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            // Simpan data perusahaan
-            $companyProfile = CompanyProfile::create($formInput);
-            $companyProfile->save();
-    
             // Mendaftarkan user admin default
-            $user = User::create([
-                'role_id' => 1,
-                'status_id' => 2,
-                'username' => 'admin',
-                'password' => Hash::make('12345', ['rounds' => 10]),
-                'name' => 'Administrator',
-                'phone_number' => '088976685446',
-                'email' => null,
-                'address' => null,
-                'image' => null,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-            $user->save();
-    
+            UserService::insertDefaultUser();
             return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
         } catch (QueryException $ex) {
             return redirect('/registration/company');

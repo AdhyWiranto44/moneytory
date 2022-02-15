@@ -39,4 +39,9 @@ class Helper
         $menus = Menu::where('role_id', '>=', $role_id)->get();
         return $menus;
     }
+
+    public static function uploadfile($imgName)
+    {
+        request()->image->storeAs('./public/img', $imgName);
+    }
 }
