@@ -16,7 +16,7 @@ class ExpenseController extends Controller
         [ $user, $company, $menus ] = Helper::getCommonData();
         [ $dateMin, $dateMax ] = Helper::getCurrentDate();
         $expenses = ExpenseService::getByDate($dateMin, $dateMax);
-        
+
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -72,37 +72,17 @@ class ExpenseController extends Controller
         );
 
         try {
-            $formInput = [
-                'name' => $request->input('name'),
-                'code' => $request->input('code'),
-                'description' => $request->input('description'),
-                'cost' => $request->input('cost'),
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-
-            $expense = Expense::create($formInput);
-            $expense->save();
-    
+            ExpenseService::insert();
             return redirect('/expenses')->with('success', 'Tambah Pengeluaran Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Tambah Pengeluaran Gagal!');
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $expense = Expense::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = Helper::getCommonData();
+        $expense = ExpenseService::getOne($code);
         $data = [
             'title' => 'Ubah',
             'expense' => $expense,
@@ -118,7 +98,7 @@ class ExpenseController extends Controller
 
     public function update(Request $request, $code)
     {
-        $expense = Expense::firstWhere('code', $code);
+        $expense = ExpenseService::getOne($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -140,22 +120,7 @@ class ExpenseController extends Controller
         );
 
         try {
-            $formInput = [
-                'name' => $request->input('name') != null ? $request->input('name') : $expense->name,
-                'code' => $request->input('code') != null ? $request->input('code') : $expense->code,
-                'description' => $request->input('description') != null ? $request->input('description') : $expense->description,
-                'cost' => $request->input('cost') != null ? $request->input('cost') : $expense->cost,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            Expense::where('code', $code)->update($formInput);
+            ExpenseService::update($code, $expense);
             return redirect('/expenses')->with('success', 'Ubah pengeluaran berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Ubah pengeluaran gagal!');
@@ -165,7 +130,7 @@ class ExpenseController extends Controller
     public function destroy($code)
     {
         try {
-            Expense::where('code', $code)->delete();
+            ExpenseService::delete($code);
             return redirect('/expenses')->with('success', 'Penghapusan pengeluaran berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Penghapusan pengeluaran gagal!');

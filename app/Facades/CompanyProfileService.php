@@ -9,7 +9,7 @@ class CompanyProfileService
 {
     static function insert()
     {
-        $formInput = [
+        $companyProfile = [
             'name' => request()->input('name'),
             'phone_number' => request()->input('phone_number'),
             'email' => request()->input('email'),
@@ -18,13 +18,11 @@ class CompanyProfileService
 
         // Kalau ada gambar yang di-upload
         if (request()->image) {
-            $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
-            $formInput['image'] = $imgName;
-            
-            Helper::uploadfile($imgName);
+            $companyProfile['image'] = Helper::createImageName();
+            Helper::uploadFile($companyProfile['image']);
         }
 
-        CompanyProfileRepository::insert($formInput);
+        CompanyProfileRepository::insert($companyProfile);
     }
 
     static function update($company, $request)
@@ -42,7 +40,7 @@ class CompanyProfileService
             $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
             $formInput['image'] = $imgName;
             
-            Helper::uploadfile($imgName);
+            Helper::uploadFile($imgName);
         }
 
         CompanyProfileRepository::update($formInput);
