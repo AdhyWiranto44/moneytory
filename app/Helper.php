@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Facades\CompanyProfileService;
+use App\Facades\MenuService;
+use App\Facades\UserService;
 use App\Models\CompanyProfile;
 use App\Models\Menu;
 use App\Models\User;
@@ -19,6 +22,15 @@ class Helper
         }
 
         return [$dateMin, $dateMax];
+    }
+
+    public static function getCommonData()
+    {
+        $user = UserService::getUserLogin(request()->session()->get('username'));
+        $company = CompanyProfileService::getOne();
+        $menus = MenuService::getByRoleId(request()->session()->get('role_id'));
+
+        return [ $user, $company, $menus ];
     }
 
     public static function getUserLogin(Request $request)
