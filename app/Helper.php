@@ -52,8 +52,14 @@ class Helper
         return $menus;
     }
 
-    public static function uploadfile($imgName)
+    public static function uploadFile($imgName)
     {
         request()->image->storeAs('./public/img', $imgName);
+    }
+
+    public static function createImageName()
+    {
+        $name = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
+        return $name;
     }
 }
