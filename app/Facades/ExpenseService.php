@@ -6,7 +6,7 @@ use App\Repositories\ExpenseRepository;
 
 class ExpenseService
 {
-    static function getByDate($from, $to)
+    static function getCostSumByDate($from, $to)
     {
         $params = [
             ["created_at", ">=", $from], 

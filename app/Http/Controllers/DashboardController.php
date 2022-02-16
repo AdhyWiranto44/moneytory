@@ -39,9 +39,9 @@ class DashboardController extends Controller
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
-        $incomes = IncomeService::getByDate($dateMin, $dateMax);
-        $expenses = ExpenseService::getByDate($dateMin, $dateMax);
-        $debts = DebtService::getByDate($dateMin, $dateMax);
+        $incomes = IncomeService::getPriceSumByDate($dateMin, $dateMax);
+        $expenses = ExpenseService::getCostSUmByDate($dateMin, $dateMax);
+        $debts = DebtService::getPriceSumByDate($dateMin, $dateMax);
 
         $user = UserService::getUserLogin($request->session()->get('username'));
         $company = CompanyProfileService::getOne();

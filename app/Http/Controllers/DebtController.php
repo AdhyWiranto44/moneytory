@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Facades\CompanyProfileService;
+use App\Facades\DebtService;
+use App\Facades\DebtStatusService;
+use App\Facades\DebtTypeService;
 use App\Facades\MenuService;
 use App\Facades\UserService;
 use App\Helper;
-use App\Models\Debt;
-use App\Models\DebtStatus;
-use App\Models\DebtType;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class DebtController extends Controller
@@ -30,13 +29,7 @@ class DebtController extends Controller
 
         $user = UserService::getUserLogin($request->session()->get('username'));
         $company = CompanyProfileService::getOne();
-        $debts = DB::table('debts')
-                ->join('debt_types', 'debts.debt_type_id', '=', 'debt_types.id')
-                ->join('debt_statuses', 'debts.debt_status_id', '=', 'debt_statuses.id')
-                ->select('debts.*', 'debt_types.name as type', 'debt_statuses.name as status')
-                ->where("debts.created_at", ">=", $dateMin)
-                ->where("debts.created_at", "<=", $dateMax)
-                ->get();
+        $debts = DebtService::getByDate($dateMin, $dateMax);
         $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Hutang',
@@ -52,11 +45,11 @@ class DebtController extends Controller
 
     public function create(Request $request)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
-        $debtTypes = DebtType::all();
-        $debtStatuses = DebtStatus::all();
+        $user = UserService::getUserLogin($request->session()->get('username'));
+        $company = CompanyProfileService::getOne();
+        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
+        $debtTypes = DebtTypeService::getAll();
+        $debtStatuses = DebtStatusService::getAll();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -91,23 +84,21 @@ class DebtController extends Controller
         );
 
         try {
-            $formInput = [
-                'debt_type_id' => $request->input('debt_type'),
-                'debt_status_id' => $request->input('debt_status'),
-                'name' => $request->input('name'),
-                'code' => $request->input('code'),
-                'description' => $request->input('description'),
-                'price' => $request->input('price'),
-                'on_behalf_of' => $request->input('on_behalf_of'),
-                'phone_number' => $request->input('phone_number'),
-                'address' => $request->input('address'),
+            $data = [
+                'debt_type_id' => request()->input('debt_type'),
+                'debt_status_id' => request()->input('debt_status'),
+                'name' => request()->input('name'),
+                'code' => request()->input('code'),
+                'description' => request()->input('description'),
+                'price' => request()->input('price'),
+                'on_behalf_of' => request()->input('on_behalf_of'),
+                'phone_number' => request()->input('phone_number'),
+                'address' => request()->input('address'),
                 'created_at' => now(),
                 'updated_at' => now()
             ];
 
-            $debt = Debt::create($formInput);
-            $debt->save();
-    
+            DebtService::insert($data);
             return redirect('/debts')->with('success', 'Tambah Hutang Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Tambah Hutang Gagal!');
@@ -116,12 +107,12 @@ class DebtController extends Controller
 
     public function edit(Request $request, $code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $debtTypes = DebtType::all();
-        $debtStatuses = DebtStatus::all();
-        $debt = Debt::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        $user = UserService::getUserLogin($request->session()->get('username'));
+        $company = CompanyProfileService::getOne();
+        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
+        $debtTypes = DebtTypeService::getAll();
+        $debtStatuses = DebtStatusService::getAll();
+        $debt = DebtService::getOne($code);
         $data = [
             'title' => 'Ubah',
             'debt' => $debt,
@@ -139,7 +130,7 @@ class DebtController extends Controller
 
     public function update(Request $request, $code)
     {
-        $debt = Debt::firstWhere('code', $code);
+        $debt = DebtService::getOne($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -162,7 +153,7 @@ class DebtController extends Controller
         );
 
         try {
-            $formInput = [
+            $update = [
                 'debt_type_id' => $request->input('debt_type') != null ? $request->input('debt_type') : $debt->debt_type_id,
                 'debt_status_id' => $request->input('debt_status') != null ? $request->input('debt_status') : $debt->debt_status_id,
                 'name' => $request->input('name') != null ? $request->input('name') : $debt->name,
@@ -174,32 +165,39 @@ class DebtController extends Controller
                 'address' => $request->input('address') != null ? $request->input('address') : $debt->address,
                 'updated_at' => now()
             ];
-    
-            Debt::where('code', $code)->update($formInput);
+            DebtService::update($code, $update);
             return redirect('/debts')->with('success', 'Ubah hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah hutang gagal!');
         }
     }
 
-    public function deactivate(Request $request, $code)
+    public function deactivate($code)
     {
-        $status = 1;
-        Debt::where('code', $code)->update(['debt_status_id' => $status]);
-        return redirect('/debts');
+        try {
+            $update = [ 'debt_status_id' => 1 ];
+            DebtService::update($code, $update);
+            return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
+        }
     }
 
-    public function activate(Request $request, $code)
+    public function activate($code)
     {
-        $status = 2;
-        Debt::where('code', $code)->update(['debt_status_id' => $status]);
-        return redirect('/debts');
+        try {
+            $update = [ 'debt_status_id' => 2 ];
+            DebtService::update($code, $update);
+            return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
+        } catch(QueryException $ex) {
+            return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
+        }
     }
 
     public function destroy($code)
     {
         try {
-            Debt::where('code', $code)->delete();
+            DebtService::delete($code);
             return redirect('/debts')->with('success', 'Penghapusan hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Penghapusan hutang gagal!');

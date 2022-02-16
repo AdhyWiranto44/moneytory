@@ -6,7 +6,7 @@ use App\Repositories\IncomeRepository;
 
 class IncomeService
 {
-    static function getByDate($from, $to)
+    static function getPriceSumByDate($from, $to)
     {
         $params = [
             [ "income_status_id", "=", 2 ], 
