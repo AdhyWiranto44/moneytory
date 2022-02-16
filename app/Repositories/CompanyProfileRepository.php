@@ -6,18 +6,23 @@ use App\Models\CompanyProfile;
 
 class CompanyProfileRepository
 {
-    static function insert($data)
+    public function __construct()
     {
-        CompanyProfile::create($data)->save();
+        $this->companyProfile = new CompanyProfile();
     }
 
-    static function update($data)
+    public function insert($data)
     {
-        CompanyProfile::first()->update($data);
+        $this->companyProfile->create($data)->save();
     }
 
-    static function getFirst()
+    public function update($data)
     {
-        return CompanyProfile::first();
+        $this->companyProfile->first()->update($data);
+    }
+
+    public function getFirst()
+    {
+        return $this->companyProfile->first();
     }
 }

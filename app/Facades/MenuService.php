@@ -6,9 +6,14 @@ use App\Repositories\MenuRepository;
 
 class MenuService
 {
-    static function getByRoleId($role_id)
+    public function __construct()
     {
-        $menus = MenuRepository::getAll()->where('role_id', '>=', $role_id);
+        $this->menuRepository = new MenuRepository();
+    }
+
+    public function getByRoleId($role_id)
+    {
+        $menus = $this->menuRepository->getAll()->where('role_id', '>=', $role_id);
         return $menus;
     }
 }

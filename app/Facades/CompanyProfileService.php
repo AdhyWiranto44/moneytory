@@ -7,7 +7,13 @@ use App\Repositories\CompanyProfileRepository;
 
 class CompanyProfileService
 {
-    static function insert()
+    public function __construct()
+    {
+        $this->companyProfileRepository = new CompanyProfileRepository();
+        $this->helper = new Helper();
+    }
+
+    public function insert()
     {
         $companyProfile = [
             'name' => request()->input('name'),
@@ -18,14 +24,14 @@ class CompanyProfileService
 
         // Kalau ada gambar yang di-upload
         if (request()->image) {
-            $companyProfile['image'] = Helper::createImageName();
-            Helper::uploadFile($companyProfile['image']);
+            $companyProfile['image'] = $this->helper->createImageName();
+            $this->helper->uploadFile($companyProfile['image']);
         }
 
-        CompanyProfileRepository::insert($companyProfile);
+        $this->companyProfileRepository->insert($companyProfile);
     }
 
-    static function update($company, $request)
+    public function update($company, $request)
     {
         $formInput = [
             'name' => $request->input('name') != null ? $request->input('name') : $company->name,
@@ -40,15 +46,15 @@ class CompanyProfileService
             $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
             $formInput['image'] = $imgName;
             
-            Helper::uploadFile($imgName);
+            $this->helper->uploadFile($imgName);
         }
 
-        CompanyProfileRepository::update($formInput);
+        $this->companyProfileRepository->update($formInput);
     }
 
-    static function getOne()
+    public function getOne()
     {
-        $company = CompanyProfileRepository::getFirst();
+        $company = $this->companyProfileRepository->getFirst();
         if (!isset($company)) return null;
         return $company;
     }

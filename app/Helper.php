@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class Helper
 {
-    public static function getCurrentDate()
+    public function getCurrentDate()
     {
         $dateMin = date("Y-m-d 00:00:00");
         $dateMax = date("Y-m-d 23:59:59");
@@ -24,11 +24,15 @@ class Helper
         return [$dateMin, $dateMax];
     }
 
-    public static function getCommonData()
+    public function getCommonData()
     {
-        $user = UserService::getUserLogin(request()->session()->get('username'));
-        $company = CompanyProfileService::getOne();
-        $menus = MenuService::getByRoleId(request()->session()->get('role_id'));
+        $user = new UserService();
+        $company = new CompanyProfileService();
+        $menus = new MenuService();
+        
+        $user = $user->getUserLogin(request()->session()->get('username'));
+        $company = $company->getOne();
+        $menus = $menus->getByRoleId(request()->session()->get('role_id'));
 
         return [ $user, $company, $menus ];
     }
@@ -52,12 +56,12 @@ class Helper
         return $menus;
     }
 
-    public static function uploadFile($imgName)
+    public function uploadFile($imgName)
     {
         request()->image->storeAs('./public/img', $imgName);
     }
 
-    public static function createImageName()
+    public function createImageName()
     {
         $name = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
         return $name;

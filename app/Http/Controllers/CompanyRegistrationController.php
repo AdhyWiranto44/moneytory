@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Facades\CompanyProfileService;
 use App\Facades\UserService;
-use App\Models\CompanyProfile;
-use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class CompanyRegistrationController extends Controller
 {
+    public function __construct()
+    {
+        $this->companyProfileService = new CompanyProfileService();
+        $this->userService = new UserService();
+    }
+
     public function index()
     {
-        $companyProfile = CompanyProfileService::getOne();
+        $companyProfile = $this->companyProfileService->getOne();
         if ($companyProfile != null) return redirect('/login');
         
         $data = [ 'title' => 'Company Registration' ];
@@ -40,14 +43,14 @@ class CompanyRegistrationController extends Controller
         );
 
         try {
-            CompanyProfileService::insert();
+            $this->companyProfileService->insert();
         } catch (QueryException $ex) {
             return redirect('/registration/company');
         }
         
         try {
             // Mendaftarkan user admin default
-            UserService::insertDefaultUser();
+            $this->userService->insertDefaultUser();
             return redirect('/login')->with('success', 'Pendaftaran perusahaanmu berhasil dilakukan. Sistem juga telah menambahkan user baru username: admin dan password: 12345, disarankan untuk menggantinya segera!');
         } catch (QueryException $ex) {
             return redirect('/registration/company');

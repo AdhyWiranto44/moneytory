@@ -6,23 +6,28 @@ use App\Models\Expense;
 
 class ExpenseRepository
 {
-    static function get($params)
+    public function __construct()
     {
-        return Expense::where($params)->get();
+        $this->expense = new Expense();
     }
 
-    static function insert($data)
+    public function get($params)
     {
-        Expense::create($data)->save();
+        return $this->expense->where($params)->get();
     }
 
-    static function update($params, $update)
+    public function insert($data)
     {
-        Expense::where($params)->update($update);
+        $this->expense->create($data)->save();
     }
 
-    static function delete($params)
+    public function update($params, $update)
     {
-        Expense::where($params)->delete();
+        $this->expense->where($params)->update($update);
+    }
+
+    public function delete($params)
+    {
+        $this->expense->where($params)->delete();
     }
 }

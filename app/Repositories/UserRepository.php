@@ -6,13 +6,18 @@ use App\Models\User;
 
 class UserRepository
 {
-    static function insert($data)
+    public function __construct()
     {
-        User::create($data)->save();
+        $this->user = new User();
+    }
+
+    public function insert($data)
+    {
+        $this->user->create($data)->save();
     }
     
-    static function get($params)
+    public function get($params)
     {
-        return User::where($params)->get();
+        return $this->user->where($params)->get();
     }
 }

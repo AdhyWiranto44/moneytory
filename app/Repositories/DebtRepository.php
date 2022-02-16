@@ -7,12 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class DebtRepository
 {
-    static function get($params)
+    public function __construct()
     {
-        return Debt::where($params)->get();
+        $this->debt = new Debt();
     }
 
-    static function getWithTypeAndStatus($params)
+    public function get($params)
+    {
+        return $this->debt->where($params)->get();
+    }
+
+    public function getWithTypeAndStatus($params)
     {
         return DB::table('debts')
             ->join('debt_types', 'debts.debt_type_id', '=', 'debt_types.id')
@@ -23,18 +28,18 @@ class DebtRepository
             ->get();
     }
 
-    static function insert($data)
+    public function insert($data)
     {
-        Debt::create($data)->save();
+        $this->debt->create($data)->save();
     }
 
-    static function update($params, $update)
+    public function update($params, $update)
     {
-        Debt::where($params)->update($update);
+        $this->debt->where($params)->update($update);
     }
     
-    static function delete($params)
+    public function delete($params)
     {
-        Debt::where($params)->delete();
+        $this->debt->where($params)->delete();
     }
 }

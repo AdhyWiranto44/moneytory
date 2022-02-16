@@ -6,8 +6,13 @@ use App\Models\Income;
 
 class IncomeRepository
 {
-    static function get($params)
+    public function __construct()
     {
-        return Income::where($params)->get();
+        $this->income = new Income();
+    }
+
+    public function get($params)
+    {
+        return $this->income->where($params)->get();
     }
 }

@@ -6,8 +6,13 @@ use App\Models\Menu;
 
 class MenuRepository
 {
-    static function getAll()
+    public function __construct()
     {
-        return Menu::all();
+        $this->menu = new Menu();
+    }
+
+    public function getAll()
+    {
+        return $this->menu->all();
     }
 }

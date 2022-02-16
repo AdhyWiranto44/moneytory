@@ -6,8 +6,13 @@ use App\Models\DebtStatus;
 
 class DebtStatusRepository
 {
-    static function getAll()
+    public function __construct()
     {
-        return DebtStatus::all();
+        $this->debtStatus = new DebtStatus();
+    }
+
+    public function getAll()
+    {
+        return $this->debtStatus->all();
     }
 }

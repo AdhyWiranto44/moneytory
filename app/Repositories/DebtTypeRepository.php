@@ -3,12 +3,16 @@
 namespace App\Repositories;
 
 use App\Models\DebtType;
-use Illuminate\Support\Facades\DB;
 
 class DebtTypeRepository
 {
-    static function getAll()
+    public function __construct()
     {
-        return DebtType::all();
+        $this->debtType = new DebtType();
+    }
+
+    public function getAll()
+    {
+        return $this->debtType->all();
     }
 }

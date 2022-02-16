@@ -12,9 +12,14 @@ use Illuminate\Validation\Rule;
 
 class IncomeController extends Controller
 {
+    public function __construct()
+    {
+        $this->helper = new Helper();
+    }
+
     public function index(Request $request)
     {
-        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        [$dateMin, $dateMax] = $this->helper->getCurrentDate();
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -25,8 +30,8 @@ class IncomeController extends Controller
         }
 
         $code = $request->query('code');
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
+        $user = $this->helper->getUserLogin($request);
+        $company = $this->helper->getCompanyProfile();
         $incomes = DB::table('incomes')
                         ->join('income_statuses', 'incomes.income_status_id', '=', 'income_statuses.id')
                         ->select('incomes.*', 'income_statuses.name as status')
@@ -34,7 +39,7 @@ class IncomeController extends Controller
                         ->where("incomes.created_at", "<=", $dateMax)
                         ->where("incomes.products", "LIKE", "%".$code."%")
                         ->get();
-        $menus = Helper::getMenus($request);
+        $menus = $this->helper->getMenus($request);
         $data = [
             'title' => 'Pemasukan',
             'menus' => $menus,
@@ -72,9 +77,9 @@ class IncomeController extends Controller
 
     public function create(Request $request)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        $user = $this->helper->getUserLogin($request);
+        $company = $this->helper->getCompanyProfile();
+        $menus = $this->helper->getMenus($request);
         $products = DB::table('products')
                 ->join('units', 'products.unit_id', '=', 'units.id')
                 ->select('products.*', 'units.name as unit')
@@ -154,10 +159,10 @@ class IncomeController extends Controller
 
     public function edit(Request $request, $code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
+        $user = $this->helper->getUserLogin($request);
+        $company = $this->helper->getCompanyProfile();
         $income = Income::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        $menus = $this->helper->getMenus($request);
         $products = DB::table('products')
                 ->join('units', 'products.unit_id', '=', 'units.id')
                 ->select('products.*', 'units.name as unit')

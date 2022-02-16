@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Facades\ExpenseService;
 use App\Helper;
-use App\Models\Expense;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ExpenseController extends Controller
 {
+    public function __construct()
+    {
+        $this->expenseService = new ExpenseService();
+        $this->helper = new Helper();
+    }
+
     public function index(Request $request)
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
-        $expenses = ExpenseService::getByDate($dateMin, $dateMax);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
+        $expenses = $this->expenseService->getByDate($dateMin, $dateMax);
 
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
@@ -40,7 +45,7 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -72,7 +77,7 @@ class ExpenseController extends Controller
         );
 
         try {
-            ExpenseService::insert();
+            $this->expenseService->insert();
             return redirect('/expenses')->with('success', 'Tambah Pengeluaran Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Tambah Pengeluaran Gagal!');
@@ -81,8 +86,8 @@ class ExpenseController extends Controller
 
     public function edit($code)
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        $expense = ExpenseService::getOne($code);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $expense = $this->expenseService->getOne($code);
         $data = [
             'title' => 'Ubah',
             'expense' => $expense,
@@ -98,7 +103,7 @@ class ExpenseController extends Controller
 
     public function update(Request $request, $code)
     {
-        $expense = ExpenseService::getOne($code);
+        $expense = $this->expenseService->getOne($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -120,7 +125,7 @@ class ExpenseController extends Controller
         );
 
         try {
-            ExpenseService::update($code, $expense);
+            $this->expenseService->update($code, $expense);
             return redirect('/expenses')->with('success', 'Ubah pengeluaran berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Ubah pengeluaran gagal!');
@@ -130,7 +135,7 @@ class ExpenseController extends Controller
     public function destroy($code)
     {
         try {
-            ExpenseService::delete($code);
+            $this->expenseService->delete($code);
             return redirect('/expenses')->with('success', 'Penghapusan pengeluaran berhasil!');
         } catch(QueryException $ex) {
             return redirect('/expenses')->with('error', 'Penghapusan pengeluaran gagal!');

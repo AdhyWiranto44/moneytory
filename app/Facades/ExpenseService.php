@@ -7,31 +7,37 @@ use App\Repositories\ExpenseRepository;
 
 class ExpenseService
 {
-    static function getOne(String $code = "")
+    public function __construct()
+    {
+        $this->expenseRepository = new ExpenseRepository();
+        $this->helper = new Helper();
+    }
+
+    public function getOne(String $code = "")
     {
         $params = [ 'code' => $code ];
-        return ExpenseRepository::get($params)->first();
+        return $this->expenseRepository->get($params)->first();
     }
 
-    static function getByDate($from, $to)
+    public function getByDate($from, $to)
     {
         $params = [
             ["created_at", ">=", $from], 
             ["created_at", "<=", $to]
         ];
-        return ExpenseRepository::get($params);
+        return $this->expenseRepository->get($params);
     }
 
-    static function getCostSumByDate($from, $to)
+    public function getCostSumByDate($from, $to)
     {
         $params = [
             ["created_at", ">=", $from], 
             ["created_at", "<=", $to]
         ];
-        return ExpenseRepository::get($params)->sum('cost');
+        return $this->expenseRepository->get($params)->sum('cost');
     }
 
-    static function insert()
+    public function insert()
     {
         $expense = [
             'name' => request()->input('name'),
@@ -44,14 +50,14 @@ class ExpenseService
 
         // Kalau ada gambar yang di-upload
         if (request()->image) {
-            $expense['image'] = Helper::createImageName();
-            Helper::uploadFile($expense['image']);
+            $expense['image'] = $this->helper->createImageName();
+            $this->helper->uploadFile($expense['image']);
         }
 
-        ExpenseRepository::insert($expense);
+        $this->expenseRepository->insert($expense);
     }
 
-    static function update($code, $expense)
+    public function update($code, $expense)
     {
         $params = [ 'code' => $code ];
         $update = [
@@ -64,16 +70,16 @@ class ExpenseService
 
         // Kalau ada gambar yang di-upload
         if (request()->image) {
-            $update['image'] = Helper::createImageName();
-            Helper::uploadFile($update['image']);
+            $update['image'] = $this->helper->createImageName();
+            $this->helper->uploadFile($update['image']);
         }
 
-        ExpenseRepository::update($params, $update);
+        $this->expenseRepository->update($params, $update);
     }
 
-    static function delete($code)
+    public function delete($code)
     {
         $params = [ 'code' => $code ];
-        ExpenseRepository::delete($params);
+        $this->expenseRepository->delete($params);
     }
 }

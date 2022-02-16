@@ -6,29 +6,34 @@ use App\Repositories\DebtRepository;
 
 class DebtService
 {
-    static function getOne(String $code = "")
+    public function __construct()
+    {
+        $this->debtRepository = new DebtRepository();
+    }
+
+    public function getOne(String $code = "")
     {
         $params = [ 'code' => $code ];
-        return DebtRepository::get($params)->first();
+        return $this->debtRepository->get($params)->first();
     }
 
-    static function getByDate($from, $to)
+    public function getByDate($from, $to)
     {
         $params = [ 'from' => $from, 'to' => $to ];
-        return DebtRepository::getWithTypeAndStatus($params);
+        return $this->debtRepository->getWithTypeAndStatus($params);
     }
 
-    static function getPriceSumByDate($from, $to)
+    public function getPriceSumByDate($from, $to)
     {
         $params = [
             ["debt_status_id", "=", 2], 
             ["created_at", ">=", $from], 
             ["created_at", "<=", $to]
         ];
-        return DebtRepository::get($params)->sum('price');
+        return $this->debtRepository->get($params)->sum('price');
     }
 
-    static function insert()
+    public function insert()
     {
         $data = [
             'debt_type_id' => request()->input('debt_type'),
@@ -44,10 +49,10 @@ class DebtService
             'updated_at' => now()
         ];
 
-        DebtRepository::insert($data);
+        $this->debtRepository->insert($data);
     }
 
-    static function update($code, $debt)
+    public function update($code, $debt)
     {
         $params = [ 'code' => $code ];
         $update = [
@@ -63,12 +68,12 @@ class DebtService
             'updated_at' => now()
         ];
 
-        DebtRepository::update($params, $update);
+        $this->debtRepository->update($params, $update);
     }
     
-    static function delete($code)
+    public function delete($code)
     {
         $params = [ 'code' => $code ];
-        DebtRepository::delete($params);
+        $this->debtRepository->delete($params);
     }
 }

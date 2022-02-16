@@ -12,11 +12,19 @@ use Illuminate\Validation\Rule;
 
 class DebtController extends Controller
 {
+    public function __construct()
+    {
+        $this->debtService = new DebtService();
+        $this->debtStatusService = new DebtStatusService();
+        $this->debtTypeService = new DebtTypeService();
+        $this->helper = new Helper();
+    }
+
     public function index(Request $request)
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
-        $debts = DebtService::getByDate($dateMin, $dateMax);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
+        $debts = $this->debtService->getByDate($dateMin, $dateMax);
 
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
@@ -41,9 +49,9 @@ class DebtController extends Controller
 
     public function create()
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        $debtTypes = DebtTypeService::getAll();
-        $debtStatuses = DebtStatusService::getAll();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $debtTypes = $this->debtTypeService->getAll();
+        $debtStatuses = $this->debtStatusService->getAll();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -78,7 +86,7 @@ class DebtController extends Controller
         );
 
         try {
-            DebtService::insert();
+            $this->debtService->insert();
             return redirect('/debts')->with('success', 'Tambah Hutang Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Tambah Hutang Gagal!');
@@ -87,10 +95,10 @@ class DebtController extends Controller
 
     public function edit($code)
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        $debtTypes = DebtTypeService::getAll();
-        $debtStatuses = DebtStatusService::getAll();
-        $debt = DebtService::getOne($code);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $debtTypes = $this->debtTypeService->getAll();
+        $debtStatuses = $this->debtStatusService->getAll();
+        $debt = $this->debtService->getOne($code);
         $data = [
             'title' => 'Ubah',
             'debt' => $debt,
@@ -108,7 +116,7 @@ class DebtController extends Controller
 
     public function update(Request $request, $code)
     {
-        $debt = DebtService::getOne($code);
+        $debt = $this->debtService->getOne($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -131,7 +139,7 @@ class DebtController extends Controller
         );
 
         try {
-            DebtService::update($code, $debt);
+            $this->debtService->update($code, $debt);
             return redirect('/debts')->with('success', 'Ubah hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah hutang gagal!');
@@ -142,7 +150,7 @@ class DebtController extends Controller
     {
         try {
             $update = [ 'debt_status_id' => 1 ];
-            DebtService::update($code, $update);
+            $this->debtService->update($code, $update);
             return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
@@ -153,7 +161,7 @@ class DebtController extends Controller
     {
         try {
             $update = [ 'debt_status_id' => 2 ];
-            DebtService::update($code, $update);
+            $this->debtService->update($code, $update);
             return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
@@ -163,7 +171,7 @@ class DebtController extends Controller
     public function destroy($code)
     {
         try {
-            DebtService::delete($code);
+            $this->debtService->delete($code);
             return redirect('/debts')->with('success', 'Penghapusan hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Penghapusan hutang gagal!');

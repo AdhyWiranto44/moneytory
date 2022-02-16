@@ -10,6 +10,14 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->expenseService = new ExpenseService();
+        $this->incomeService = new IncomeService();
+        $this->debtService = new DebtService();
+        $this->helper = new Helper();
+    }
+
     public function index(Request $request)
     {
         /** 
@@ -18,11 +26,11 @@ class DashboardController extends Controller
          * Saat membuka root route
          * Dan belum ada data profil perusahaan di database
          */
-        [ $user, $company, $menus ] = Helper::getCommonData();
-        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
-        $incomes = IncomeService::getPriceSumByDate($dateMin, $dateMax);
-        $expenses = ExpenseService::getCostSUmByDate($dateMin, $dateMax);
-        $debts = DebtService::getPriceSumByDate($dateMin, $dateMax);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
+        $incomes = $this->incomeService->getPriceSumByDate($dateMin, $dateMax);
+        $expenses = $this->expenseService->getCostSUmByDate($dateMin, $dateMax);
+        $debts = $this->debtService->getPriceSumByDate($dateMin, $dateMax);
 
         // Arahkan ke halaman pendaftaran jika perusahaan belum terdaftar
         if ($company == null) return redirect('/welcome');

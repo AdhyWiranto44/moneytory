@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class CompanyProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->companyProfileService = new CompanyProfileService();
+        $this->helper = new Helper();
+    }
+    
     public function edit()
     {
-        [ $user, $company, $menus ] = Helper::getCommonData();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
         $data = [
             'title' => 'Ubah Profil Perusahaan',
             'menus' => $menus,
@@ -45,8 +51,8 @@ class CompanyProfileController extends Controller
         );
         
         try {
-            $company = CompanyProfileService::getOne();
-            CompanyProfileService::update($company, $request);
+            $company = $this->companyProfileService->getOne();
+            $this->companyProfileService->update($company, $request);
             return redirect('/settings')->with('success', 'Ubah profil perusahaan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil perusahaan gagal!');

@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    static function insertDefaultUser()
+    public function __construct()
+    {
+        $this->userRepository = new UserRepository();
+    }
+
+    public function insertDefaultUser()
     {
         $formInput = [
             'role_id' => 1,
@@ -22,12 +27,12 @@ class UserService
             'created_at' => now(),
             'updated_at' => now()
         ];
-        UserRepository::insert($formInput);
+        $this->userRepository->insert($formInput);
     }
 
-    static function getUserLogin(String $username = "")
+    public function getUserLogin(String $username = "")
     {
         $params = [ 'username' => $username ];
-        return UserRepository::get($params)->first();
+        return $this->userRepository->get($params)->first();
     }
 }

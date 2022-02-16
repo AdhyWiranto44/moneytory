@@ -6,8 +6,13 @@ use App\Repositories\DebtTypeRepository;
 
 class DebtTypeService
 {
-    static function getAll()
+    public function __construct()
     {
-        return DebtTypeRepository::getAll();
+        $this->debtTypeRepository = new DebtTypeRepository();
+    }
+
+    public function getAll()
+    {
+        return $this->debtTypeRepository->getAll();
     }
 }
