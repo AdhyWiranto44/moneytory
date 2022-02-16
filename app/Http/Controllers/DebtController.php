@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\CompanyProfileService;
 use App\Facades\DebtService;
 use App\Facades\DebtStatusService;
 use App\Facades\DebtTypeService;
-use App\Facades\MenuService;
-use App\Facades\UserService;
 use App\Helper;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -17,7 +14,10 @@ class DebtController extends Controller
 {
     public function index(Request $request)
     {
-        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        [ $user, $company, $menus ] = Helper::getCommonData();
+        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
+        $debts = DebtService::getByDate($dateMin, $dateMax);
+
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -27,10 +27,6 @@ class DebtController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
-        $user = UserService::getUserLogin($request->session()->get('username'));
-        $company = CompanyProfileService::getOne();
-        $debts = DebtService::getByDate($dateMin, $dateMax);
-        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Hutang',
             'menus' => $menus,
@@ -43,11 +39,9 @@ class DebtController extends Controller
         return view('debts', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = UserService::getUserLogin($request->session()->get('username'));
-        $company = CompanyProfileService::getOne();
-        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
+        [ $user, $company, $menus ] = Helper::getCommonData();
         $debtTypes = DebtTypeService::getAll();
         $debtStatuses = DebtStatusService::getAll();
         $data = [
@@ -105,11 +99,9 @@ class DebtController extends Controller
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = UserService::getUserLogin($request->session()->get('username'));
-        $company = CompanyProfileService::getOne();
-        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
+        [ $user, $company, $menus ] = Helper::getCommonData();
         $debtTypes = DebtTypeService::getAll();
         $debtStatuses = DebtStatusService::getAll();
         $debt = DebtService::getOne($code);

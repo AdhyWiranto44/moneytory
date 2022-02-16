@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ExpenseService;
 use App\Helper;
 use App\Models\Expense;
 use Illuminate\Database\QueryException;
@@ -12,7 +13,10 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        [ $user, $company, $menus ] = Helper::getCommonData();
+        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
+        $expenses = ExpenseService::getByDate($dateMin, $dateMax);
+        
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -22,10 +26,6 @@ class ExpenseController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $expenses = Expense::where([["created_at", ">=", $dateMin], ["created_at", "<=", $dateMax]])->get();
-        $menus = Helper::getMenus($request);
         $data = [
             'title' => 'Pengeluaran',
             'menus' => $menus,
@@ -38,11 +38,9 @@ class ExpenseController extends Controller
         return view('expenses', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = Helper::getCommonData();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,

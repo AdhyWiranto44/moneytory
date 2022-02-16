@@ -2,19 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\CompanyProfileService;
 use App\Facades\ExpenseService;
 use App\Facades\IncomeService;
 use App\Facades\DebtService;
-use App\Facades\MenuService;
-use App\Facades\UserService;
 use App\Helper;
-use App\Models\CompanyProfile;
-use App\Models\Debt;
-use App\Models\Expense;
-use App\Models\Income;
-use App\Models\Menu;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -27,10 +18,16 @@ class DashboardController extends Controller
          * Saat membuka root route
          * Dan belum ada data profil perusahaan di database
          */
-        $companyProfile = CompanyProfileService::getOne();
-        if ($companyProfile == null) return redirect('/welcome');
+        [ $user, $company, $menus ] = Helper::getCommonData();
+        [ $dateMin, $dateMax ] = Helper::getCurrentDate();
+        $incomes = IncomeService::getPriceSumByDate($dateMin, $dateMax);
+        $expenses = ExpenseService::getCostSUmByDate($dateMin, $dateMax);
+        $debts = DebtService::getPriceSumByDate($dateMin, $dateMax);
+
+        // Arahkan ke halaman pendaftaran jika perusahaan belum terdaftar
+        if ($company == null) return redirect('/welcome');
         
-        [$dateMin, $dateMax] = Helper::getCurrentDate();
+        // Mendapatkan tanggal
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -39,13 +36,7 @@ class DashboardController extends Controller
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
-        $incomes = IncomeService::getPriceSumByDate($dateMin, $dateMax);
-        $expenses = ExpenseService::getCostSUmByDate($dateMin, $dateMax);
-        $debts = DebtService::getPriceSumByDate($dateMin, $dateMax);
 
-        $user = UserService::getUserLogin($request->session()->get('username'));
-        $company = CompanyProfileService::getOne();
-        $menus = MenuService::getByRoleId($request->session()->get('role_id'));
         $data = [
             'title' => 'Dashboard',
             'menus' => $menus,
