@@ -17,8 +17,9 @@ class CompanyRegistrationController extends Controller
 
     public function index()
     {
-        $companyProfile = $this->companyProfileService->getOne();
-        if ($companyProfile != null) return redirect('/login');
+        $this->companyProfileService = new CompanyProfileService();
+        $isCompanyRegistered = $this->companyProfileService->isCompanyUnregistered();
+        if ($isCompanyRegistered) return redirect('/welcome');
         
         $data = [ 'title' => 'Company Registration' ];
         return view('company_registration', $data);

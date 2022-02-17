@@ -43,10 +43,8 @@ class CompanyProfileService
 
         // Kalau ada gambar yang di-upload
         if ($request->image) {
-            $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-            $formInput['image'] = $imgName;
-            
-            $this->helper->uploadFile($imgName);
+            $formInput['image'] = $this->helper->createImageName();
+            $this->helper->uploadFile($formInput['image']);
         }
 
         $this->companyProfileRepository->update($formInput);
@@ -57,5 +55,10 @@ class CompanyProfileService
         $company = $this->companyProfileRepository->getFirst();
         if (!isset($company)) return null;
         return $company;
+    }
+
+    public function isCompanyUnregistered()
+    {
+        return $this->getOne() == null;
     }
 }

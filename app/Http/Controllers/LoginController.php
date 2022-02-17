@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CompanyProfile;
+use App\Facades\CompanyProfileService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,10 +11,9 @@ class LoginController extends Controller
 {
     public function index(Request $request)
     {
-        $companyProfile = CompanyProfile::first();
-        if ($companyProfile == null) {
-            return redirect('/welcome');
-        }
+        $this->companyProfileService = new CompanyProfileService();
+        $isCompanyRegistered = $this->companyProfileService->isCompanyUnregistered();
+        if ($isCompanyRegistered) return redirect('/welcome');
 
         if ($request->session()->get('username')) {
             return redirect('/');
