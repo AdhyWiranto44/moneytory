@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\CompanyProfileService;
 use App\Models\CompanyProfile;
 use Illuminate\Http\Request;
 
@@ -9,10 +10,9 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $companyProfile = CompanyProfile::first();
-        if ($companyProfile != null) {
-            return redirect('/login');
-        }
+        $this->companyProfileService = new CompanyProfileService();
+        $isCompanyRegistered = $this->companyProfileService->isCompanyUnregistered();
+        if (!$isCompanyRegistered) return redirect('/login');
 
         $data = [
             'title' => 'Welcome Page'
