@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\CompanyProfileService;
+use App\Facades\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -39,20 +40,18 @@ class LoginController extends Controller
 
         $username = $request->input('username');
         $password = $request->input('password');
-        $userData = User::firstWhere('username', $username);
+        $userService = new UserService();
+        $userData = $userService->getOne($username);
 
         if (!$userData) {
             return redirect(url()->previous())->with('error', 'Username / password salah!');
-        } 
+        }
         
         if($userData->status_id == 1) {
             return redirect('/login')->with('error', 'Akun tersebut tidak aktif!');
         }
         
-        if (
-            $username == $userData['username'] 
-            && Hash::check($password, $userData['password'])
-        ) {
+        if ( $username == $userData['username'] && Hash::check($password, $userData['password']) ) {
             $request->session()->put([
                 'username' => $username, 
                 'role_id' => $userData['role_id']

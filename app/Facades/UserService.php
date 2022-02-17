@@ -30,7 +30,7 @@ class UserService
         $this->userRepository->insert($formInput);
     }
 
-    public function getUserLogin(String $username = "")
+    public function getOne(String $username = "")
     {
         $params = [ 'username' => $username ];
         return $this->userRepository->get($params)->first();

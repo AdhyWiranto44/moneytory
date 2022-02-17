@@ -30,7 +30,7 @@ class Helper
         $company = new CompanyProfileService();
         $menus = new MenuService();
         
-        $user = $user->getUserLogin(request()->session()->get('username'));
+        $user = $user->getOne(request()->session()->get('username'));
         $company = $company->getOne();
         $menus = $menus->getByRoleId(request()->session()->get('role_id'));
 
