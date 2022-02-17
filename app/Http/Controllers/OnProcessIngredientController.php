@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\OnProcessIngredientService;
+use App\Facades\RawIngredientService;
 use App\Helper;
-use App\Models\OnProcessIngredient;
-use App\Models\RawIngredient;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class OnProcessIngredientController extends Controller
 {
-    public function index(Request $request)
+    public function __construct()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $onProcessIngredients = DB::table('on_process_ingredients')
-                        ->join('statuses', 'on_process_ingredients.status_id', '=', 'statuses.id')
-                        ->join('raw_ingredients', 'on_process_ingredients.raw_ingredient_id', '=', 'raw_ingredients.id')
-                        ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
-                        ->select('on_process_ingredients.*', 'statuses.name as status', 'raw_ingredients.name as raw_ingredient', 'raw_ingredients.image as image', 'units.name as unit')
-                        ->get();
-        $menus = Helper::getMenus($request);
+        $this->onProcessIngredientService = new OnProcessIngredientService();
+        $this->rawIngredientService = new RawIngredientService();
+        $this->helper = new Helper();
+    }
+
+    public function index()
+    {
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $onProcessIngredients = $this->onProcessIngredientService->getAll();
         $data = [
             'title' => 'Bahan Dalam Proses',
             'menus' => $menus,
@@ -35,16 +34,10 @@ class OnProcessIngredientController extends Controller
         return view('on_process_ingredients', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
-        $rawIngredients = DB::table('raw_ingredients')
-                        ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
-                        ->select('raw_ingredients.*', 'units.name as unit')
-                        ->where('raw_ingredients.status_id', '=', '2')
-                        ->get();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $rawIngredients = $this->rawIngredientService->getAll();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -71,49 +64,34 @@ class OnProcessIngredientController extends Controller
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
                 'unique' => 'Kode barang sudah ada!',
             ]
-        );
+        );     
 
-        $amount = (float) $request->input('amount');
-        $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
-        if ($rawIngredient->stock - $amount < 0) {
-            return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
+        try {
+            $rawIngredientId = $request->input('raw_ingredient');
+            $rawIngredient = $this->rawIngredientService->getOne($rawIngredientId);
+
+            $isSuccess = $this->rawIngredientService->updateStock($rawIngredientId, $rawIngredient);
+            
+            if (!$isSuccess) {
+                return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
+            }
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Pengurangan stok bahan mentah gagal!');
         }
 
         try {
-            $formInput = [
-                'status_id' => 2,
-                'raw_ingredient_id' => $request->input('raw_ingredient'),
-                'code' => $request->input('code'),
-                'purpose' => $request->input('purpose'),
-                'amount' => $amount,
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            $onProcessIngredient = OnProcessIngredient::create($formInput);
-            $onProcessIngredient->save();
-
-            $currentStock = $rawIngredient->stock;
-            $rawIngredient->update(['stock' => $currentStock - $amount]);
-            $rawIngredient->save();
-    
+            $this->onProcessIngredientService->insert();
             return redirect('/on-process-ingredients')->with('success', 'Tambah Bahan Dalam Proses Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/on-process-ingredients')->with('error', 'Tambah Bahan Dalam Proses Gagal!');
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $rawIngredients = DB::table('raw_ingredients')
-                        ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
-                        ->select('raw_ingredients.*', 'units.name as unit')
-                        ->where('raw_ingredients.status_id', '=', '2')
-                        ->get();
-        $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $rawIngredients = $this->rawIngredientService->getAll();
+        $onProcessIngredient = $this->onProcessIngredientService->getOne($code);
         $data = [
             'title' => 'Ubah',
             'onProcessIngredient' => $onProcessIngredient,
@@ -130,7 +108,7 @@ class OnProcessIngredientController extends Controller
 
     public function update(Request $request, $code)
     {
-        $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
+        $onProcessIngredient = $this->onProcessIngredientService->getOne($code);
         $request->validate(
             [
                 'raw_ingredient' => 'required',
@@ -148,25 +126,24 @@ class OnProcessIngredientController extends Controller
             ]
         );
 
-        $amount = (float) $request->input('amount');
-        $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
-        $initialStock = $rawIngredient->stock + $onProcessIngredient->amount;
-        $stockUpdate = $initialStock - $amount;
-        if ($stockUpdate < 0) {
-            return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
+        try {
+            $rawIngredientId = $request->input('raw_ingredient');
+            $rawIngredient = $this->rawIngredientService->getOne($rawIngredientId);
+
+            // Restore previous raw ingredient stock
+            $rawIngredient->stock += $onProcessIngredient->amount;
+
+            $isSuccess = $this->rawIngredientService->updateStock($rawIngredientId, $rawIngredient);
+
+            if (!$isSuccess) {
+                return back()->withInput()->with('error', 'Input jumlah melebihi stok!');
+            }
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Pengurangan stok bahan mentah gagal!');
         }
 
         try {
-            $formInput = [
-                'raw_ingredient_id' => $request->input('raw_ingredient') != null ? $request->input('raw_ingredient') : $onProcessIngredient->raw_ingredient_id,
-                'code' => $request->input('code') != null ? $request->input('code') : $onProcessIngredient->code,
-                'purpose' => $request->input('purpose') != null ? $request->input('purpose') : $onProcessIngredient->purpose,
-                'amount' => $request->input('amount') != null ? $request->input('amount') : $onProcessIngredient->amount,
-                'updated_at' => now()
-            ];
-    
-            $rawIngredient->update(['stock' => $stockUpdate]);
-            OnProcessIngredient::where('code', $code)->update($formInput);
+            $this->onProcessIngredientService->update($code, $onProcessIngredient);
             return redirect('/on-process-ingredients')->with('success', 'Ubah bahan dalam proses berhasil!');
         } catch(QueryException $ex) {
             return redirect('/on-process-ingredients')->with('error', 'Ubah bahan dalam proses gagal!');
@@ -175,13 +152,19 @@ class OnProcessIngredientController extends Controller
 
     public function destroy(Request $request, $code)
     {
-        try {
-            $onProcessIngredient = OnProcessIngredient::firstWhere('code', $code);
-            $rawIngredient = RawIngredient::firstWhere('id', $request->input('raw_ingredient'));
-            $rawIngredient->update(['stock' => $rawIngredient->stock + $onProcessIngredient->amount]);
-            $rawIngredient->save();
-            $onProcessIngredient->delete();
+        $onProcessIngredientService = $this->onProcessIngredientService->getOne($code);
 
+        try {
+            $rawIngredientId = $request->input('raw_ingredient');
+            $amount = $onProcessIngredientService->amount;
+
+            $this->rawIngredientService->restoreStock($rawIngredientId, $amount);
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Pengurangan stok bahan mentah gagal!');
+        }
+
+        try {
+            $this->onProcessIngredientService->delete($code);
             return redirect('/on-process-ingredients')->with('success', 'Penghapusan bahan dalam proses berhasil! Stock dikembalikan.');
         } catch(QueryException $ex) {
             return redirect('/on-process-ingredients')->with('error', 'Penghapusan bahan dalam proses gagal!');
@@ -190,15 +173,23 @@ class OnProcessIngredientController extends Controller
 
     public function deactivate($code)
     {
-        $status = 1;
-        OnProcessIngredient::where('code', $code)->update(['status_id' => $status]);
-        return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses selesai diproses');
+        try {
+            $status = 1;
+            $this->onProcessIngredientService->changeStatus($code, $status);
+            return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses selesai diproses');
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Penggantian status gagal!');
+        }
     }
 
     public function activate($code)
     {
-        $status = 2;
-        OnProcessIngredient::where('code', $code)->update(['status_id' => $status]);
-        return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses sedang diproses');
+        try {
+            $status = 2;
+            $this->onProcessIngredientService->changeStatus($code, $status);
+            return redirect('/on-process-ingredients')->with('success', 'Bahan dalam proses sedang diproses');
+        } catch(QueryException $ex) {
+            return redirect('/on-process-ingredients')->with('error', 'Penggantian status gagal!');
+        }
     }
 }
