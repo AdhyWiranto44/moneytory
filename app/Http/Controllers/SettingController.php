@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        $helper = new Helper();
+        [ $user, $company, $menus ] = $helper->getCommonData();
         $data = [
             'title' => 'Pengaturan',
             'menus' => $menus,
