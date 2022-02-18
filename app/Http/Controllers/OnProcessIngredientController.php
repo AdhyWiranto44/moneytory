@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class OnProcessIngredientController extends Controller
-{
+{ 
+    const ACTIVE = 2;
+
     public function __construct()
     {
         $this->onProcessIngredientService = new OnProcessIngredientService();
@@ -37,7 +39,7 @@ class OnProcessIngredientController extends Controller
     public function create()
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        $rawIngredients = $this->rawIngredientService->getAll();
+        $rawIngredients = $this->rawIngredientService->getAllByStatusId(self::ACTIVE);
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -90,7 +92,7 @@ class OnProcessIngredientController extends Controller
     public function edit($code)
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        $rawIngredients = $this->rawIngredientService->getAll();
+        $rawIngredients = $this->rawIngredientService->getAllByStatusId(self::ACTIVE);
         $onProcessIngredient = $this->onProcessIngredientService->getOne($code);
         $data = [
             'title' => 'Ubah',

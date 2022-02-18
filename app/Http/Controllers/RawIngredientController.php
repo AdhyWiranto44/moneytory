@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\RawIngredientService;
+use App\Facades\UnitService;
 use App\Helper;
 use App\Models\RawIngredient;
 use App\Models\Unit;
@@ -12,16 +14,17 @@ use Illuminate\Validation\Rule;
 
 class RawIngredientController extends Controller
 {
-    public function index(Request $request)
+    public function __construct()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $rawIngredients = DB::table('raw_ingredients')
-                        ->join('statuses', 'raw_ingredients.status_id', '=', 'statuses.id')
-                        ->join('units', 'raw_ingredients.unit_id', '=', 'units.id')
-                        ->select('raw_ingredients.*', 'statuses.name as status', 'units.name as unit')
-                        ->get();
-        $menus = Helper::getMenus($request);
+        $this->rawIngredientService = new RawIngredientService();
+        $this->unitService = new UnitService();
+        $this->helper = new Helper();
+    }
+
+    public function index()
+    {
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $rawIngredients = $this->rawIngredientService->getAll();
         $data = [
             'title' => 'Bahan Mentah',
             'menus' => $menus,
@@ -34,12 +37,10 @@ class RawIngredientController extends Controller
         return view('raw_ingredients', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
-        $units = Unit::all();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $units = $this->unitService->getAll();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -73,40 +74,18 @@ class RawIngredientController extends Controller
         );
 
         try {
-            $formInput = [
-                'status_id' => 2,
-                'unit_id' => $request->input('unit'),
-                'name' => $request->input('name'),
-                'code' => $request->input('code'),
-                'stock' => $request->input('stock'),
-                'minimum_stock' => $request->input('minimum_stock'),
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-
-            $rawIngredient = RawIngredient::create($formInput);
-            $rawIngredient->save();
-    
+            $this->rawIngredientService->insert();    
             return redirect('/raw-ingredients')->with('success', 'Tambah Bahan Mentah Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/raw-ingredients')->with('error', 'Tambah Bahan Mentah Gagal!');
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $units = Unit::all();
-        $rawIngredient = RawIngredient::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $units = $this->unitService->getAll();
+        $rawIngredient = $this->rawIngredientService->getOneByCode($code);
         $data = [
             'title' => 'Ubah',
             'rawIngredient' => $rawIngredient,
@@ -123,7 +102,7 @@ class RawIngredientController extends Controller
 
     public function update(Request $request, $code)
     {
-        $rawIngredient = RawIngredient::firstWhere('code', $code);
+        $rawIngredient = $this->rawIngredientService->getOneByCode($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -146,47 +125,31 @@ class RawIngredientController extends Controller
         );
 
         try {
-            $formInput = [
-                'unit_id' => $request->input('unit') != null ? $request->input('unit') : $rawIngredient->unit_id,
-                'name' => $request->input('name') != null ? $request->input('name') : $rawIngredient->name,
-                'code' => $request->input('code') != null ? $request->input('code') : $rawIngredient->code,
-                'stock' => $request->input('stock') != null ? $request->input('stock') : $rawIngredient->stock,
-                'minimum_stock' => $request->input('minimum_stock') != null ? $request->input('minimum_stock') : $rawIngredient->minimum_stock,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            RawIngredient::where('code', $code)->update($formInput);
+            $this->rawIngredientService->update($code, $rawIngredient);
             return redirect('/raw-ingredients')->with('success', 'Ubah bahan mentah berhasil!');
         } catch(QueryException $ex) {
             return redirect('/raw-ingredients')->with('error', 'Ubah bahan mentah gagal!');
         }
     }
 
-    public function deactivate(Request $request, $code)
+    public function deactivate($code)
     {
         $status = 1;
-        RawIngredient::where('code', $code)->update(['status_id' => $status]);
+        $this->rawIngredientService->changeStatus($code, $status);
         return redirect('/raw-ingredients');
     }
 
-    public function activate(Request $request, $code)
+    public function activate($code)
     {
         $status = 2;
-        RawIngredient::where('code', $code)->update(['status_id' => $status]);
+        $this->rawIngredientService->changeStatus($code, $status);
         return redirect('/raw-ingredients');
     }
 
     public function destroy($code)
     {
         try {
-            RawIngredient::where('code', $code)->delete();
+            $this->rawIngredientService->delete($code);
             return redirect('/raw-ingredients')->with('success', 'Penghapusan bahan mentah berhasil!');
         } catch(QueryException $ex) {
             return redirect('/raw-ingredients')->with('error', 'Penghapusan bahan mentah gagal!');
