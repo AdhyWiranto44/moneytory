@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ProductService;
+use App\Facades\UnitService;
 use App\Helper;
 use App\Models\Product;
 use App\Models\Unit;
@@ -12,16 +14,17 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function __construct()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $products = DB::table('products')
-                ->join('statuses', 'products.status_id', '=', 'statuses.id')
-                ->join('units', 'products.unit_id', '=', 'units.id')
-                ->select('products.*', 'statuses.name as status', 'units.name as unit')
-                ->get();
-        $menus = Helper::getMenus($request);
+        $this->productService = new ProductService();
+        $this->unitService = new UnitService();
+        $this->helper = new Helper();
+    }
+
+    public function index()
+    {
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $products = $this->productService->getAll();
         $data = [
             'title' => 'Barang Jadi',
             'menus' => $menus,
@@ -34,12 +37,10 @@ class ProductController extends Controller
         return view('products', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
-        $units = Unit::all();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $units = $this->unitService->getAll();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -75,42 +76,18 @@ class ProductController extends Controller
         );
 
         try {
-            $formInput = [
-                'status_id' => 2,
-                'unit_id' => $request->input('unit'),
-                'name' => $request->input('name'),
-                'code' => $request->input('code'),
-                'base_price' => $request->input('base_price'),
-                'profit' => $request->input('profit'),
-                'stock' => $request->input('stock'),
-                'minimum_stock' => $request->input('minimum_stock'),
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-
-            $product = Product::create($formInput);
-            $product->save();
-    
+            $this->productService->insert();    
             return redirect('/products')->with('success', 'Tambah Barang Jadi Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/products')->with('error', 'Tambah Barang Jadi Gagal!');
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $units = Unit::all();
-        $product = Product::firstWhere('code', $code);
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $units = $this->unitService->getAll();
+        $product = $this->productService->getOne($code);
         $data = [
             'title' => 'Ubah',
             'product' => $product,
@@ -127,7 +104,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $code)
     {
-        $product = Product::firstWhere('code', $code);
+        $product = $this->productService->getOne($code);
         $request->validate(
             [
                 'name' => 'required',
@@ -152,49 +129,31 @@ class ProductController extends Controller
         );
 
         try {
-            $formInput = [
-                'unit_id' => $request->input('unit') != null ? $request->input('unit') : $product->unit_id,
-                'name' => $request->input('name') != null ? $request->input('name') : $product->name,
-                'code' => $request->input('code') != null ? $request->input('code') : $product->code,
-                'stock' => $request->input('stock') != null ? $request->input('stock') : $product->stock,
-                'minimum_stock' => $request->input('minimum_stock') != null ? $request->input('minimum_stock') : $product->minimum_stock,
-                'base_price' => $request->input('base_price') != null ? $request->input('base_price') : $product->base_price,
-                'profit' => $request->input('profit') != null ? $request->input('profit') : $product->profit,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            Product::where('code', $code)->update($formInput);
+            $this->productService->update($code, $product);
             return redirect('/products')->with('success', 'Ubah barang jadi berhasil!');
         } catch(QueryException $ex) {
             return redirect('/products')->with('error', 'Ubah barang jadi gagal!');
         }
     }
 
-    public function deactivate(Request $request, $code)
+    public function deactivate($code)
     {
         $status = 1;
-        Product::where('code', $code)->update(['status_id' => $status]);
+        $this->productService->changeStatus($code, $status);
         return redirect('/products');
     }
 
-    public function activate(Request $request, $code)
+    public function activate($code)
     {
         $status = 2;
-        Product::where('code', $code)->update(['status_id' => $status]);
+        $this->productService->changeStatus($code, $status);
         return redirect('/products');
     }
 
     public function destroy($code)
     {
         try {
-            Product::where('code', $code)->delete();
+            $this->productService->delete($code);
             return redirect('/products')->with('success', 'Penghapusan barang jadi berhasil!');
         } catch(QueryException $ex) {
             return redirect('/products')->with('error', 'Penghapusan barang jadi gagal!');
