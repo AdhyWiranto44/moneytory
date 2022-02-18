@@ -70,6 +70,13 @@ class DebtService
 
         $this->debtRepository->update($params, $update);
     }
+
+    public function changeStatus($code, $status)
+    {
+        $params = [ 'code' => $code ];
+        $update = [ 'debt_status_id' => $status ];
+        $this->debtRepository->update($params, $update);
+    }
     
     public function delete($code)
     {

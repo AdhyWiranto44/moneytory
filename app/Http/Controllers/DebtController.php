@@ -149,8 +149,8 @@ class DebtController extends Controller
     public function deactivate($code)
     {
         try {
-            $update = [ 'debt_status_id' => 1 ];
-            $this->debtService->update($code, $update);
+            $status = 1;
+            $this->debtService->changeStatus($code, $status);
             return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
@@ -160,8 +160,8 @@ class DebtController extends Controller
     public function activate($code)
     {
         try {
-            $update = [ 'debt_status_id' => 2 ];
-            $this->debtService->update($code, $update);
+            $status = 2;
+            $this->debtService->changeStatus($code, $status);
             return redirect('/debts')->with('success', 'Ubah status hutang berhasil!');
         } catch(QueryException $ex) {
             return redirect('/debts')->with('error', 'Ubah status hutang gagal!');
