@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\RoleService;
+use App\Facades\UserService;
 use App\Helper;
 use App\Models\Role;
 use App\Models\User;
@@ -13,17 +15,17 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function __construct()
+    {
+        $this->userService = new UserService();
+        $this->roleService = new RoleService();
+        $this->helper = new Helper();
+    }
+
+    public function index()
     {   
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $users = DB::table('users')
-                ->join('roles', 'users.role_id', '=', 'roles.id')
-                ->join('statuses', 'users.status_id', '=', 'statuses.id')
-                ->select('users.*', 'roles.name as role_name', 'statuses.name as status_name')
-                ->where('users.username', '!=', $user->username)
-                ->get();
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $users = $this->userService->getAllWithoutUserLogin($user->username);
         $data = [
             'title' => 'Pengguna',
             'users' => $users,
@@ -36,12 +38,10 @@ class UserController extends Controller
         return view('users', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $roles = Role::all();
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $roles = $this->roleService->getAll();
         $data = [
             'title' => 'Registrasi Pengguna',
             'roles' => $roles,
@@ -78,29 +78,7 @@ class UserController extends Controller
         );
 
         try {
-            $formInput = [
-                'role_id' => $request->input('role'),
-                'status_id' => 2,
-                'username' => $request->input('username'),
-                'password' => Hash::make($request->input('password'), ['rounds' => 10]),
-                'name' => $request->input('name'),
-                'phone_number' => $request->input('phone_number'),
-                'email' => $request->input('email'),
-                'address' => $request->input('address'),
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-
-            $user = User::create($formInput);
-            $user->save();
-    
+            $this->userService->insert();    
             return redirect('/users')->with('success', 'Registrasi Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/users')->with('error', 'Registrasi Gagal!');
@@ -114,7 +92,7 @@ class UserController extends Controller
         }
 
         $status = 1;
-        User::where('username', $username)->update(['status_id' => $status]);
+        $this->userService->changeStatus($username, $status);
         return redirect('/users');
     }
 
@@ -125,27 +103,25 @@ class UserController extends Controller
         }
 
         $status = 2;
-        User::where('username', $username)->update(['status_id' => $status]);
+        $this->userService->changeStatus($username, $status);
         return redirect('/users');
     }
 
     public function destroy($username)
     {
         try {
-            User::where('username', $username)->delete();
+            $this->userService->delete($username);
             return redirect('/users')->with('success', 'Penghapusan pengguna berhasil!');
         } catch(QueryException $ex) {
             return redirect('/users')->with('error', 'Penghapusan pengguna gagal!');
         }
     }
 
-    public function edit(Request $request, $username)
+    public function edit($username)
     {
-        $userUpdate = User::firstWhere('username', $username);
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $roles = Role::all();
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $roles = $this->roleService->getAll();
+        $userUpdate = $this->userService->getOne($username);
         $data = [
             'title' => 'Ubah Pengguna',
             'roles' => $roles,
@@ -162,7 +138,7 @@ class UserController extends Controller
 
     public function update(Request $request, $username)
     {
-        $user = User::firstWhere('username', $username);
+        $user = $this->userService->getOne($username);
         $request->validate(
             [
                 'name' => 'required',
@@ -186,24 +162,7 @@ class UserController extends Controller
         );
 
         try {
-            $formInput = [
-                'role_id' => $request->input('role_id') != null ? $request->input('role_id') : $user->role_id,
-                'username' => $request->input('username') != null ? $request->input('username') : $user->username,
-                'name' => $request->input('name') != null ? $request->input('name') : $user->name,
-                'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $user->phone_number,
-                'email' => $request->input('email') != null ? $request->input('email') : $user->email,
-                'address' => $request->input('address') != null ? $request->input('address') : $user->address,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            User::where('username', $username)->update($formInput);
+            $this->userService->update($username, $user);
             return redirect('/users')->with('success', 'Ubah pengguna berhasil!');
         } catch(QueryException $ex) {
             return redirect('/users')->with('error', 'Ubah pengguna gagal!');
@@ -225,26 +184,21 @@ class UserController extends Controller
         );
 
         try {
-            $formInput = [
-                'password' => Hash::make($request->input('password'), ['rounds' => 10]),
-                'updated_at' => now()
-            ];
-
-            User::where('username', $username)->update($formInput);
+            $this->userService->updatePassword($username);
             return redirect('/users')->with('success', 'Ubah Password Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/users')->with('error', 'Ubah Password Gagal!');
         }
     }
 
-    public function editProfile(Request $request, $username)
+    public function editProfile($username)
     {
-        $userUpdate = User::firstWhere('username', $username);
-        $user = Helper::getUserLogin($request);
-        $company = Helper::getCompanyProfile();
-        $menus = Helper::getMenus($request);
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $roles = $this->roleService->getAll();
+        $userUpdate = $this->userService->getOne($username);
         $data = [
-            'title' => 'Ubah Profil Pengguna',
+            'title' => 'Ubah Pengguna',
+            'roles' => $roles,
             'menus' => $menus,
             'userUpdate' => $userUpdate,
             'username' => $user->username,
@@ -258,7 +212,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request, $username)
     {
-        $user = User::firstWhere('username', $username);
+        $user = $this->userService->getOne($username);
         $request->validate(
             [
                 'name' => 'required',
@@ -281,24 +235,7 @@ class UserController extends Controller
         );
 
         try {
-            $formInput = [
-                'username' => $request->input('username') != null ? $request->input('username') : $user->username,
-                'name' => $request->input('name') != null ? $request->input('name') : $user->name,
-                'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $user->phone_number,
-                'email' => $request->input('email') != null ? $request->input('email') : $user->email,
-                'address' => $request->input('address') != null ? $request->input('address') : $user->address,
-                'updated_at' => now()
-            ];
-    
-            // Kalau ada gambar yang di-upload
-            if ($request->image) {
-                $imgName = strtotime('now') . '-' . preg_replace('/\s+/', '-', $request->image->getClientOriginalName());
-                $formInput['image'] = $imgName;
-                $request->image->storeAs('./public/img', $imgName);
-            }
-    
-            User::where('username', $username)->update($formInput);
-            $request->session()->put(['username' => $formInput['username']]);
+            $this->userService->update($username, $user);
             return redirect('/settings')->with('success', 'Ubah profil pengguna berhasil!');
         } catch(QueryException $ex) {
             return redirect('/settings')->with('error', 'Ubah profil pengguna gagal!');
@@ -320,13 +257,7 @@ class UserController extends Controller
         );
 
         try {
-            $formInput = [
-                'password' => Hash::make($request->input('password'), ['rounds' => 10]),
-                'updated_at' => now()
-            ];
-            User::where('username', $username)->update($formInput);
-
-            // Hapus session login
+            $this->userService->updatePassword($username);
             $request->session()->flush();
             return redirect('/login')->with('success', 'Ubah password berhasil! Silakan login kembali.');
         } catch(QueryException $ex) {
