@@ -13,7 +13,7 @@ class MenuService
 
     public function getByRoleId($role_id)
     {
-        $menus = $this->menuRepository->getAll()->where('role_id', '>=', $role_id);
+        $menus = $this->menuRepository->getAll()->where('display', '=', 1);
         return $menus;
     }
 }
