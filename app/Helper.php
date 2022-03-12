@@ -51,9 +51,13 @@ class Helper
 
     public static function getMenus(Request $request)
     {
-        $role_id = $request->session()->get('role_id');
-        $menus = Menu::where('role_id', '>=', $role_id)->get();
+        $menus = new MenuService();
+        $menus = $menus->getByRoleId(request()->session()->get('role_id'));
         return $menus;
+        
+        // $role_id = $request->session()->get('role_id');
+        // $menus = Menu::where('role_id', '>=', $role_id)->get();
+        // return $menus;
     }
 
     public function uploadFile($imgName)

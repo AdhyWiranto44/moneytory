@@ -13,7 +13,17 @@ class MenuService
 
     public function getByRoleId($role_id)
     {
-        $menus = $this->menuRepository->getAll()->where('display', '=', 1);
+        $params = [
+            'role_id' => $role_id,
+            'display' => 1
+        ];
+        $menus = $this->menuRepository->getAllJoinWithPrivileges($params);
         return $menus;
+    }
+
+    public function getOne(String $slug = "")
+    {
+        $params = [ 'slug' => $slug ];
+        return $this->menuRepository->get($params)->first();
     }
 }

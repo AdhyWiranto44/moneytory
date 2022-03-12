@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             MenusSeeder::class,
             CompanyProfilesSeeder::class,
             UsersSeeder::class,
+            PrivilegesSeeder::class,
             // RawIngredientsSeeder::class,
             // OnProcessIngredientsSeeder::class,
             // ProductsSeeder::class

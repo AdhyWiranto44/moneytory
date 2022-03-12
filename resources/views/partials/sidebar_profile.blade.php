@@ -5,4 +5,4 @@
         <img class="rounded-circle" src="/img/default.jpg" alt="default" width="64" height="64">
     @endif
 </div>
-<h5 class="company-name fw-bold text-center d-none">{{ $companyName }}</h5>
+<h5 class="company-name fw-bold text-center">{{ $companyName }}</h5>
