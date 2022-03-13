@@ -11,6 +11,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\OnProcessIngredientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RawIngredientController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRegistrationController;
@@ -141,3 +142,13 @@ Route::patch('/debts/{code}/activate', [DebtController::class, 'activate'])->mid
 Route::get('/debts/{code}/edit', [DebtController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-hutang');
 Route::patch('/debts/{code}/edit', [DebtController::class, 'update'])->middleware(IsLoggedIn::class);
 Route::delete('/debts/{code}/delete', [DebtController::class, 'destroy'])->middleware(IsLoggedIn::class)->name('menghapus-hutang');
+
+/**
+ * RoleController
+ */
+Route::get('/roles', [RoleController::class, 'index'])->middleware(IsLoggedIn::class)->name('role');
+Route::get('/roles/add-new', [RoleController::class, 'create'])->middleware(IsLoggedIn::class)->name('tambah-role');
+Route::post('/roles/add-new', [RoleController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::get('/roles/{rname}/edit', [RoleController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-role');
+Route::patch('/roles/{rname}/edit', [RoleController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::delete('/roles/{name}/delete', [RoleController::class, 'destroy'])->middleware(IsLoggedIn::class)->name('menghapus-role');
