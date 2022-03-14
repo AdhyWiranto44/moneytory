@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Privilege extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'role_id',
+        'menu_id',
+        'created_at',
+        'updated_at'
+    ];
 }

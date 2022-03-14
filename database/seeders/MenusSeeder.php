@@ -495,6 +495,16 @@ class MenusSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Ubah Hak Akses',
+                'main_menu_id' => 9,
+                'slug' => 'ubah-hak-akses',
+                'display' => 0,
+                'url' => '/privileges/{name}/edit',
+                'icon' => 'bi bi-people me-2',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ])->each(function($menu) {
             DB::table('menus')->insert($menu);
         });

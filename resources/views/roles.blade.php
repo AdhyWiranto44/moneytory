@@ -29,8 +29,9 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/roles/{{$role->name}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
-                                    <form action="/roles/{{$role->name}}/delete" method="POST">
+                                    <a class="btn btn-sm btn-dark shadow-sm mb-2 mb-md-0" href="/privileges/{{$role->name}}/edit"><i class="bi bi-pencil me-md-2"></i> Hak Akses</a>
+                                    <a class="btn btn-sm btn-warning shadow-sm mb-2 mb-md-0" href="/roles/{{$role->name}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
+                                    <form class="d-inline" action="/roles/{{$role->name}}/delete" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus role {{ $role->name }}?');"><i class="bi bi-trash me-md-2"></i> Hapus</button>

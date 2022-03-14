@@ -11,6 +11,11 @@ class MenuService
         $this->menuRepository = new MenuRepository();
     }
 
+    public function getAll()
+    {
+        return $this->menuRepository->getAll();
+    }
+
     public function getByRoleId($role_id)
     {
         $params = [
