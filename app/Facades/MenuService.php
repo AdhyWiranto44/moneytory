@@ -11,9 +11,24 @@ class MenuService
         $this->menuRepository = new MenuRepository();
     }
 
+    public function getAll()
+    {
+        return $this->menuRepository->getAll();
+    }
+
     public function getByRoleId($role_id)
     {
-        $menus = $this->menuRepository->getAll()->where('role_id', '>=', $role_id);
+        $params = [
+            'role_id' => $role_id,
+            'display' => 1
+        ];
+        $menus = $this->menuRepository->getAllJoinWithPrivileges($params);
         return $menus;
+    }
+
+    public function getOne(String $slug = "")
+    {
+        $params = [ 'slug' => $slug ];
+        return $this->menuRepository->get($params)->first();
     }
 }
