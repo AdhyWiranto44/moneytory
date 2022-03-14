@@ -14,4 +14,24 @@ class UnitRepository {
     {
         return $this->unit->all();
     }
+
+    public function get($params)
+    {
+        return $this->unit->where($params)->get();
+    }
+
+    public function insert($data)
+    {
+        $this->unit->create($data)->save();
+    }
+
+    public function update($params, $update)
+    {
+        $this->unit->where($params)->update($update);
+    }
+
+    public function delete($params)
+    {
+        $this->unit->where($params)->delete();
+    }
 }

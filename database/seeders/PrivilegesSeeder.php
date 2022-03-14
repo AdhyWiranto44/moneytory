@@ -310,6 +310,30 @@ class PrivilegesSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'role_id' => 1,
+                'menu_id' => 50,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 51,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 52,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 53,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
                 'role_id' => 2,
                 'menu_id' => 1,
                 'created_at' => now(),

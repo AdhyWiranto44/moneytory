@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RawIngredientController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRegistrationController;
 use App\Http\Controllers\WelcomeController;
@@ -158,4 +159,14 @@ Route::delete('/roles/{name}/delete', [RoleController::class, 'destroy'])->middl
  * PrivilegeController
  */
 Route::get('/privileges/{name}/edit', [PrivilegeController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-hak-akses');
-Route::patch('/privileges/{name}/edit', [PrivilegeController::class, 'update'])->middleware(IsLoggedIn::class);;
+Route::patch('/privileges/{name}/edit', [PrivilegeController::class, 'update'])->middleware(IsLoggedIn::class);
+
+/**
+ * UnitCOntroller
+ */
+Route::get('/units', [UnitController::class, 'index'])->middleware(IsLoggedIn::class)->name('satuan');
+Route::get('/units/add-new', [UnitController::class, 'create'])->middleware(IsLoggedIn::class)->name('tambah-satuan');
+Route::post('/units/add-new', [UnitController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::get('/units/{name}/edit', [UnitController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-satuan');
+Route::patch('/units/{name}/edit', [UnitController::class, 'update'])->middleware(IsLoggedIn::class);
+Route::delete('/units/{name}/delete', [UnitController::class, 'destroy'])->middleware(IsLoggedIn::class)->name('menghapus-satuan');

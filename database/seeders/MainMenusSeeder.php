@@ -68,6 +68,12 @@ class MainMenusSeeder extends Seeder
                 'icon' => 'bi bi-gear',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            [
+                'name' => 'Satuan',
+                'icon' => 'bi bi-123',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ])->each(function($main_menu) {
             DB::table('main_menus')->insert($main_menu);
