@@ -4,7 +4,7 @@
             <button type="button" class="border-0 bg-transparent" onclick="return toggleSidebar()">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="btn btn-salmon px-3 py-2 ms-md-2 fw-bold" href="/incomes/add-new"><i class="bi bi-card-checklist me-2"></i> Order</a>
+            <a class="btn btn-salmon px-3 py-2 ms-md-2 fw-bold" href="/products/order"><i class="bi bi-card-checklist me-2"></i> Order</a>
         </div>
         <div class="userProfile d-flex align-items-center">
             <small class="d-none d-md-inline text-end">Selamat datang! <br /><b>{{ $username }}</b></small>

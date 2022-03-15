@@ -9,6 +9,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\OnProcessIngredientController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PrivilegeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RawIngredientController;
@@ -170,3 +171,8 @@ Route::post('/units/add-new', [UnitController::class, 'store'])->middleware(IsLo
 Route::get('/units/{name}/edit', [UnitController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-satuan');
 Route::patch('/units/{name}/edit', [UnitController::class, 'update'])->middleware(IsLoggedIn::class);
 Route::delete('/units/{name}/delete', [UnitController::class, 'destroy'])->middleware(IsLoggedIn::class)->name('menghapus-satuan');
+
+/**
+ * OrderController
+ */
+Route::get('/products/order', [OrderController::class, 'index']);

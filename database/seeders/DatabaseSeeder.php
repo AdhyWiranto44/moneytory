@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             PrivilegesSeeder::class,
             // RawIngredientsSeeder::class,
             // OnProcessIngredientsSeeder::class,
-            // ProductsSeeder::class
+            ProductsSeeder::class
         ]);
     }
 }
