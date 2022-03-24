@@ -55,18 +55,6 @@
                             </div>    
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="total_price" class="form-label small mb-1 text-capitalize">total harga</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1">Rp</span>
-                            <input type="number" class="form-control p-3 @error('total_price') is-invalid @enderror" placeholder="contoh: 45000" aria-label="total_price" aria-describedby="basic-addon1" id="total_price" name="total_price" value="{{ $income->total_price }}">
-                            @error('total_price')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>    
-                            @enderror
-                        </div>
-                    </div>
                     <small class="text-danger">* Input kode produknya saja.</small><br>
                     <small class="text-danger">** Input jumlah masing-masing produk.</small><br>
                     <small class="text-danger">*** Input harga dalam bentuk angka.</small>

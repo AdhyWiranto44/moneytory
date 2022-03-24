@@ -20,7 +20,7 @@ class CompanyProfilesSeeder extends Seeder
                 'phone_number' => '0987654321',
                 'email' => 'customer@adisoft.id',
                 'address' => 'Cirebon, Indonesia',
-                'image' => '1642664987-My-Logo-–-3.png',
+                'image' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

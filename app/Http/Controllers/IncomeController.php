@@ -104,7 +104,7 @@ class IncomeController extends Controller
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
-                'total_price' => 'required|numeric',
+                // 'total_price' => 'required|numeric',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
@@ -119,6 +119,7 @@ class IncomeController extends Controller
 
             $inputProducts = $request->input('products');
             $inputAmounts = $request->input('amounts');
+            $prices = $request->input('prices');
             $products = explode(',', $inputProducts);
             $amounts = explode(',', $inputAmounts);
 
@@ -127,8 +128,8 @@ class IncomeController extends Controller
                 'code' => $request->input('code'),
                 'products' => $inputProducts,
                 'amounts' => $inputAmounts,
-                'prices' => $request->input('prices'),
-                'total_price' => $request->input('total_price'),
+                'prices' => $prices,
+                'total_price' => array_sum(explode(',', $prices)),
                 'created_at' => now(),
                 'updated_at' => now()
             ];
@@ -193,7 +194,6 @@ class IncomeController extends Controller
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
-                'total_price' => 'required|numeric',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
@@ -208,7 +208,7 @@ class IncomeController extends Controller
                 'products' => $request->input('products') != null ? $request->input('products') : $income->products,
                 'amounts' => $request->input('amounts') != null ? $request->input('amounts') : $income->amounts,
                 'prices' => $request->input('prices') != null ? $request->input('prices') : $income->prices,
-                'total_price' => $request->input('total_price') != null ? $request->input('total_price') : $income->total_price,
+                'total_price' => array_sum(explode(',', $request->input('prices'))),
                 'updated_at' => now()
             ];
     

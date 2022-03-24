@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,7 +29,9 @@ class DatabaseSeeder extends Seeder
             PrivilegesSeeder::class,
             // RawIngredientsSeeder::class,
             // OnProcessIngredientsSeeder::class,
-            ProductsSeeder::class
+            // ProductsSeeder::class
         ]);
+
+        Product::factory(35)->create();
     }
 }

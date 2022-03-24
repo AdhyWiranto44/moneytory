@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanyRegistrationController;
 use App\Http\Controllers\DashboardController;
@@ -176,3 +177,12 @@ Route::delete('/units/{name}/delete', [UnitController::class, 'destroy'])->middl
  * OrderController
  */
 Route::get('/products/order', [OrderController::class, 'index']);
+
+/** 
+ * CartController
+ */
+Route::get('/cart', [CartController::class, 'index']);
+Route::post('/cart/add-new', [CartController::class, 'store']);
+Route::patch('/cart/{code}/{action}', [CartController::class, 'changeAmount']);
+Route::delete('/cart/{code}/delete', [CartController::class, 'removeOne']);
+Route::delete('/cart/delete', [CartController::class, 'destroy']);

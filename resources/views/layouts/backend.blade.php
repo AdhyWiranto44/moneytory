@@ -34,6 +34,9 @@
         <footer class="text-secondary text-center py-3 marginLeftMinimized" style="margin-top: 250px">
             Moneytory v{{ env('APP_VERSION', '1.0.0') }} &copy; {{ date("Y") }}. 
         </footer>
+
+        @include('../partials/cart_modal')
+        
         <!-- Optional JavaScript; choose one of the two! -->
 
         <!-- Option 1: Bootstrap Bundle with Popper -->

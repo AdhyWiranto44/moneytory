@@ -5,69 +5,93 @@
     <div class="col-md-12">
         @include('partials.title')
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="row">
-                    @for ($i = 0; $i < 20; $i++)
-                        <div class="col-6 col-md-4">
+                    @foreach ($products as $product)
+                        {{-- <input type="hidden" class="product-code" value="{{ $product->code }}">
+                        <input type="hidden" class="product-name" value="{{ $product->name }}">
+                        <input type="hidden" class="product-price" value="{{ $product->base_price + $product->profit }}">
+                        <input type="hidden" class="product-amount" value="1"> --}}
+                        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
                             <div class="card p-2 border-0 shadow-sm mb-3">
                                 <div class="card-body overflow-hidden">
                                     <div class="d-flex align-items-center mb-1">
                                         <img class="rounded-circle me-2" src="/img/default.jpg" alt="default" width="48" height="48">
-                                        <h6 class="fw-bold mb-0">Product Name</h6>
+                                        <h6 class="fw-bold mb-0">{{ $product->name }}</h6>
                                     </div>
-                                    <small class="text-secondary">Harga</small>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="fw-bold mt-2 overflow-hidden">Rp {{ number_format(45000, 0, ",", ".") }}</h6>
-                                        <div class="product-buttons d-flex">
-                                            <button class="btn-decrease border-0 bg-transparent"><i class="bi bi-dash-circle"></i></button>
-                                            <h6 class="product-amount mt-2">0</h6>
-                                            <button class="btn-increase border-0 bg-transparent"><i class="bi bi-plus-circle"></i></button>
+                                    <div class="d-flex justify-content-between my-3">
+                                        <div>
+                                            <small class="text-secondary">Harga</small>
+                                            <h6 class="fw-bold mt-2 overflow-hidden">Rp {{ number_format($product->base_price+$product->profit, 0, ",", ".") }}</h6>
+                                        </div>
+                                        <div>
+                                            <small class="text-secondary">Stok</small>
+                                            <h6 class="fw-bold mt-2 overflow-hidden">{{ $product->stock }}</h6>
                                         </div>
                                     </div>
+                                    <form action="/cart/add-new" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product-code" value="{{ $product->code }}">
+                                        <input type="hidden" name="amount" value="1">
+                                        <button type="submit" class="atc-button btn btn-sm btn-outline-salmon shadow-sm w-100 py-2" title="Tambah ke keranjang" onclick="return confirm('Tambahkan ke keranjang?')"><i class="bi bi-cart-plus"></i></button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card">
-                    <div class="card-header">
-                      Featured
-                    </div>
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item">An item</li>
-                      <li class="list-group-item">A second item</li>
-                      <li class="list-group-item">A third item</li>
-                    </ul>
-                  </div>
             </div>
         </div>
     </div>
 </div>
 <script>
-    const buttonDecrease = document.querySelectorAll('.btn-decrease');
-    const buttonIncrease = document.querySelectorAll('.btn-increase');
-    let productAmount = document.querySelectorAll('.product-amount');
+    // const atcButton = document.querySelectorAll('.atc-button');
+    // const productStock = document.querySelectorAll('.product-stock');
+    // let productAmount = document.querySelectorAll('.product-amount');
+    // let cartCount = document.querySelector('.cart-count');
+    // let cart = [];
 
-    // Increase button
-    buttonDecrease.forEach((decrease, i) => {
-        decrease.addEventListener('click', () => {
-            let currentAmount = parseInt(productAmount[i].innerText);
-            if (currentAmount > 0) {
-                let newAmount = --currentAmount;
-                productAmount[i].innerText = currentAmount;
-            }
-        });
-    });
+    // atcButton.forEach((atc, idx) => {
+    //     atc.addEventListener('click', () => {
+    //         const currProduct = parseInt(productStock[idx].innerText);console.log(currProduct);
+    //         if (currProduct > 0) addToCart(idx);
+    //     });
+    // });
 
-    // Decrease button
-    buttonIncrease.forEach((increase, i) => {
-        increase.addEventListener('click', () => {
-            let currentAmount = parseInt(productAmount[i].innerText);
-            let newAmount = ++currentAmount;
-            productAmount[i].innerText = newAmount;
-        });
-    });
+    // let addToCart = (idx) => {
+    //     // postData('/add-to-cart-session', { answer: 42 })
+    //     // .then(data => {
+    //     //     console.log(data);
+    //     // });
+    //     addCartCounter();
+    //     decreaseProductStock(idx);
+    // }
+
+    // async function addToCartSession(url = '', data = {}) {
+    //     const response = await fetch(url, {
+    //         method: 'POST',
+    //         mode: 'cors',
+    //         cache: 'no-cache',
+    //         credentials: 'same-origin',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     });
+    //     return response.json();
+    // }
+
+    // let decreaseProductStock = (idx) => {
+    //     let currStock = parseInt(productStock[idx].innerText);
+    //     --currStock;
+    //     productStock[idx].innerText = currStock;
+    // }
+
+    // let addCartCounter = () => {
+    //     let counter = parseInt(cartCount.innerText);
+    //     ++counter;
+    //     cartCount.innerText = counter;
+    // }
+    
 </script>
 @endsection
