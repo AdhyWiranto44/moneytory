@@ -117,19 +117,26 @@ class IncomeController extends Controller
             // untuk input base_prices data incomes
             $basePrices = [];
 
+            $inputPrices = $request->input('prices');
             $inputProducts = $request->input('products');
             $inputAmounts = $request->input('amounts');
-            $prices = $request->input('prices');
+            $prices = explode(',', $inputPrices);
             $products = explode(',', $inputProducts);
             $amounts = explode(',', $inputAmounts);
+            $total_price = 0;
+
+            // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
+            for ($i = 0; $i < count($prices); $i++) { 
+                $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
+            }
 
             $formInput = [
                 'income_status_id' => 2,
                 'code' => $request->input('code'),
                 'products' => $inputProducts,
                 'amounts' => $inputAmounts,
-                'prices' => $prices,
-                'total_price' => array_sum(explode(',', $prices)),
+                'prices' => $inputPrices,
+                'total_price' => $total_price,
                 'created_at' => now(),
                 'updated_at' => now()
             ];
