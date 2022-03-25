@@ -84,11 +84,12 @@
         });
         let formInput = {
             "code": incomeCodeInput.value,
+            "extra_charge": parseInt(extraChargeInput.value) || 0,
             "products": products.join(),
             "amounts": amounts.join(),
             "prices": prices.join(),
         }
-
+        
         // kirim datanya ke backend
         checkout(formInput);
 

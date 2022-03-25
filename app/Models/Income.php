@@ -16,6 +16,7 @@ class Income extends Model
         'base_prices',
         'prices',
         'total_price',
+        'extra_charge',
         'created_at',
         'updated_at',
     ];

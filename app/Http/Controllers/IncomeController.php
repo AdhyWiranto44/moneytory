@@ -104,7 +104,7 @@ class IncomeController extends Controller
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
-                // 'total_price' => 'required|numeric',
+                'extra_charge' => 'numeric',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
@@ -120,6 +120,7 @@ class IncomeController extends Controller
             $inputPrices = $request->input('prices');
             $inputProducts = $request->input('products');
             $inputAmounts = $request->input('amounts');
+            $inputExtraCharge = $request->input('extra_charge');
             $prices = explode(',', $inputPrices);
             $products = explode(',', $inputProducts);
             $amounts = explode(',', $inputAmounts);
@@ -129,6 +130,7 @@ class IncomeController extends Controller
             for ($i = 0; $i < count($prices); $i++) { 
                 $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
             }
+            $total_price += $inputExtraCharge;
 
             $formInput = [
                 'income_status_id' => 2,
@@ -137,6 +139,7 @@ class IncomeController extends Controller
                 'amounts' => $inputAmounts,
                 'prices' => $inputPrices,
                 'total_price' => $total_price,
+                'extra_charge' => $inputExtraCharge,
                 'created_at' => now(),
                 'updated_at' => now()
             ];
