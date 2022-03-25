@@ -22,6 +22,7 @@ class CreateIncomesTable extends Migration
             $table->string('base_prices');
             $table->string('prices');
             $table->integer('total_price');
+            $table->integer('extra_charge');
             $table->timestamps();
         });
     }

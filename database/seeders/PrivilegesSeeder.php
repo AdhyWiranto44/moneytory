@@ -334,6 +334,36 @@ class PrivilegesSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'role_id' => 1,
+                'menu_id' => 54,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 55,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 56,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 57,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 1,
+                'menu_id' => 58,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
                 'role_id' => 2,
                 'menu_id' => 1,
                 'created_at' => now(),
@@ -552,6 +582,36 @@ class PrivilegesSeeder extends Seeder
             [
                 'role_id' => 2,
                 'menu_id' => 43,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 2,
+                'menu_id' => 54,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 2,
+                'menu_id' => 55,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 2,
+                'menu_id' => 56,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 2,
+                'menu_id' => 57,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'role_id' => 2,
+                'menu_id' => 58,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

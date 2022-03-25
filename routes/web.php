@@ -176,13 +176,13 @@ Route::delete('/units/{name}/delete', [UnitController::class, 'destroy'])->middl
 /**
  * OrderController
  */
-Route::get('/products/order', [OrderController::class, 'index']);
+Route::get('/products/order', [OrderController::class, 'index'])->middleware(IsLoggedIn::class)->name('order');
 
 /** 
  * CartController
  */
-Route::get('/cart', [CartController::class, 'index']);
-Route::post('/cart/add-new', [CartController::class, 'store']);
-Route::patch('/cart/{code}/{action}', [CartController::class, 'changeAmount']);
-Route::delete('/cart/{code}/delete', [CartController::class, 'removeOne']);
-Route::delete('/cart/delete', [CartController::class, 'destroy']);
+Route::get('/cart', [CartController::class, 'index'])->middleware(IsLoggedIn::class)->name('keranjang');
+Route::post('/cart/add-new', [CartController::class, 'store'])->middleware(IsLoggedIn::class);
+Route::patch('/cart/{code}/{action}', [CartController::class, 'changeAmount'])->middleware(IsLoggedIn::class)->name('ubah-jumlah-item-keranjang');
+Route::delete('/cart/{code}/delete', [CartController::class, 'removeOne'])->middleware(IsLoggedIn::class)->name('menghapus-keranjang');
+Route::delete('/cart/delete', [CartController::class, 'destroy'])->middleware(IsLoggedIn::class)->name('menghapus-semua-item-keranjang');
