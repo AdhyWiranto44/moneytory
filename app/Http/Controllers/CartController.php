@@ -11,17 +11,19 @@ class CartController extends Controller
     public function index(Request $request) {
         $sessionCart = $request->session()->get('cart');
         $cart = [];
-        foreach ($sessionCart as $item) {
-            $product = Product::where('code', $item["code"])->first();
-            $newCartItem = [
-                'code' => $item["code"],
-                'amount' => $item["amount"],
-                'name' => $product->name,
-                'stock' => $product->stock,
-                'price' => $product->base_price + $product->profit,
-                'image' => $product->image,
-            ];
-            array_push($cart, $newCartItem);
+        if ($sessionCart != null) {
+            foreach ($sessionCart as $item) {
+                $product = Product::where('code', $item["code"])->first();
+                $newCartItem = [
+                    'code' => $item["code"],
+                    'amount' => $item["amount"],
+                    'name' => $product->name,
+                    'stock' => $product->stock,
+                    'price' => $product->base_price + $product->profit,
+                    'image' => $product->image,
+                ];
+                array_push($cart, $newCartItem);
+            }
         }
 
         return $cart;
