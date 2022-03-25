@@ -159,6 +159,7 @@ class IncomeController extends Controller
             $income = Income::create($formInput);
             $income->save();
     
+            $request->session()->remove('cart');
             return redirect('/incomes')->with('success', 'Tambah Pemasukan Berhasil!');
         } catch(QueryException $ex) {
             return redirect('/incomes')->with('error', 'Tambah Pemasukan Gagal!');
