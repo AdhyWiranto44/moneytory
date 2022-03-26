@@ -17,6 +17,14 @@ class ProductService {
         return $this->productRepository->getAll();
     }
 
+    public function getAllIfStockAvailable()
+    {
+        $products = array_filter($this->productRepository->getAll()->toArray(), function($item) {
+            return $item->stock > 0;
+        });
+        return $products;
+    }
+
     public function getOne($code)
     {
         $params = [ 'code' => $code ];

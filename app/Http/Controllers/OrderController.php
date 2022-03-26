@@ -21,7 +21,7 @@ class OrderController extends Controller
     public function index()
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        $products = $this->productService->getAll();
+        $products = $this->productService->getAllIfStockAvailable();
         $data = [
             'title' => 'Order',
             'products' => $products,
