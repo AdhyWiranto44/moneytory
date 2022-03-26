@@ -20,4 +20,9 @@ class IncomeService
         ];
         return $this->incomeRepository->get($params)->sum('total_price');
     }
+
+    public function getLastRow()
+    {
+        return $this->incomeRepository->getLastRow();
+    }
 }

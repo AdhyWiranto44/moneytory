@@ -19,15 +19,6 @@
                 <form action="/incomes/add-new" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="code" class="form-label small mb-1 text-capitalize">kode</label>
-                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" placeholder="misal: INC001" autofocus required>
-                        @error('code')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>    
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="products" class="form-label small mb-1 text-capitalize">daftar produk <div class="text-danger d-inline">*</div></label>
                         <input type="text" class="form-control p-3 @error('products') is-invalid @enderror" id="products" name="products" value="{{ old('products') }}" placeholder="contoh: PROD001,PROD002,PROD003" required>
                         @error('products')
@@ -54,7 +45,17 @@
                             </div>    
                         @enderror
                     </div>
-                    <small class="text-danger">* Input kode produknya saja.</small><br>
+                    <label for="extra_charge" class="form-label small mb-1 text-capitalize">biaya tambahan</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Rp</span>
+                        <input type="number" class="form-control p-3 @error('extra_charge') is-invalid @enderror" id="extra_charge" name="extra_charge" value="{{ old('extra_charge') }}">
+                        @error('extra_charge')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>    
+                        @enderror
+                    </div>
+                    <small class="text-danger">** Input kode produknya saja.</small><br>
                     <small class="text-danger">** Input jumlah masing-masing produk.</small><br>
                     <small class="text-danger">*** Input harga dalam bentuk angka.</small>
                     @include('partials.add_button')

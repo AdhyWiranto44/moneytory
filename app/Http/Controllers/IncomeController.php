@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\IncomeService;
 use App\Helper;
 use App\Models\Income;
 use App\Models\Product;
@@ -15,6 +16,7 @@ class IncomeController extends Controller
     public function __construct()
     {
         $this->helper = new Helper();
+        $this->incomeService = new IncomeService();
     }
 
     public function index(Request $request)
@@ -100,16 +102,14 @@ class IncomeController extends Controller
     {
         $request->validate(
             [
-                'code' => 'required|unique:incomes',
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
-                'extra_charge' => 'numeric',
+                'extra_charge' => 'numeric|nullable',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
             ]
         );
 
@@ -120,11 +120,18 @@ class IncomeController extends Controller
             $inputPrices = $request->input('prices');
             $inputProducts = $request->input('products');
             $inputAmounts = $request->input('amounts');
-            $inputExtraCharge = $request->input('extra_charge');
+            $inputExtraCharge = $request->input('extra_charge') ? $request->input('extra_charge') : 0;
             $prices = explode(',', $inputPrices);
             $products = explode(',', $inputProducts);
             $amounts = explode(',', $inputAmounts);
             $total_price = 0;
+
+            // Membuat code
+            $prefix = "INC";
+            $lastRow = $this->incomeService->getLastRow();
+            $nextId = 1;
+            if ($lastRow != null) $nextId = $lastRow->id + 1;
+            $newCode = $prefix . $nextId;
 
             // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
             for ($i = 0; $i < count($prices); $i++) { 
@@ -134,7 +141,7 @@ class IncomeController extends Controller
 
             $formInput = [
                 'income_status_id' => 2,
-                'code' => $request->input('code'),
+                'code' => $newCode,
                 'products' => $inputProducts,
                 'amounts' => $inputAmounts,
                 'prices' => $inputPrices,
@@ -151,7 +158,11 @@ class IncomeController extends Controller
                 $basePrice = $product->base_price;
 
                 // mengurangi stok barang jadi
-                $product->update(['stock' => $stock - $amounts[$i]]);
+                $decreasedStock = $stock - $amounts[$i];
+                if ($decreasedStock < 0) {
+                    return redirect('/incomes')->with('error', "Stok {$product->name} kurang!");
+                }
+                $product->update(['stock' => $decreasedStock]);
 
                 array_push($basePrices, $basePrice);
             }
@@ -164,7 +175,7 @@ class IncomeController extends Controller
     
             $request->session()->remove('cart');
             return redirect('/incomes')->with('success', 'Tambah Pemasukan Berhasil!');
-        } catch(QueryException $ex) {
+        } catch(QueryException $ex) {dd($ex);
             return redirect('/incomes')->with('error', 'Tambah Pemasukan Gagal!');
         }
     }

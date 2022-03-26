@@ -12,12 +12,6 @@
             <div class="cart-price">
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="income-code" class="mb-0">Kode Pemasukan/order</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="income-code form-control" id="income-code" name="income-code" placeholder="Kode Pemasukan/Order, mis: INC1">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
                         <label for="extra-charge" class="mb-0">Biaya tambahan</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
@@ -83,7 +77,6 @@
             return item.price 
         });
         let formInput = {
-            "code": incomeCodeInput.value,
             "extra_charge": parseInt(extraChargeInput.value) || 0,
             "products": products.join(),
             "amounts": amounts.join(),

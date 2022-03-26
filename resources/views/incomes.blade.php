@@ -34,6 +34,7 @@
                                 <th class="text-center">Produk</th>
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
+                                <th class="text-center">Biaya Tambahan</th>
                                 <th class="text-center">Total Harga</th>
                                 <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
@@ -69,6 +70,13 @@
                                 <td class="text-center">
                                     @if ($income->prices)
                                         {{ $income->prices }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($income->extra_charge)
+                                        Rp {{ number_format($income->extra_charge, 0, ',', '.') }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
@@ -118,6 +126,7 @@
                                 <th class="text-center">Produk</th>
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
+                                <th class="text-center">Biaya Tambahan</th>
                                 <th class="text-center">Total Harga</th>
                                 <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
