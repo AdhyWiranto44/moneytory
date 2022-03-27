@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\IncomeService;
+use App\Facades\ProductService;
 use App\Helper;
 use App\Models\Income;
 use App\Models\Product;
@@ -17,11 +18,16 @@ class IncomeController extends Controller
     {
         $this->helper = new Helper();
         $this->incomeService = new IncomeService();
+        $this->productService = new ProductService();
     }
 
     public function index(Request $request)
     {
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
         [$dateMin, $dateMax] = $this->helper->getCurrentDate();
+        $code = $request->query('code');
+        $incomes = $this->incomeService->getByDate($code, $dateMin, $dateMax);
+
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
         } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
@@ -31,17 +37,6 @@ class IncomeController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
-        $code = $request->query('code');
-        $user = $this->helper->getUserLogin($request);
-        $company = $this->helper->getCompanyProfile();
-        $incomes = DB::table('incomes')
-                        ->join('income_statuses', 'incomes.income_status_id', '=', 'income_statuses.id')
-                        ->select('incomes.*', 'income_statuses.name as status')
-                        ->where("incomes.created_at", ">=", $dateMin)
-                        ->where("incomes.created_at", "<=", $dateMax)
-                        ->where("incomes.products", "LIKE", "%".$code."%")
-                        ->get();
-        $menus = $this->helper->getMenus($request);
         $data = [
             'title' => 'Pemasukan',
             'menus' => $menus,
@@ -77,15 +72,10 @@ class IncomeController extends Controller
         return view('incomes', $data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $user = $this->helper->getUserLogin($request);
-        $company = $this->helper->getCompanyProfile();
-        $menus = $this->helper->getMenus($request);
-        $products = DB::table('products')
-                ->join('units', 'products.unit_id', '=', 'units.id')
-                ->select('products.*', 'units.name as unit')
-                ->get();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $products = $this->productService->getAll2();
         $data = [
             'title' => 'Tambah',
             'menus' => $menus,
@@ -114,82 +104,19 @@ class IncomeController extends Controller
         );
 
         try {
-            // untuk input base_prices data incomes
-            $basePrices = [];
-
-            $inputPrices = $request->input('prices');
-            $inputProducts = $request->input('products');
-            $inputAmounts = $request->input('amounts');
-            $inputExtraCharge = $request->input('extra_charge') ? $request->input('extra_charge') : 0;
-            $prices = explode(',', $inputPrices);
-            $products = explode(',', $inputProducts);
-            $amounts = explode(',', $inputAmounts);
-            $total_price = 0;
-
-            // Membuat code
-            $prefix = "INC";
-            $lastRow = $this->incomeService->getLastRow();
-            $nextId = 1;
-            if ($lastRow != null) $nextId = $lastRow->id + 1;
-            $newCode = $prefix . $nextId;
-
-            // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
-            for ($i = 0; $i < count($prices); $i++) { 
-                $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
-            }
-            $total_price += $inputExtraCharge;
-
-            $formInput = [
-                'income_status_id' => 2,
-                'code' => $newCode,
-                'products' => $inputProducts,
-                'amounts' => $inputAmounts,
-                'prices' => $inputPrices,
-                'total_price' => $total_price,
-                'extra_charge' => $inputExtraCharge,
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-
-            // Mengurangi stok tiap produk yang dibeli
-            for ($i = 0; $i < count($products); $i++) {
-                $product = Product::firstWhere('code', $products[$i]);
-                $stock = $product->stock;
-                $basePrice = $product->base_price;
-
-                // mengurangi stok barang jadi
-                $decreasedStock = $stock - $amounts[$i];
-                if ($decreasedStock < 0) {
-                    return redirect('/incomes')->with('error', "Stok {$product->name} kurang!");
-                }
-                $product->update(['stock' => $decreasedStock]);
-
-                array_push($basePrices, $basePrice);
-            }
-
-            // tambahkan data harga modal pada form
-            $formInput['base_prices'] = implode(",", $basePrices);
-
-            $income = Income::create($formInput);
-            $income->save();
-    
-            $request->session()->remove('cart');
+            $result = $this->incomeService->insert();
+            if ($result != null) return redirect('/incomes')->with('error', $result);
             return redirect('/incomes')->with('success', 'Tambah Pemasukan Berhasil!');
         } catch(QueryException $ex) {dd($ex);
             return redirect('/incomes')->with('error', 'Tambah Pemasukan Gagal!');
         }
     }
 
-    public function edit(Request $request, $code)
+    public function edit($code)
     {
-        $user = $this->helper->getUserLogin($request);
-        $company = $this->helper->getCompanyProfile();
-        $income = Income::firstWhere('code', $code);
-        $menus = $this->helper->getMenus($request);
-        $products = DB::table('products')
-                ->join('units', 'products.unit_id', '=', 'units.id')
-                ->select('products.*', 'units.name as unit')
-                ->get();
+        [ $user, $company, $menus ] = $this->helper->getCommonData();
+        $income = $this->incomeService->getOne($code);
+        $products = $this->productService->getAll2();
         $data = [
             'title' => 'Ubah',
             'income' => $income,
@@ -206,70 +133,47 @@ class IncomeController extends Controller
 
     public function update(Request $request, $code)
     {
-        $income = Income::firstWhere('code', $code);
+        $income = $this->incomeService->getOne($code);
         $request->validate(
             [
-                'code' => [
-                    'required',
-                    Rule::unique('incomes')->ignore($income->id)
-                ],
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
+                'extra_charge' => 'numeric|nullable',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
             ]
         );
 
         try {
-            $formInput = [
-                'code' => $request->input('code') != null ? $request->input('code') : $income->code,
-                'products' => $request->input('products') != null ? $request->input('products') : $income->products,
-                'amounts' => $request->input('amounts') != null ? $request->input('amounts') : $income->amounts,
-                'prices' => $request->input('prices') != null ? $request->input('prices') : $income->prices,
-                'total_price' => array_sum(explode(',', $request->input('prices'))),
-                'updated_at' => now()
-            ];
-    
-            Income::where('code', $code)->update($formInput);
+            $result = $this->incomeService->update($code, $income);
+            if ($result != null) return redirect('/incomes')->with('error', $result);
             return redirect('/incomes')->with('success', 'Ubah pemasukan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/incomes')->with('error', 'Ubah pemasukan gagal!');
         }
     }
 
-    public function deactivate(Request $request, $code)
+    public function deactivate($code)
     {
         $status = 1;
-        Income::where('code', $code)->update(['income_status_id' => $status]);
+        $this->incomeService->changeStatus($code, $status);
         return redirect('/incomes');
     }
 
-    public function activate(Request $request, $code)
+    public function activate($code)
     {
         $status = 2;
-        Income::where('code', $code)->update(['income_status_id' => $status]);
+        $this->incomeService->changeStatus($code, $status);
         return redirect('/incomes');
     }
 
     public function destroy($code)
     {
         try {
-            $income = Income::firstWhere('code', $code);
-            $products = explode(',', $income->products);
-            $amounts = explode(',', $income->amounts);
-
-            // Mengurangi stok tiap produk yang dibeli
-            for ($i = 0; $i < count($products); $i++) {
-                $product = Product::firstWhere('code', $products[$i]);
-                $stock = $product->stock;
-                $product->update(['stock' => $stock + $amounts[$i]]);
-            }
-
-            $income->delete();
+            $this->incomeService->delete($code);
             return redirect('/incomes')->with('success', 'Penghapusan pemasukan berhasil!');
         } catch(QueryException $ex) {
             return redirect('/incomes')->with('error', 'Penghapusan pemasukan gagal!');

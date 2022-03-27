@@ -20,6 +20,14 @@ class ProductRepository {
             ->get();
     }
 
+    public function getAll2()
+    {
+        return DB::table('products')
+            ->join('units', 'products.unit_id', '=', 'units.id')
+            ->select('products.*', 'units.name as unit')
+            ->get();
+    }
+
     public function get($params)
     {
         return $this->product->where($params)->get();

@@ -8,7 +8,14 @@ class IncomeService
 {
     public function __construct()
     {
+        $this->productService = new ProductService();
         $this->incomeRepository = new IncomeRepository();
+    }
+
+    public function getOne($code)
+    {
+        $params = [ 'code' => $code ];
+        return $this->incomeRepository->get($params)->first();
     }
 
     public function getPriceSumByDate($from, $to)
@@ -24,5 +31,199 @@ class IncomeService
     public function getLastRow()
     {
         return $this->incomeRepository->getLastRow();
+    }
+
+    public function getByDate($code, $from, $to)
+    {
+        $params = [
+            "code" => $code, 
+            "from" => $from, 
+            "to" => $to
+        ];
+        return $this->incomeRepository->getByDate($params);
+    }
+
+    public function insert()
+    {
+        // untuk input base_prices data incomes
+        $basePrices = [];
+
+        $inputPrices = request()->input('prices');
+        $inputProducts = request()->input('products');
+        $inputAmounts = request()->input('amounts');
+        $inputExtraCharge = request()->input('extra_charge') ? request()->input('extra_charge') : 0;
+        $prices = explode(',', $inputPrices);
+        $products = explode(',', $inputProducts);
+        $amounts = explode(',', $inputAmounts);
+        $total_price = 0;
+
+        // cek apakah panjang array harga, kode produk, dan jumlah sama
+        if ((count($prices) + count($products) + count($amounts)) % 3 > 0) {
+            return "Banyaknya harga, kode produk, dan jumlahnya tidak sama!";
+        }
+
+        // cek apakah jumlah ada yang minus
+        foreach ($amounts as $amount) {
+            if ($amount < 0) {
+                return "Jumlah tidak boleh minus!";
+            }
+        }
+
+        // cek apakah ada produk yang tidak ada
+        foreach ($products as $product) {
+            if ($this->productService->getOne($product) == null) {
+                return "Barang jadi dengan kode {$product} tidak ada!";
+            }
+        }
+
+        // Membuat code
+        $prefix = "INC";
+        $lastRow = $this->incomeRepository->getLastRow();
+        $nextId = 1;
+        if ($lastRow != null) $nextId = $lastRow->id + 1;
+        $newCode = $prefix . $nextId;
+
+        // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
+        for ($i = 0; $i < count($prices); $i++) { 
+            $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
+        }
+        $total_price += $inputExtraCharge;
+
+        $formInput = [
+            'income_status_id' => 2,
+            'code' => $newCode,
+            'products' => $inputProducts,
+            'amounts' => $inputAmounts,
+            'prices' => $inputPrices,
+            'total_price' => $total_price,
+            'extra_charge' => $inputExtraCharge,
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+
+        // Mengurangi stok tiap produk yang dibeli
+        for ($i = 0; $i < count($products); $i++) {
+            $product = $this->productService->getOne($products[$i]);
+            $stock = $product->stock;
+            $basePrice = $product->base_price;
+
+            // mengurangi stok barang jadi
+            $decreasedStock = $stock - $amounts[$i];
+            if ($decreasedStock < 0) {
+                return "Stok {$product->name} kurang!";
+            }
+            $product->update(['stock' => $decreasedStock]);
+
+            array_push($basePrices, $basePrice);
+        }
+
+        // tambahkan data harga modal pada form
+        $formInput['base_prices'] = implode(",", $basePrices);
+
+        $this->incomeRepository->insert($formInput);
+        request()->session()->remove('cart');
+    }
+
+    public function update($code, $income)
+    {
+        $params = [ 'code' => $code ];
+        
+        // untuk input base_prices data incomes
+        $basePrices = [];
+
+        $inputPrices = request()->input('prices');
+        $inputProducts = request()->input('products');
+        $inputAmounts = request()->input('amounts');
+        $inputExtraCharge = request()->input('extra_charge') ? request()->input('extra_charge') : 0;
+        $prices = explode(',', $inputPrices);
+        $products = explode(',', $inputProducts);
+        $amounts = explode(',', $inputAmounts);
+        $total_price = 0;
+        
+        // cek apakah panjang array harga, kode produk, dan jumlah sama
+        if ((count($prices) + count($products) + count($amounts)) % 3 > 0) {
+            return "Banyaknya harga, kode produk, dan jumlahnya tidak sama!";
+        }
+
+        // cek apakah jumlah ada yang minus
+        foreach ($amounts as $amount) {
+            if ($amount < 0) {
+                return "Jumlah tidak boleh minus!";
+            }
+        }
+
+        // cek apakah ada produk yang tidak ada
+        foreach ($products as $product) {
+            if ($this->productService->getOne($product) == null) {
+                return "Barang jadi dengan kode {$product} tidak ada!";
+            }
+        }
+
+        // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
+        for ($i = 0; $i < count($prices); $i++) { 
+            $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
+        }
+        $total_price += $inputExtraCharge;
+
+        $update = [
+            'products' => request()->input('products') != null ? request()->input('products') : $income->products,
+            'amounts' => request()->input('amounts') != null ? request()->input('amounts') : $income->amounts,
+            'prices' => request()->input('prices') != null ? request()->input('prices') : $income->prices,
+            'total_price' => array_sum(explode(',', request()->input('prices'))),
+            'updated_at' => now()
+        ];
+
+        // Mengurangi stok tiap produk yang dibeli
+        for ($i = 0; $i < count($products); $i++) {
+            $product = $this->productService->getOne($products[$i]);
+            $stock = $product->stock;
+            $basePrice = $product->base_price;
+            $newStock = 0;
+            $amountsFromIncome = explode(",", $income->amounts);
+
+            // Jika amount sebelum lebih besar dari amount baru, tambahkan stok nya
+            if ($amountsFromIncome[$i] > $amounts[$i]) {
+                $newStock = $stock + ($amountsFromIncome[$i] - $amounts[$i]);
+            } else { // Jika sebaliknya kurangi lagi stok barang jadi
+                $newStock = $stock - ($amounts[$i] - $amountsFromIncome[$i]);
+            }
+
+            if ($newStock < 0) {
+                return "Stok {$product->name} kurang!";
+            }
+
+            $product->update(['stock' => $newStock]);
+
+            array_push($basePrices, $basePrice);
+        }
+
+        // tambahkan data harga modal pada form
+        $update['base_prices'] = implode(",", $basePrices);
+
+        $this->incomeRepository->update($params, $update);
+    }
+
+    public function changeStatus($code, $status)
+    {
+        $params = [ 'code' => $code ];
+        $update = [ 'income_status_id' => $status ];
+        $this->incomeRepository->update($params, $update);
+    }
+
+    public function delete($code)
+    {
+        $income = $this->getOne($code);
+        $products = explode(',', $income->products);
+        $amounts = explode(',', $income->amounts);
+
+        // Mengurangi stok tiap produk yang dibeli
+        for ($i = 0; $i < count($products); $i++) {
+            $product = $this->productService->getOne($products[$i]);
+            $stock = $product->stock;
+            $product->update(['stock' => $stock + $amounts[$i]]);
+        }
+
+        $params = [ 'code' => $code ];
+        $this->incomeRepository->delete($params);
     }
 }
