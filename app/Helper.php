@@ -70,4 +70,13 @@ class Helper
         $name = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
         return $name;
     }
+
+    public function generateCode($prefix, $lastRow)
+    {
+        $nextId = 1;
+        if ($lastRow != null) $nextId = $lastRow->id + 1;
+        $newCode = $prefix . $nextId;
+        
+        return $newCode;
+    }
 }

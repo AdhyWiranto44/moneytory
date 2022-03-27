@@ -62,7 +62,6 @@ class ExpenseController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => 'required|unique:expenses',
                 'description' => 'required',
                 'cost' => 'required|numeric',
                 'image' => 'image|max:1024'
@@ -70,7 +69,6 @@ class ExpenseController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]
@@ -107,10 +105,6 @@ class ExpenseController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => [
-                    'required',
-                    Rule::unique('expenses')->ignore($expense->id),
-                ],
                 'description' => 'required',
                 'cost' => 'required|numeric',
                 'image' => 'image|max:1024'
@@ -118,7 +112,6 @@ class ExpenseController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]

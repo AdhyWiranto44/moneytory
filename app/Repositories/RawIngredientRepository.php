@@ -25,6 +25,11 @@ class RawIngredientRepository
         return $this->rawIngredient->where($params)->get();
     }
 
+    public function getLastRow()
+    {
+        return DB::table('raw_ingredients')->select('id')->orderByDesc('id')->limit(1)->first();
+    }
+
     public function insert($data)
     {
         $this->rawIngredient->create($data)->save();

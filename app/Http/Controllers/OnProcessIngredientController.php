@@ -57,14 +57,12 @@ class OnProcessIngredientController extends Controller
         $request->validate(
             [
                 'raw_ingredient' => 'required',
-                'code' => 'required|unique:on_process_ingredients',
                 'purpose' => 'required',
                 'amount' => 'required|numeric',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
             ]
         );     
 
@@ -114,17 +112,12 @@ class OnProcessIngredientController extends Controller
         $request->validate(
             [
                 'raw_ingredient' => 'required',
-                'code' => [
-                    'required',
-                    Rule::unique('on_process_ingredients')->ignore($onProcessIngredient->id),
-                ],
                 'purpose' => 'required',
                 'amount' => 'required|numeric',
             ],
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
             ]
         );
 

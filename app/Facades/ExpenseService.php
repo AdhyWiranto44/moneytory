@@ -37,11 +37,19 @@ class ExpenseService
         return $this->expenseRepository->get($params)->sum('cost');
     }
 
+    public function getLastRow()
+    {
+        return $this->expenseRepository->getLastRow();
+    }
+
     public function insert()
     {
+        // Membuat code
+        $newCode = $this->helper->generateCode("EXP", $this->expenseRepository->getLastRow());
+
         $expense = [
             'name' => request()->input('name'),
-            'code' => request()->input('code'),
+            'code' => $newCode,
             'description' => request()->input('description'),
             'cost' => request()->input('cost'),
             'created_at' => now(),
@@ -62,7 +70,6 @@ class ExpenseService
         $params = [ 'code' => $code ];
         $update = [
             'name' => request()->input('name') != null ? request()->input('name') : $expense->name,
-            'code' => request()->input('code') != null ? request()->input('code') : $expense->code,
             'description' => request()->input('description') != null ? request()->input('description') : $expense->description,
             'cost' => request()->input('cost') != null ? request()->input('cost') : $expense->cost,
             'updated_at' => now()

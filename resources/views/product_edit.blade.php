@@ -28,15 +28,6 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="code" class="form-label small mb-1 text-capitalize">kode</label>
-                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ $product->code }}" placeholder="misal: PROD001" required>
-                        @error('code')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>    
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="unit" class="form-label small mb-1 text-capitalize">satuan</label>
                         <select class="form-select p-3 @error('unit') is-invalid @enderror" aria-label="Default select example" id="unit" name="unit" required>
                             <option value="" selected>-- Pilih Satuan --</option>

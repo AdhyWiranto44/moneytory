@@ -58,7 +58,6 @@ class RawIngredientController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => 'required|unique:raw_ingredients',
                 'stock' => 'required|numeric',
                 'minimum_stock' => 'required|numeric',
                 'unit' => 'required',
@@ -67,7 +66,6 @@ class RawIngredientController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]
@@ -106,10 +104,6 @@ class RawIngredientController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => [
-                    'required',
-                    Rule::unique('raw_ingredients')->ignore($rawIngredient->id),
-                ],
                 'stock' => 'required|numeric',
                 'minimum_stock' => 'required|numeric',
                 'unit' => 'required',
@@ -118,7 +112,6 @@ class RawIngredientController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]

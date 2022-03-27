@@ -27,6 +27,11 @@ class OnProcessIngredientRepository
         return $this->onProcessIngredient->where($params)->get();
     }
 
+    public function getLastRow()
+    {
+        return DB::table('on_process_ingredients')->select('id')->orderByDesc('id')->limit(1)->first();
+    }
+
     public function create($data)
     {
         $this->onProcessIngredient->create($data)->save();

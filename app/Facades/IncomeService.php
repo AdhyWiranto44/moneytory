@@ -2,12 +2,14 @@
 
 namespace App\Facades;
 
+use App\Helper;
 use App\Repositories\IncomeRepository;
 
 class IncomeService
 {
     public function __construct()
     {
+        $this->helper = new Helper();
         $this->productService = new ProductService();
         $this->incomeRepository = new IncomeRepository();
     }
@@ -77,11 +79,7 @@ class IncomeService
         }
 
         // Membuat code
-        $prefix = "INC";
-        $lastRow = $this->incomeRepository->getLastRow();
-        $nextId = 1;
-        if ($lastRow != null) $nextId = $lastRow->id + 1;
-        $newCode = $prefix . $nextId;
+        $newCode = $this->helper->generateCode("INC", $this->incomeRepository->getLastRow());
 
         // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
         for ($i = 0; $i < count($prices); $i++) { 

@@ -70,7 +70,6 @@ class DebtController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => 'required|unique:debts',
                 'price' => 'required|numeric',
                 'on_behalf_of' => 'required',
                 'phone_number' => 'required',
@@ -81,7 +80,6 @@ class DebtController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
             ]
         );
 
@@ -120,10 +118,6 @@ class DebtController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => [
-                    'required',
-                    Rule::unique('debts')->ignore($debt->id),
-                ],
                 'price' => 'required|numeric',
                 'on_behalf_of' => 'required',
                 'phone_number' => 'required',
@@ -134,7 +128,6 @@ class DebtController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!'
             ]
         );
 

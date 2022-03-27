@@ -32,15 +32,6 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="code" class="form-label small mb-1 text-capitalize">kode</label>
-                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" placeholder="misal: ONP001" required>
-                        @error('code')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>    
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="purpose" class="form-label small mb-1 text-capitalize">tujuan</label>
                         <input type="text" class="form-control p-3 @error('purpose') is-invalid @enderror" id="purpose" name="purpose" value="{{ old('purpose') }}" required>
                         @error('purpose')

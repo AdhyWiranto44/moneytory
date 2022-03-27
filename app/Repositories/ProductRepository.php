@@ -33,6 +33,11 @@ class ProductRepository {
         return $this->product->where($params)->get();
     }
 
+    public function getLastRow()
+    {
+        return DB::table('products')->select('id')->orderByDesc('id')->limit(1)->first();
+    }
+
     public function insert($data)
     {
         $this->product->create($data)->save();

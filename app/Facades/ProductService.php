@@ -36,13 +36,21 @@ class ProductService {
         return $this->productRepository->get($params)->first();
     }
 
+    public function getLastRow()
+    {
+        return $this->productRepository->getLastRow();
+    }
+
     public function insert()
     {
+        // Membuat code
+        $newCode = $this->helper->generateCode("PROD", $this->productRepository->getLastRow());
+
         $product = [
             'status_id' => 2,
             'unit_id' => request()->input('unit'),
             'name' => request()->input('name'),
-            'code' => request()->input('code'),
+            'code' => $newCode,
             'base_price' => request()->input('base_price'),
             'profit' => request()->input('profit'),
             'stock' => request()->input('stock'),
@@ -66,7 +74,6 @@ class ProductService {
         $update = [
             'unit_id' => request()->input('unit') != null ? request()->input('unit') : $product->unit_id,
             'name' => request()->input('name') != null ? request()->input('name') : $product->name,
-            'code' => request()->input('code') != null ? request()->input('code') : $product->code,
             'stock' => request()->input('stock') != null ? request()->input('stock') : $product->stock,
             'minimum_stock' => request()->input('minimum_stock') != null ? request()->input('minimum_stock') : $product->minimum_stock,
             'base_price' => request()->input('base_price') != null ? request()->input('base_price') : $product->base_price,

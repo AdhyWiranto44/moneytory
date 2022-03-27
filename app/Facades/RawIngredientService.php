@@ -35,13 +35,21 @@ class RawIngredientService
         return $this->rawIngredientRepository->get($params)->first();
     }
 
+    public function getLastRow()
+    {
+        return $this->rawIngredientRepository->getLastRow();
+    }
+
     public function insert()
     {
+        // Membuat code
+        $newCode = $this->helper->generateCode("RAW", $this->rawIngredientRepository->getLastRow());
+
         $data = [
             'status_id' => 2,
             'unit_id' => request()->input('unit'),
             'name' => request()->input('name'),
-            'code' => request()->input('code'),
+            'code' => $newCode,
             'stock' => request()->input('stock'),
             'minimum_stock' => request()->input('minimum_stock'),
             'created_at' => now(),

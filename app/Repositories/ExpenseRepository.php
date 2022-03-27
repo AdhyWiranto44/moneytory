@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Expense;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseRepository
 {
@@ -14,6 +15,11 @@ class ExpenseRepository
     public function get($params)
     {
         return $this->expense->where($params)->get();
+    }
+
+    public function getLastRow()
+    {
+        return DB::table('expenses')->select('id')->orderByDesc('id')->limit(1)->first();
     }
 
     public function insert($data)

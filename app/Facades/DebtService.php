@@ -2,6 +2,7 @@
 
 namespace App\Facades;
 
+use App\Helper;
 use App\Repositories\DebtRepository;
 
 class DebtService
@@ -9,6 +10,7 @@ class DebtService
     public function __construct()
     {
         $this->debtRepository = new DebtRepository();
+        $this->helper = new Helper();
     }
 
     public function getOne(String $code = "")
@@ -33,13 +35,21 @@ class DebtService
         return $this->debtRepository->get($params)->sum('price');
     }
 
+    public function getLastRow()
+    {
+        return $this->debtRepository->getLastRow();
+    }
+
     public function insert()
     {
+        // Membuat code
+        $newCode = $this->helper->generateCode("DEBT", $this->debtRepository->getLastRow());
+
         $data = [
             'debt_type_id' => request()->input('debt_type'),
             'debt_status_id' => request()->input('debt_status'),
             'name' => request()->input('name'),
-            'code' => request()->input('code'),
+            'code' => $newCode,
             'description' => request()->input('description'),
             'price' => request()->input('price'),
             'on_behalf_of' => request()->input('on_behalf_of'),
@@ -59,7 +69,6 @@ class DebtService
             'debt_type_id' => request()->input('debt_type') != null ? request()->input('debt_type') : $debt->debt_type_id,
             'debt_status_id' => request()->input('debt_status') != null ? request()->input('debt_status') : $debt->debt_status_id,
             'name' => request()->input('name') != null ? request()->input('name') : $debt->name,
-            'code' => request()->input('code') != null ? request()->input('code') : $debt->code,
             'description' => request()->input('description') != null ? request()->input('description') : $debt->description,
             'price' => request()->input('price') != null ? request()->input('price') : $debt->price,
             'on_behalf_of' => request()->input('on_behalf_of') != null ? request()->input('on_behalf_of') : $debt->on_behalf_of,

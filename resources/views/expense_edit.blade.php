@@ -28,15 +28,6 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="code" class="form-label small mb-1 text-capitalize">kode</label>
-                        <input type="text" class="form-control p-3 @error('code') is-invalid @enderror" id="code" name="code" value="{{ $expense->code }}" placeholder="contoh: EXP001" required>
-                        @error('code')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>    
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="description" class="form-label small mb-1 text-capitalize">deskripsi</label>
                         <input type="text" class="form-control p-3 @error('description') is-invalid @enderror" id="description" name="description" value="{{ $expense->description }}" placeholder="contoh: untuk membuat kue ulang tahun" required>
                         @error('description')

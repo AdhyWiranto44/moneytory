@@ -19,7 +19,7 @@ class CreateExpensesTable extends Migration
             $table->text('description')->nullable();
             $table->string('code', 10)->unique();
             $table->integer('cost');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

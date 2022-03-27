@@ -58,7 +58,6 @@ class ProductController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => 'required|unique:products',
                 'unit' => 'required',
                 'base_price' => 'required|numeric',
                 'profit' => 'required|numeric',
@@ -69,7 +68,6 @@ class ProductController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]
@@ -108,10 +106,6 @@ class ProductController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'code' => [
-                    'required',
-                    Rule::unique('products')->ignore($product->id),
-                ],
                 'base_price' => 'required|numeric',
                 'profit' => 'required|numeric',
                 'stock' => 'required|numeric',
@@ -122,7 +116,6 @@ class ProductController extends Controller
             [
                 'required' => 'Kolom ini harus diisi!',
                 'numeric' => 'Kolom ini harus berisi bilangan bulat atau bilangan pecahan',
-                'unique' => 'Kode barang sudah ada!',
                 'image.image' => 'File harus berupa gambar (jpg, jpeg, dan png)',
                 'image.max' => 'Ukuran gambar maksimal yang diterima adalah sebesar :max MB'
             ]
