@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('name')->unique();
             $table->integer('base_price');
             $table->integer('profit');
+            $table->integer('discount')->default(0); // in percent
             $table->float('stock');
             $table->float('minimum_stock');
             $table->string('image')->nullable();

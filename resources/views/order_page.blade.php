@@ -9,7 +9,7 @@
                 <div class="row">
                     @if (count($products) > 0)
                         @foreach ($products as $product)
-                            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                            <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="card p-2 border-0 shadow-sm mb-3">
                                     <div class="card-body overflow-hidden">
                                         <div class="d-flex align-items-center mb-1">
@@ -19,11 +19,19 @@
                                         <div class="d-flex justify-content-between my-3">
                                             <div>
                                                 <small class="text-secondary">Harga</small>
-                                                <h6 class="fw-bold mt-2 overflow-hidden">Rp {{ number_format($product->base_price+$product->profit, 0, ",", ".") }}</h6>
+                                                @if ($product->discount > 0)
+                                                    <?php $discountPrice = $product->base_price+$product->profit - (($product->base_price+$product->profit) * ($product->discount/100)) ?>
+                                                    <small class="bg-warning text-dark px-1 fw-bold rounded shadow-sm">{{ "Diskon " . $product->discount . " % " }}</small>
+                                                    <h5 class="fw-bold mt-2 overflow-hidden">Rp {{ number_format($discountPrice, 0, ",", ".") }}</h5>
+                                                    <small class="fw-bold mt-2 overflow-hidden text-secondary d-block text-decoration-line-through">Rp {{ number_format($product->base_price+$product->profit, 0, ",", ".") }}</small>
+                                                    
+                                                @else
+                                                    <h5 class="fw-bold mt-2 overflow-hidden">Rp {{ number_format($product->base_price+$product->profit, 0, ",", ".") }}</h5>
+                                                @endif
                                             </div>
                                             <div>
                                                 <small class="text-secondary">Stok</small>
-                                                <h6 class="fw-bold mt-2 overflow-hidden">{{ $product->stock }}</h6>
+                                                <h5 class="fw-bold mt-2 overflow-hidden">{{ $product->stock }}</h5>
                                             </div>
                                         </div>
                                         <form action="/cart/add-new" method="POST">

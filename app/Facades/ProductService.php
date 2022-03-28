@@ -53,6 +53,7 @@ class ProductService {
             'code' => $newCode,
             'base_price' => request()->input('base_price'),
             'profit' => request()->input('profit'),
+            'discount' => request()->input('discount'),
             'stock' => request()->input('stock'),
             'minimum_stock' => request()->input('minimum_stock'),
             'created_at' => now(),
@@ -78,6 +79,7 @@ class ProductService {
             'minimum_stock' => request()->input('minimum_stock') != null ? request()->input('minimum_stock') : $product->minimum_stock,
             'base_price' => request()->input('base_price') != null ? request()->input('base_price') : $product->base_price,
             'profit' => request()->input('profit') != null ? request()->input('profit') : $product->profit,
+            'discount' => request()->input('discount') != null ? request()->input('discount') : $product->discount,
             'updated_at' => now()
         ];
 

@@ -53,20 +53,22 @@ class IncomeService
         $inputPrices = request()->input('prices');
         $inputProducts = request()->input('products');
         $inputAmounts = request()->input('amounts');
+        $inputDiscounts = request()->input('discounts');
         $inputExtraCharge = request()->input('extra_charge') ? request()->input('extra_charge') : 0;
         $prices = explode(',', $inputPrices);
         $products = explode(',', $inputProducts);
         $amounts = explode(',', $inputAmounts);
+        $discounts = explode(',', $inputDiscounts);
         $total_price = 0;
 
         // cek apakah panjang array harga, kode produk, dan jumlah sama
-        if ((count($prices) + count($products) + count($amounts)) % 3 > 0) {
-            return "Banyaknya harga, kode produk, dan jumlahnya tidak sama!";
+        if ((count($prices) + count($products) + count($amounts) + count($discounts)) % 4 > 0) {
+            return "Banyaknya harga, kode produk, jumlah, dan diskon tidak sama!";
         }
 
         // cek apakah jumlah ada yang minus
         foreach ($amounts as $amount) {
-            if ($amount < 0) {
+            if ((int) $amount < 0) {
                 return "Jumlah tidak boleh minus!";
             }
         }
@@ -81,9 +83,10 @@ class IncomeService
         // Membuat code
         $newCode = $this->helper->generateCode("INC", $this->incomeRepository->getLastRow());
 
-        // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
+        // Menghitung total biaya berdasarkan (harga modal + untung - diskon) dikali jumlah pesanan
         for ($i = 0; $i < count($prices); $i++) { 
-            $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
+            $discountPrice = (int) $prices[$i] - ((int) $prices[$i] * (int) $discounts[$i]/100);
+            $total_price += $discountPrice * (int) $amounts[$i];
         }
         $total_price += $inputExtraCharge;
 
@@ -93,6 +96,7 @@ class IncomeService
             'products' => $inputProducts,
             'amounts' => $inputAmounts,
             'prices' => $inputPrices,
+            'discounts' => $inputDiscounts,
             'total_price' => $total_price,
             'extra_charge' => $inputExtraCharge,
             'created_at' => now(),
@@ -132,20 +136,22 @@ class IncomeService
         $inputPrices = request()->input('prices');
         $inputProducts = request()->input('products');
         $inputAmounts = request()->input('amounts');
+        $inputDiscounts = request()->input('discounts');
         $inputExtraCharge = request()->input('extra_charge') ? request()->input('extra_charge') : 0;
         $prices = explode(',', $inputPrices);
         $products = explode(',', $inputProducts);
         $amounts = explode(',', $inputAmounts);
+        $discounts = explode(',', $inputDiscounts);
         $total_price = 0;
         
         // cek apakah panjang array harga, kode produk, dan jumlah sama
-        if ((count($prices) + count($products) + count($amounts)) % 3 > 0) {
-            return "Banyaknya harga, kode produk, dan jumlahnya tidak sama!";
+        if ((count($prices) + count($products) + count($amounts) + count($discounts)) % 4 > 0) {
+            return "Banyaknya harga, kode produk, jumlah, dan diskon tidak sama!";
         }
 
         // cek apakah jumlah ada yang minus
         foreach ($amounts as $amount) {
-            if ($amount < 0) {
+            if ((int) $amount < 0) {
                 return "Jumlah tidak boleh minus!";
             }
         }
@@ -159,7 +165,8 @@ class IncomeService
 
         // Menghitung total biaya berdasarkan (harga modal + untung) dikali jumlah pesanan
         for ($i = 0; $i < count($prices); $i++) { 
-            $total_price += ((int) $prices[$i] * (int) $amounts[$i]);
+            $discountPrice = (int) $prices[$i] - ((int) $prices[$i] * (int) $discounts[$i]/100);
+            $total_price += $discountPrice * (int) $amounts[$i];
         }
         $total_price += $inputExtraCharge;
 
@@ -167,7 +174,8 @@ class IncomeService
             'products' => request()->input('products') != null ? request()->input('products') : $income->products,
             'amounts' => request()->input('amounts') != null ? request()->input('amounts') : $income->amounts,
             'prices' => request()->input('prices') != null ? request()->input('prices') : $income->prices,
-            'total_price' => array_sum(explode(',', request()->input('prices'))),
+            'discounts' => request()->input('discounts') != null ? request()->input('discounts') : $income->discounts,
+            'total_price' => $total_price,
             'updated_at' => now()
         ];
 
@@ -178,13 +186,7 @@ class IncomeService
             $basePrice = $product->base_price;
             $newStock = 0;
             $amountsFromIncome = explode(",", $income->amounts);
-
-            // Jika amount sebelum lebih besar dari amount baru, tambahkan stok nya
-            if ($amountsFromIncome[$i] > $amounts[$i]) {
-                $newStock = $stock + ($amountsFromIncome[$i] - $amounts[$i]);
-            } else { // Jika sebaliknya kurangi lagi stok barang jadi
-                $newStock = $stock - ($amounts[$i] - $amountsFromIncome[$i]);
-            }
+            $newStock = $stock + $amountsFromIncome[$i] - $amounts[$i];
 
             if ($newStock < 0) {
                 return "Stok {$product->name} kurang!";

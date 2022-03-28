@@ -46,6 +46,15 @@
                             </div>    
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="discounts" class="form-label small mb-1 text-capitalize">daftar diskon <div class="text-danger d-inline">****</div></label>
+                        <input type="text" class="form-control p-3 @error('discounts') is-invalid @enderror" id="discounts" name="discounts" value="{{ $income->discounts }}" placeholder="contoh: 5,50,75" autofocus required>
+                        @error('discounts')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>    
+                        @enderror
+                    </div>
                     <label for="extra_charge" class="form-label small mb-1 text-capitalize">biaya tambahan</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Rp</span>
@@ -58,7 +67,8 @@
                     </div>
                     <small class="text-danger">* Input kode produknya saja.</small><br>
                     <small class="text-danger">** Input jumlah masing-masing produk.</small><br>
-                    <small class="text-danger">*** Input harga dalam bentuk angka.</small>
+                    <small class="text-danger">*** Input harga dalam bentuk angka.</small><br>
+                    <small class="text-danger">**** Input diskon dalam bentuk angka.</small>
                     @include('partials.edit_button')
                 </form>
             </div>

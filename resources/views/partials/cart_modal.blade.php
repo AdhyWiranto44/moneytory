@@ -79,11 +79,15 @@
             const prices = cartItems.map(item => {
                 return item.price 
             });
+            const discounts = cartItems.map(item => {
+                return item.discount
+            });
             let formInput = {
                 "extra_charge": parseInt(extraChargeInput.value) || 0,
                 "products": products.join(),
                 "amounts": amounts.join(),
                 "prices": prices.join(),
+                "discounts": discounts.join(),
             }
             
             // kirim datanya ke backend
@@ -110,7 +114,8 @@
     const calculateSubTotal = () => {
         subTotal = 0;
         cartItems.forEach(item => {
-            subTotal += (item.price*item.amount);
+            const priceAfterDiscount = item.price - (item.price*item.discount/100);
+            subTotal += (priceAfterDiscount*item.amount);
         });
         subTotalInfo.innerText = subTotal;
     }
@@ -146,6 +151,14 @@
         if (productLength > 0) {
             for (let i = 0; i < productLength; i++) {
                 showCartPrice();
+                let finalPrice = '';
+                if (product[i].discount > 0) {
+                    finalPrice = `<small class="bg-warning text-dark px-1 fw-bold rounded shadow-sm">Diskon ${product[i].discount} %</small>
+                    <h6 class="fw-bold mt-2 overflow-hidden">Rp ${product[i].price - (product[i].price * (product[i].discount/100))}</h6>
+                    <small class="fw-bold mt-2 overflow-hidden text-secondary d-block text-decoration-line-through">Rp ${product[i].price}</small>`;
+                } else {
+                    finalPrice = `<h6 class="fw-bold mt-2 overflow-hidden">Rp ${product[i].price}</h6>`;
+                }
                 productLists += `
                     <input type="hidden" class="product-stock" value="${product[i].stock}" />
                     <input type="hidden" class="product-code" value="${product[i].code}" />
@@ -155,7 +168,7 @@
                                 <h6 class="fw-bold mb-0">${product[i].name}</h6>
                             </div>
                             <div class="col-md-4">
-                                <h6 class="fw-bold mt-2 overflow-hidden text-end">Rp ${product[i].price}</h6>
+                                ${finalPrice}
                             </div>
                         </div>
                         <div class="row">

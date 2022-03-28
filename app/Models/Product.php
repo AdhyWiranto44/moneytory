@@ -15,6 +15,7 @@ class Product extends Model
         'name',
         'base_price',
         'profit',
+        'discount',
         'stock',
         'minimum_stock',
         'image',

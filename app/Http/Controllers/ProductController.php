@@ -61,6 +61,7 @@ class ProductController extends Controller
                 'unit' => 'required',
                 'base_price' => 'required|numeric',
                 'profit' => 'required|numeric',
+                'discount' => 'numeric',
                 'stock' => 'required|numeric',
                 'minimum_stock' => 'required|numeric',
                 'image' => 'image|max:1024'
@@ -108,6 +109,7 @@ class ProductController extends Controller
                 'name' => 'required',
                 'base_price' => 'required|numeric',
                 'profit' => 'required|numeric',
+                'discount' => 'numeric',
                 'stock' => 'required|numeric',
                 'minimum_stock' => 'required|numeric',
                 'unit' => 'required',

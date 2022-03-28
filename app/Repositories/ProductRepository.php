@@ -17,6 +17,7 @@ class ProductRepository {
             ->join('statuses', 'products.status_id', '=', 'statuses.id')
             ->join('units', 'products.unit_id', '=', 'units.id')
             ->select('products.*', 'statuses.name as status', 'units.name as unit')
+            ->orderByDesc('discount')
             ->get();
     }
 

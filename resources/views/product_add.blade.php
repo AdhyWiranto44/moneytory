@@ -83,6 +83,18 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="discount" class="form-label small mb-1 text-capitalize">diskon</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control p-3 @error('discount') is-invalid @enderror" placeholder="dalam persen" aria-label="discount" aria-describedby="basic-addon1" id="discount" name="discount" value="{{ old('discount') }}">
+                            <span class="input-group-text" id="basic-addon2">%</span>
+                            @error('discount')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="image" class="form-label small mb-1 text-capitalize">gambar</label>
                         <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
                         @error('image')

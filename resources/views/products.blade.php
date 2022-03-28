@@ -17,6 +17,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Harga Modal</th>
                                 <th class="text-center">Untung</th>
+                                <th class="text-center">Diskon</th>
                                 <th class="text-center">Stok</th>
                                 <th class="text-center">Stok Min.</th>
                                 <th class="text-center">Status</th>
@@ -59,6 +60,13 @@
                                 <td class="text-center">
                                     @if ($product->profit)
                                         Rp {{ number_format($product->profit, 0, ',', '.') }}
+                                    @else
+                                        <small class="text-secondary">(Kosong)</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($product->discount)
+                                        {{ $product->discount . " %" }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
@@ -109,6 +117,7 @@
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Harga Modal</th>
                                 <th class="text-center">Untung</th>
+                                <th class="text-center">Diskon</th>
                                 <th class="text-center">Stok</th>
                                 <th class="text-center">Stok Min.</th>
                                 <th class="text-center">Status</th>
