@@ -25,7 +25,7 @@
                     </div>
                 @endif
                 <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/incomes/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a>
-                <div class="table-responsdd($productIncome);ive">
+                <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
                             <tr>
