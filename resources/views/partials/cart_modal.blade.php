@@ -67,28 +67,31 @@
     let subTotal = 0, extra = 0, grandTotal = 0;
 
     checkoutButton.addEventListener('click', () => {
-        // persiapkan form yang ingin datanya dikirim
-        const products = cartItems.map(item => {
-            return item.code
-        });
-        const amounts = cartItems.map(item => {
-            return item.amount 
-        });
-        const prices = cartItems.map(item => {
-            return item.price 
-        });
-        let formInput = {
-            "extra_charge": parseInt(extraChargeInput.value) || 0,
-            "products": products.join(),
-            "amounts": amounts.join(),
-            "prices": prices.join(),
-        }
-        
-        // kirim datanya ke backend
-        checkout(formInput);
+        const isConfirmed = confirm("Konfirmasi Checkout?");
+        if (isConfirmed) {
+            // persiapkan form yang ingin datanya dikirim
+            const products = cartItems.map(item => {
+                return item.code
+            });
+            const amounts = cartItems.map(item => {
+                return item.amount 
+            });
+            const prices = cartItems.map(item => {
+                return item.price 
+            });
+            let formInput = {
+                "extra_charge": parseInt(extraChargeInput.value) || 0,
+                "products": products.join(),
+                "amounts": amounts.join(),
+                "prices": prices.join(),
+            }
+            
+            // kirim datanya ke backend
+            checkout(formInput);
 
-        // refresh halaman
-        location.reload();
+            // refresh halaman
+            location.reload();
+        }
     });
 
     extraChargeInput.addEventListener('keyup', (e) => {
