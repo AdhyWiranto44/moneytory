@@ -9,7 +9,7 @@
             <div class="cart-modal my-3">
                 <p class='text-center'>Keranjang Kosong!</p>
             </div>
-            <div class="cart-price">
+            <div class="cart-price d-none">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="extra-charge" class="mb-0">Biaya tambahan</label>
@@ -56,6 +56,7 @@
     let cartCount = document.querySelector('.cart-count');
     const csrf = document.getElementsByName('_token')[0].value;
     let cartItems = [];
+    let cartPriceSection = document.querySelector('.cart-price');
     let subTotalInfo = document.querySelector('.sub-total');
     let grandTotalInfo = document.querySelector('.grand-total');
     let extraChargeInput = document.querySelector('.extra-charge');
@@ -125,6 +126,14 @@
         modalFooter.classList.add('d-none');
     }
 
+    const hideCartPrice = () => {
+        cartPriceSection.classList.add('d-none');
+    }
+
+    const showCartPrice = () => {
+        cartPriceSection.classList.remove('d-none');
+    }
+
     const renderCartItems = (product) => {
         let productLists = "";
         const productLength = product.length;
@@ -133,6 +142,7 @@
         
         if (productLength > 0) {
             for (let i = 0; i < productLength; i++) {
+                showCartPrice();
                 productLists += `
                     <input type="hidden" class="product-stock" value="${product[i].stock}" />
                     <input type="hidden" class="product-code" value="${product[i].code}" />
@@ -162,8 +172,9 @@
             }
             cartModal.innerHTML = productLists;
         } else {
-            cartModal.innerHTML = "<p class='text-center'>Keranjang kosong!</p>";
             hideCheckoutButton();
+            hideCartPrice();
+            cartModal.innerHTML = "<p class='text-center'>Keranjang kosong!</p>";
         }
 
         calculateSubTotal();
