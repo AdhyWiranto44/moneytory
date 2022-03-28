@@ -68,6 +68,11 @@
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
                             <input type="number" class="form-control p-3 @error('base_price') is-invalid @enderror" placeholder="contoh: 10000" aria-label="base_price" aria-describedby="basic-addon1" id="base_price" name="base_price" value="{{ $product->base_price }}">
+                            @error('base_price')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -75,6 +80,23 @@
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
                             <input type="number" class="form-control p-3 @error('profit') is-invalid @enderror" placeholder="contoh: 5000" aria-label="profit" aria-describedby="basic-addon1" id="profit" name="profit" value="{{ $product->profit }}">
+                            @error('profit')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="discount" class="form-label small mb-1 text-capitalize">diskon</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control p-3 @error('discount') is-invalid @enderror" placeholder="dalam persen" aria-label="discount" aria-describedby="basic-addon1" id="discount" name="discount" value="{{ $product->discount }}">
+                            <span class="input-group-text" id="basic-addon2">%</span>
+                            @error('discount')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">

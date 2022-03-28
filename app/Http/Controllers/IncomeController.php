@@ -95,6 +95,7 @@ class IncomeController extends Controller
                 'products' => 'required',
                 'amounts' => 'required',
                 'prices' => 'required',
+                'discounts' => 'required',
                 'extra_charge' => 'numeric|nullable',
             ],
             [

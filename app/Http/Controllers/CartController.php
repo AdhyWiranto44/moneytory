@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ProductService;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 class CartController extends Controller
 {
+    public function __construct()
+    {
+        $this->productService = new ProductService();
+    }
+
     public function index(Request $request) {
         $sessionCart = $request->session()->get('cart');
         $cart = [];
         if ($sessionCart != null) {
             foreach ($sessionCart as $item) {
-                $product = Product::where('code', $item["code"])->first();
+                $product = $this->productService->getOne($item["code"]);
                 $newCartItem = [
                     'code' => $item["code"],
                     'amount' => $item["amount"],
                     'name' => $product->name,
                     'stock' => $product->stock,
-                    'price' => $product->base_price + $product->profit,
+                    'price' => $product->base_price+$product->profit,
+                    'discount' => $product->discount,
                     'image' => $product->image,
                 ];
                 array_push($cart, $newCartItem);
