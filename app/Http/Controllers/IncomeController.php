@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Facades\IncomeService;
 use App\Facades\ProductService;
 use App\Helper;
+use App\Models\CompanyProfile;
 use App\Models\Income;
 use App\Models\Product;
+use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -179,5 +181,43 @@ class IncomeController extends Controller
         } catch(QueryException $ex) {
             return redirect('/incomes')->with('error', 'Penghapusan pemasukan gagal!');
         }
+    }
+
+    public function printBill($code)
+    {
+        $productService = new ProductService();
+
+        $income = $this->incomeService->getOne($code);
+        $productCodes = explode(",", $income->products);
+        $amounts = explode(",", $income->amounts);
+        $prices = explode(",", $income->prices);
+        $discounts = explode(",", $income->discounts);
+        $productNames = [];
+        $orders = [];
+        foreach ($productCodes as $prodCode) {
+            $name = $productService->getOne($prodCode)->name;
+            array_push($productNames, $name);
+        }
+        for ($i=0; $i < count($productCodes); $i++) { 
+            $order = [
+                "code" => $productCodes[$i],
+                "name" => $productNames[$i],
+                "amount" => $amounts[$i],
+                "price" => $prices[$i],
+                "discount" => $discounts[$i],
+            ];
+            array_push($orders, $order);
+        }
+        
+        $data = [
+            "code" => $code,
+            "orders" => $orders,
+            "extra_charge" => $income->extra_charge,
+            "total_price" => $income->total_price,
+            "date" => date($income->created_at),
+            "company" => CompanyProfile::first()
+        ];
+
+        return view("invoice", $data);
     }
 }

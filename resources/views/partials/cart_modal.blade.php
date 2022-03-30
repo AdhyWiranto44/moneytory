@@ -45,7 +45,7 @@
                 @method('DELETE')
                 <button type="submit" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="return confirm('Yakin hapus keranjang?')">Hapus Keranjang</button>
             </form>
-        <button type="button" class="checkout-button btn btn-salmon fw-bold">Checkout</button>
+            <button type="button" class="checkout-button btn btn-salmon fw-bold">Checkout</button>
         </div>
     </div>
     </div>

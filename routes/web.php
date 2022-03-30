@@ -118,6 +118,7 @@ Route::delete('/products/{code}/delete', [ProductController::class, 'destroy'])-
  */
 Route::get('/incomes', [IncomeController::class, 'index'])->middleware(IsLoggedIn::class)->name('pemasukan');
 Route::get('/incomes/add-new', [IncomeController::class, 'create'])->middleware(IsLoggedIn::class)->name('tambah-pemasukan');
+Route::get('/incomes/{code}/bill', [IncomeController::class, 'printBill'])->middleware(IsLoggedIn::class);
 Route::post('/incomes/add-new', [IncomeController::class, 'store'])->middleware(IsLoggedIn::class);
 Route::get('/incomes/{code}/edit', [IncomeController::class, 'edit'])->middleware(IsLoggedIn::class)->name('ubah-pemasukan');
 Route::patch('/incomes/{code}/edit', [IncomeController::class, 'update'])->middleware(IsLoggedIn::class);

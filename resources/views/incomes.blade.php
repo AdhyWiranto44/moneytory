@@ -53,6 +53,7 @@
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
+                                    <a class="btn btn-sm btn-info shadow-sm mb-2" href="/incomes/{{ $income->code }}/bill"><i class="bi bi-printer me-md-2"></i> Cetak Struk</a>
                                 </td>
                                 <td class="text-center">
                                     @if ($income->products)
