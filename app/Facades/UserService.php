@@ -45,7 +45,7 @@ class UserService
 
     public function insert()
     {
-        $data = [
+        $user = [
             'role_id' => request()->input('role'),
             'status_id' => 2,
             'username' => request()->input('username'),
@@ -54,17 +54,13 @@ class UserService
             'phone_number' => request()->input('phone_number'),
             'email' => request()->input('email'),
             'address' => request()->input('address'),
+            'image' => $this->helper->createImageName(),
             'created_at' => now(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $data['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($data['image']);
-        }
-
-        $this->userRepository->insert($data);
+        $this->userRepository->insert($user);
+        $this->helper->uploadFile($user['image']);
     }
 
     public function update(String $username = "", $user)
@@ -77,16 +73,12 @@ class UserService
             'phone_number' => request()->input('phone_number') != null ? request()->input('phone_number') : $user->phone_number,
             'email' => request()->input('email') != null ? request()->input('email') : $user->email,
             'address' => request()->input('address') != null ? request()->input('address') : $user->address,
+            'image' => $this->helper->createImageName(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $update['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($update['image']);
-        }
-
         $this->userRepository->update($params, $update);
+        $this->helper->uploadFile($update['image']);
     }
 
     public function updatePassword(String $username = "")

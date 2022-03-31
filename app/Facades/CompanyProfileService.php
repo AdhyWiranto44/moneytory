@@ -15,20 +15,16 @@ class CompanyProfileService
 
     public function insert()
     {
-        $companyProfile = [
-            'name' => request()->input('name'),
-            'phone_number' => request()->input('phone_number'),
-            'email' => request()->input('email'),
-            'address' => request()->input('address')
-        ];
+      $companyProfile = [
+        'name' => request()->input('name'),
+        'phone_number' => request()->input('phone_number'),
+        'email' => request()->input('email'),
+        'address' => request()->input('address'),
+        'image' => $this->helper->createImageName()
+      ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $companyProfile['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($companyProfile['image']);
-        }
-
-        $this->companyProfileRepository->insert($companyProfile);
+      $this->companyProfileRepository->insert($companyProfile);
+      $this->helper->uploadFile($companyProfile['image']);
     }
 
     public function update($company, $request)
@@ -38,16 +34,12 @@ class CompanyProfileService
             'phone_number' => $request->input('phone_number') != null ? $request->input('phone_number') : $company->phone_number,
             'email' => $request->input('email') != null ? $request->input('email') : $company->email,
             'address' => $request->input('address') != null ? $request->input('address') : $company->address,
+            'image' => $this->helper->createImageName(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if ($request->image) {
-            $formInput['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($formInput['image']);
-        }
-
         $this->companyProfileRepository->update($formInput);
+        $this->helper->uploadFile($formInput['image']);
     }
 
     public function getOne()
@@ -59,6 +51,14 @@ class CompanyProfileService
 
     public function isCompanyUnregistered()
     {
-        return $this->getOne() == null;
+      $company = $this->companyProfileRepository->getFirst();
+      return $company == null;
+    }
+
+    private function isImageUploaded() {
+      if (request()->image) {
+        $companyProfile['image'] = $this->helper->createImageName();
+        $this->helper->uploadFile($companyProfile['image']);
+      }
     }
 }

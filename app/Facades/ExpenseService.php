@@ -52,17 +52,13 @@ class ExpenseService
             'code' => $newCode,
             'description' => request()->input('description'),
             'cost' => request()->input('cost'),
+            'image' => $this->helper->createImageName(),
             'created_at' => now(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $expense['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($expense['image']);
-        }
-
         $this->expenseRepository->insert($expense);
+        $this->helper->uploadFile($expense['image']);
     }
 
     public function update($code, $expense)
@@ -72,16 +68,12 @@ class ExpenseService
             'name' => request()->input('name') != null ? request()->input('name') : $expense->name,
             'description' => request()->input('description') != null ? request()->input('description') : $expense->description,
             'cost' => request()->input('cost') != null ? request()->input('cost') : $expense->cost,
+            'image' => $this->helper->createImageName(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $update['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($update['image']);
-        }
-
         $this->expenseRepository->update($params, $update);
+        $this->helper->uploadFile($update['image']);
     }
 
     public function delete($code)

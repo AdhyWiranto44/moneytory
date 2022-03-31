@@ -56,17 +56,13 @@ class ProductService {
             'discount' => request()->input('discount'),
             'stock' => request()->input('stock'),
             'minimum_stock' => request()->input('minimum_stock'),
+            'image' => $this->helper->createImageName(),
             'created_at' => now(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $product['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($product['image']);
-        }
-
         $this->productRepository->insert($product);
+        $this->helper->uploadFile($product['image']);
     }
 
     public function update($code, $product)
@@ -80,16 +76,12 @@ class ProductService {
             'base_price' => request()->input('base_price') != null ? request()->input('base_price') : $product->base_price,
             'profit' => request()->input('profit') != null ? request()->input('profit') : $product->profit,
             'discount' => request()->input('discount') != null ? request()->input('discount') : $product->discount,
+            'image' => $this->helper->createImageName(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $update['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($update['image']);
-        }
-
         $this->productRepository->update($params, $update);
+        $this->helper->uploadFile($update['image']);
     }
 
     public function changeStatus($code, $status)

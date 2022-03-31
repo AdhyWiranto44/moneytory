@@ -49,26 +49,29 @@ class Helper
         return $company;
     }
 
-    public static function getMenus(Request $request)
+    public static function getMenus()
     {
         $menus = new MenuService();
         $menus = $menus->getByRoleId(request()->session()->get('role_id'));
         return $menus;
-        
-        // $role_id = $request->session()->get('role_id');
-        // $menus = Menu::where('role_id', '>=', $role_id)->get();
-        // return $menus;
     }
 
-    public function uploadFile($imgName)
+    public function uploadFile($imageName)
     {
-        request()->image->storeAs('./public/img', $imgName);
+      if (request()->image && $imageName != null) {
+        request()->image->storeAs('./public/img', $imageName);
+      }
     }
 
     public function createImageName()
     {
-        $name = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
-        return $name;
+      $imageName = null;
+
+      if (request()->image != null) {
+        $imageName = strtotime('now') . '-' . preg_replace('/\s+/', '-', request()->image->getClientOriginalName());
+      }
+
+      return $imageName;
     }
 
     public function generateCode($prefix, $lastRow)

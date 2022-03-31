@@ -45,24 +45,20 @@ class RawIngredientService
         // Membuat code
         $newCode = $this->helper->generateCode("RAW", $this->rawIngredientRepository->getLastRow());
 
-        $data = [
+        $rawIngredient = [
             'status_id' => 2,
             'unit_id' => request()->input('unit'),
             'name' => request()->input('name'),
             'code' => $newCode,
             'stock' => request()->input('stock'),
             'minimum_stock' => request()->input('minimum_stock'),
+            'image' => $this->helper->createImageName(),
             'created_at' => now(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $data['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($data['image']);
-        }
-
-        $this->rawIngredientRepository->insert($data);
+        $this->rawIngredientRepository->insert($rawIngredient);
+        $this->helper->uploadFile($rawIngredient['image']);
     }
 
     public function update($code, $rawIngredient)
@@ -74,16 +70,12 @@ class RawIngredientService
             'code' => request()->input('code') != null ? request()->input('code') : $rawIngredient->code,
             'stock' => request()->input('stock') != null ? request()->input('stock') : $rawIngredient->stock,
             'minimum_stock' => request()->input('minimum_stock') != null ? request()->input('minimum_stock') : $rawIngredient->minimum_stock,
+            'image' => $this->helper->createImageName(),
             'updated_at' => now()
         ];
 
-        // Kalau ada gambar yang di-upload
-        if (request()->image) {
-            $update['image'] = $this->helper->createImageName();
-            $this->helper->uploadFile($update['image']);
-        }
-
         $this->rawIngredientRepository->update($params, $update);
+        $this->helper->uploadFile($update['image']);
     }
 
     public function updateStock($id, $rawIngredient)
