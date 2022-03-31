@@ -13,7 +13,11 @@
                                 <div class="card p-2 border-0 shadow-sm mb-3">
                                     <div class="card-body overflow-hidden">
                                         <div class="d-flex align-items-center mb-1">
-                                            <img class="rounded-circle me-2" src="/img/default.jpg" alt="default" width="48" height="48">
+                                            @if ($product->image)
+                                                <img class="rounded-circle me-2" src="{{ asset('storage/img/' . $product->image) }}" alt="Bukti Pengeluaran" width="36" height="36" onclick="window.open('{{ asset('storage/img/' . $product->image) }}')">
+                                            @else
+                                                <img class="rounded-circle me-2" src="/img/default.jpg" alt="default" width="36" height="36">
+                                            @endif
                                             <h6 class="fw-bold mb-0">{{ $product->name }}</h6>
                                         </div>
                                         <div class="d-flex justify-content-between my-3">
