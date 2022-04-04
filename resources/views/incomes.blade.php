@@ -24,18 +24,18 @@
                         </div>
                     </div>
                 @endif
-                <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/incomes/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a>
+                {{-- <a class="btn btn-salmon fw-bold px-3 py-2 mb-3" href="/incomes/add-new"><i class="bi bi-plus-circle me-2"></i> Tambah Baru</a> --}}
                 <div class="table-responsive">
                     <table id="example" class="display overflow-scroll">
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
                                 <th class="text-center">Kode</th>
-                                <th class="text-center">Produk</th>
+                                {{-- <th class="text-center">Produk</th>
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
                                 <th class="text-center">Diskon (%)</th>
-                                <th class="text-center">Biaya Tambahan</th>
+                                <th class="text-center">Biaya Tambahan</th> --}}
                                 <th class="text-center">Total Harga</th>
                                 <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
@@ -53,43 +53,42 @@
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                    <a class="btn btn-sm btn-info shadow-sm mb-2" href="/incomes/{{ $income->code }}/bill"><i class="bi bi-printer me-md-2"></i> Cetak Struk</a>
                                 </td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     @if ($income->products)
                                         {{ $income->products }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                </td>
-                                <td class="text-center">
+                                </td> --}}
+                                {{-- <td class="text-center">
                                     @if ($income->amounts)
                                         {{ $income->amounts }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                </td>
-                                <td class="text-center">
+                                </td> --}}
+                                {{-- <td class="text-center">
                                     @if ($income->prices)
                                         {{ $income->prices }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                </td>
-                                <td class="text-center">
+                                </td> --}}
+                                {{-- <td class="text-center">
                                     @if ($income->discounts)
                                         {{ $income->discounts }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                </td>
-                                <td class="text-center">
+                                </td> --}}
+                                {{-- <td class="text-center">
                                     @if ($income->extra_charge)
                                         Rp {{ number_format($income->extra_charge, 0, ',', '.') }}
                                     @else
                                         <small class="text-secondary">(Kosong)</small>
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td class="text-center">
                                     @if ($income->total_price)
                                         Rp {{ number_format($income->total_price, 0, ',', '.') }}
@@ -118,6 +117,7 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
+                                    <a class="btn btn-sm btn-info shadow-sm mb-2" href="/incomes/{{ $income->code }}/bill" target="_blank"><i class="bi bi-printer me-md-2"></i> Cetak Struk</a>
                                     <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/incomes/{{$income->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
                                     <form action="/incomes/{{$income->code}}/delete" method="POST">
                                         @csrf
@@ -132,11 +132,11 @@
                             <tr>
                                 <th class="text-center">No</th>
                                 <th class="text-center">Kode</th>
-                                <th class="text-center">Produk</th>
+                                {{-- <th class="text-center">Produk</th>
                                 <th class="text-center">Jumlah</th>
                                 <th class="text-center">Harga</th>
                                 <th class="text-center">Diskon (%)</th>
-                                <th class="text-center">Biaya Tambahan</th>
+                                <th class="text-center">Biaya Tambahan</th> --}}
                                 <th class="text-center">Total Harga</th>
                                 <th class="text-center">Dibuat Pada</th>
                                 <th class="text-center">Status</th>
