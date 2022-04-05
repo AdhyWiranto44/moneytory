@@ -12,13 +12,18 @@ use Illuminate\Http\Request;
 
 class Helper
 {
-    public function getCurrentDate()
+    public function getDate()
     {
         $dateMin = date("Y-m-d 00:00:00");
         $dateMax = date("Y-m-d 23:59:59");
-        if (request()->input("dateMin") && request()->input("dateMin")) {
-            $dateMin = strval(request()->input("dateMin")) . " 00:00:00";
-            $dateMax = strval(request()->input("dateMax")) . " 23:59:59";
+
+        if (request()->query('tanggal_dari') && request()->query('tanggal_ke') == '') {
+          $dateMin = request()->query('tanggal_dari') . ' 00:00:00';
+        } else if (request()->query('tanggal_dari') == '' && request()->query('tanggal_ke')) {
+            $dateMax = request()->query('tanggal_ke') . ' 23:59:59';
+        } else if (request()->query('tanggal_dari') && request()->query('tanggal_ke')) {
+            $dateMin = request()->query('tanggal_dari') . ' 00:00:00';
+            $dateMax = request()->query('tanggal_ke') . ' 23:59:59';
         }
 
         return [$dateMin, $dateMax];

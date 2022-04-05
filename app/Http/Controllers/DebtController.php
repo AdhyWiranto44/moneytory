@@ -20,20 +20,10 @@ class DebtController extends Controller
         $this->helper = new Helper();
     }
 
-    public function index(Request $request)
+    public function index()
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
-
-        if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-        } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        } else if ($request->query('tanggal_dari') && $request->query('tanggal_ke')) {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        }
-
+        [ $dateMin, $dateMax ] = $this->helper->getDate();
         $debts = $this->debtService->getByDate($dateMin, $dateMax);
         $data = [
             'title' => 'Hutang',

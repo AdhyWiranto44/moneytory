@@ -26,18 +26,8 @@ class IncomeController extends Controller
     public function index(Request $request)
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        [$dateMin, $dateMax] = $this->helper->getCurrentDate();
+        [$dateMin, $dateMax] = $this->helper->getDate();
         $code = $request->query('code');
-
-        if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-        } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        } else if ($request->query('tanggal_dari') && $request->query('tanggal_ke')) {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        }
-
         $incomes = $this->incomeService->getByDate($code, $dateMin, $dateMax);
         $data = [
             'title' => 'Pemasukan',

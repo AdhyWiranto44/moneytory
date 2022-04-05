@@ -27,20 +27,10 @@ class DashboardController extends Controller
          * Dan belum ada data profil perusahaan di database
          */
         [ $user, $company, $menus ] = $this->helper->getCommonData();
-        [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
+        [ $dateMin, $dateMax ] = $this->helper->getDate();
 
         // Arahkan ke halaman pendaftaran jika perusahaan belum terdaftar
         if ($company == null) return redirect('/welcome');
-        
-        // Mendapatkan tanggal
-        if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-        } else if ($request->query('tanggal_dari') == '' && $request->query('tanggal_ke')) {
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        } else if ($request->query('tanggal_dari') && $request->query('tanggal_ke')) {
-            $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
-            $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
-        }
 
         $incomes = $this->incomeService->getPriceSumByDate($dateMin, $dateMax);
         $expenses = $this->expenseService->getCostSUmByDate($dateMin, $dateMax);
