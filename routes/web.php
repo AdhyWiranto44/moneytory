@@ -42,6 +42,7 @@ Route::post('/login', [LoginController::class, 'login']);
 /**
  * Logout Controller
  */
+Route::get('/logout', [LogoutController::class, 'logout']);
 Route::delete('/logout', [LogoutController::class, 'logout']);
 
 /**
