@@ -52,7 +52,7 @@ class IncomeController extends Controller
                 $prices = explode(',', $income->prices);
 
                 for ($i = 0; $i < count($products); $i++) {
-                    if ($code == $products[$i]) {
+                    if (strtolower($code) == strtolower($products[$i])) {
                         $productIncome['amount'] += $amounts[$i];
                         $productIncome['income'] += $prices[$i];
                     }

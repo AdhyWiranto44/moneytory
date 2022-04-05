@@ -18,7 +18,7 @@
                                 <div class="card-body">
                                     <h5 class="fw-bold mb-0">Kode: {{ $productIncome['code'] }}</h5>
                                     <h6 class="text-secondary mb-0">Terjual: {{ $productIncome['amount'] }}</h6>
-                                    <h3 class="py-3">Rp {{ number_format($productIncome['income'], 0, ",", ".") }}</h3>
+                                    <h3 class="py-3">Rp {{ number_format($productIncome['income']*$productIncome['amount'], 0, ",", ".") }}</h3>
                                 </div>
                                 </div>
                         </div>
