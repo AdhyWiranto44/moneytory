@@ -30,7 +30,7 @@ class IncomeRepository
 
     public function getLastRow()
     {
-        return DB::table('incomes')->select('id')->orderByDesc('id')->limit(1)->first();
+        return DB::table('incomes')->select('*')->orderByDesc('id')->limit(1)->first();
     }
 
     public function insert($data)

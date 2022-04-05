@@ -117,7 +117,8 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-sm btn-info shadow-sm mb-2" href="/incomes/{{ $income->code }}/bill" target="_blank"><i class="bi bi-printer me-md-2"></i> Cetak Struk</a>
+                                    <button class="button-print btn btn-sm btn-info shadow-sm mb-2" value="/incomes/{{ $income->code }}/bill"><i class="bi bi-printer me-md-2"></i> Cetak Struk</button>
+                                    {{-- <a class="btn btn-sm btn-info shadow-sm mb-2" href="/incomes/{{ $income->code }}/bill" target="_blank"><i class="bi bi-printer me-md-2"></i> Cetak Struk</a> --}}
                                     <a class="btn btn-sm btn-warning shadow-sm mb-2" href="/incomes/{{$income->code}}/edit"><i class="bi bi-pencil me-md-2"></i> Ubah</a>
                                     <form action="/incomes/{{$income->code}}/delete" method="POST">
                                         @csrf
@@ -151,6 +152,13 @@
 </div>
 <script>
     const formChecks = document.getElementsByClassName('form-check');
+    const buttonPrint = document.querySelectorAll('.button-print');
+
+    buttonPrint.forEach(btn => {
+      btn.addEventListener('click', () => {
+        window.open(btn.value).print();
+      });
+    });
     
     async function changeStatus(url = '', data = {}) {
         const response = await fetch(url, {

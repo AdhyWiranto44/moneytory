@@ -14,7 +14,7 @@
 <table class="body-wrap">
     <tbody><tr>
         <td></td>
-        <td class="container" width="600">
+        <td class="container">
             <div class="content">
                 <table class="main" width="100%" cellpadding="0" cellspacing="0">
                     <tbody><tr>
@@ -43,9 +43,9 @@
                                                         <?php $i = 1; ?>
                                                         @foreach ($orders as $order)
                                                             <tr>
-                                                                <td>{{ $i++ . ". " .  $order["name"] . " x " . $order["amount"] }}</td>
+                                                                <td>{{ $i++ . ". " .  $order["name"] . " @ " . $order["amount"] . " x " . "Rp " . number_format($order["price"], 0, ",", ".") }}</td>
                                                                 <td class="alignright">
-                                                                    Rp {{ number_format($order["price"], 0, ",", ".") }}
+                                                                    Rp {{ number_format($order["price"]*$order["amount"], 0, ",", ".") }}
                                                                     <br>
                                                                     @if ($order["discount"] > 0)
                                                                         Diskon {{ $order["discount"] }}%
@@ -111,7 +111,7 @@
     padding: 0;
     font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 35px;
 }
 
 img {
@@ -145,14 +145,15 @@ body {
 
 .container {
     display: block !important;
-    max-width: 600px !important;
+    /* max-width: 600px !important; */
+    max-width: 100% !important;
     margin: 0 auto !important;
     /* makes it centered */
     clear: both !important;
 }
 
 .content {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
     display: block;
     padding: 20px;
@@ -163,7 +164,7 @@ body {
 ------------------------------------- */
 .main {
     background: #fff;
-    border: 1px solid #e9e9e9;
+    /* border: 1px solid #e9e9e9; */
     border-radius: 3px;
 }
 
@@ -210,7 +211,7 @@ h1 {
 }
 
 h2 {
-    font-size: 24px;
+    font-size: 35px;
 }
 
 h3 {
@@ -316,7 +317,7 @@ a {
 .invoice {
     margin: 40px auto;
     text-align: left;
-    width: 80%;
+    width: 100%;
 }
 .invoice td {
     padding: 5px 0;

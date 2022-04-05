@@ -20,7 +20,6 @@ class ExpenseController extends Controller
     {
         [ $user, $company, $menus ] = $this->helper->getCommonData();
         [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
-        $expenses = $this->expenseService->getByDate($dateMin, $dateMax);
 
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
@@ -31,6 +30,7 @@ class ExpenseController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
+        $expenses = $this->expenseService->getByDate($dateMin, $dateMax);
         $data = [
             'title' => 'Pengeluaran',
             'menus' => $menus,

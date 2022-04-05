@@ -28,7 +28,6 @@ class IncomeController extends Controller
         [ $user, $company, $menus ] = $this->helper->getCommonData();
         [$dateMin, $dateMax] = $this->helper->getCurrentDate();
         $code = $request->query('code');
-        $incomes = $this->incomeService->getByDate($code, $dateMin, $dateMax);
 
         if ($request->query('tanggal_dari') && $request->query('tanggal_ke') == '') {
             $dateMin = $request->query('tanggal_dari') . ' 00:00:00';
@@ -39,6 +38,7 @@ class IncomeController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
+        $incomes = $this->incomeService->getByDate($code, $dateMin, $dateMax);
         $data = [
             'title' => 'Pemasukan',
             'menus' => $menus,
@@ -219,5 +219,11 @@ class IncomeController extends Controller
         ];
 
         return view("invoice", $data);
+    }
+
+    public function latestIncome()
+    {
+      $latestIncome = $this->incomeService->getLatestIncome();
+      return $latestIncome;
     }
 }

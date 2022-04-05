@@ -66,7 +66,7 @@
     const modalFooter = document.querySelector('.modal-footer');
     let subTotal = 0, extra = 0, grandTotal = 0;
 
-    checkoutButton.addEventListener('click', () => {
+    checkoutButton.addEventListener('click', async () => {
         const isConfirmed = confirm("Konfirmasi Checkout?");
         if (isConfirmed) {
             // persiapkan form yang ingin datanya dikirim
@@ -93,10 +93,32 @@
             // kirim datanya ke backend
             checkout(formInput);
 
+            // Print Invoice
+            let incomeCode = "";
+            await getLatestIncomeCode().then(result => {
+              incomeCode = result.code;
+            });
+            
+            // Print invoice
+            const invoiceUrl = `/incomes/${incomeCode}/bill`;
+            window.open(invoiceUrl).print();
+
             // refresh halaman
             location.reload();
         }
     });
+
+    const getLatestIncomeCode = async function() {
+        const url = '/latestIncome';
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.json();
+    }
 
     extraChargeInput.addEventListener('keyup', (e) => {
         let value = e.target.value;

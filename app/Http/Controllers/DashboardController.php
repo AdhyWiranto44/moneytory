@@ -28,9 +28,6 @@ class DashboardController extends Controller
          */
         [ $user, $company, $menus ] = $this->helper->getCommonData();
         [ $dateMin, $dateMax ] = $this->helper->getCurrentDate();
-        $incomes = $this->incomeService->getPriceSumByDate($dateMin, $dateMax);
-        $expenses = $this->expenseService->getCostSUmByDate($dateMin, $dateMax);
-        $debts = $this->debtService->getPriceSumByDate($dateMin, $dateMax);
 
         // Arahkan ke halaman pendaftaran jika perusahaan belum terdaftar
         if ($company == null) return redirect('/welcome');
@@ -45,6 +42,9 @@ class DashboardController extends Controller
             $dateMax = $request->query('tanggal_ke') . ' 23:59:59';
         }
 
+        $incomes = $this->incomeService->getPriceSumByDate($dateMin, $dateMax);
+        $expenses = $this->expenseService->getCostSUmByDate($dateMin, $dateMax);
+        $debts = $this->debtService->getPriceSumByDate($dateMin, $dateMax);
         $data = [
             'title' => 'Dashboard',
             'menus' => $menus,

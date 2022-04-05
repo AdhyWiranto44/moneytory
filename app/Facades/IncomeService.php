@@ -45,6 +45,12 @@ class IncomeService
         return $this->incomeRepository->getByDate($params);
     }
 
+    public function getLatestIncome()
+    {
+      $latestIncome = $this->incomeRepository->getLastRow();
+      return $latestIncome;
+    }
+
     public function insert()
     {
         // untuk input base_prices data incomes
