@@ -1,12 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     /* color: #333333; */
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lato', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lato", sans-serif;
 }
 
 * {
@@ -18,7 +23,7 @@ h1, h2, h3, h4, h5, h6 {
     list-style-type: none;
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
     .marginLeft {
         margin-left: 300px;
     }
@@ -29,7 +34,6 @@ h1, h2, h3, h4, h5, h6 {
 
     .sidebar {
         width: 300px;
-        
     }
 
     .sidebarMinimized {
@@ -41,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     .sidebar {
         padding-top: 83px;
         width: 100%;
@@ -52,15 +56,16 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-.sidebar-menu-section li a, .sidebar-menu-section li i {
+.sidebar-menu-section li a,
+.sidebar-menu-section li i {
     font-weight: bold;
     color: #ca9999;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .sidebar-menu-section li a:hover,
 .sidebar-menu-section li a:hover > i {
-    color: #F66565;
+    color: #f66565;
 }
 
 li a {
@@ -71,10 +76,11 @@ li a {
     padding: 10px 15px;
     /* border-radius: 13px 0 0 13px; */
     margin-left: -30px;
-    transition: .3s;
+    transition: 0.3s;
 }
 
-.sidebar-menu-section a, header a {
+.sidebar-menu-section a,
+header a {
     color: #333333;
 }
 
@@ -84,7 +90,7 @@ li a {
 
 .sidebar-menu-section .menu-active a,
 .sidebar-menu-section .menu-active i {
-    color: #F66565;
+    color: #f66565;
     /* background-color: #E04E01; */
 }
 
@@ -128,7 +134,7 @@ main {
 }
 
 .bg-orange {
-    background-color: #E04E01;
+    background-color: #e04e01;
 }
 
 .navbar {

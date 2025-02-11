@@ -1,12 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+
+* {
+    scrollbar-color: #f66565 #fffbfb;
+    scrollbar-width: thin;
+}
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     color: #333333;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lato', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lato", sans-serif;
 }
 
 .login {
@@ -24,15 +34,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-light-salmon {
-    background-color: #FFFBFB;
+    background-color: #fffbfb;
 }
 
 .bg-light-secondary {
-    background-color: #F5F9FC;
+    background-color: #f5f9fc;
 }
 
 .border-light-secondary {
-    border-color: #F5F9FC;
+    border-color: #f5f9fc;
 }
 
 .btn-light:hover {
@@ -40,31 +50,38 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-success {
-    color: #10C400 !important;
+    color: #10c400 !important;
 }
 
 .shadow {
     box-shadow: 8px 16px 48px rgba(138, 138, 138, 0.15) !important;
 }
 
-.btn, .form-control, .form-select, .card, .input-group-text, .welcome-card, .badge {
+.btn,
+.form-control,
+.form-select,
+.card,
+.input-group-text,
+.welcome-card,
+.badge {
     border-radius: 8px;
 }
 
-.form-control:focus, .form-select:focus {
-    border: 1px solid #5138ED;
+.form-control:focus,
+.form-select:focus {
+    border: 1px solid #5138ed;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .text-salmon {
-    color: #F66565;
+    color: #f66565;
 }
 
 .btn-salmon {
-    background-color: #F66565;
-    color: #FFFFFF;
+    background-color: #f66565;
+    color: #ffffff;
     box-shadow: 0px 4px 10px rgba(246, 101, 101, 0.3);
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .btn-salmon:hover {
@@ -77,20 +94,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-salmon:hover {
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .btn-outline-salmon {
-    background-color: #FFFBFB;
-    color: #F66565;
-    border: 2px solid #F66565;
-    transition: .3s;
+    background-color: #fffbfb;
+    color: #f66565;
+    border: 2px solid #f66565;
+    transition: 0.3s;
 }
 
 .btn-outline-salmon:hover {
     background-color: #f55858;
     border: 2px solid #f55858;
-    color: #FFFBFB;
+    color: #fffbfb;
 }
 
 .btn-outline-salmon:active {
@@ -98,12 +115,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-outline-salmon:hover {
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 @keyframes toLeftAlert {
-    from { right: -1000px; }
-    to { right: 0px; }
+    from {
+        right: -1000px;
+    }
+    to {
+        right: 0px;
+    }
 }
 
 .alert {

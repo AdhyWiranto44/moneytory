@@ -1,41 +1,47 @@
 # Moneytory v1.0
 
 ## Daftar Isi
-- [Definisi](##definisi)
-- [Proses Bisnis](##proses-bisnis)
-- [Teknologi yang Digunakan](##teknologi-yang-digunakan)
-- [Fitur yang Ditawarkan](##fitur-yang-ditawarkan)
-- [Instalasi (Windows 10)](##instalasi-windows-10)
+
+-   [Definisi](##definisi)
+-   [Proses Bisnis](##proses-bisnis)
+-   [Teknologi yang Digunakan](##teknologi-yang-digunakan)
+-   [Fitur yang Ditawarkan](##fitur-yang-ditawarkan)
+-   [Instalasi (Windows 10)](##instalasi-windows-10)
 
 ## Definisi
+
 Moneytory adalah aplikasi berbasis website yang diperuntukan untuk oleh Usaha Mikro Kecil Menengah (UMKM) untuk mengelola inventory dan keuangan. Fitur-fitur yang ada di aplikasi ini seperti pengelolaan ketersediaan produk, pengelolaan informasi produk, pengelolaan pemasukan, pengelolaan pengeluaran, pengelolaan utang dan laporan keuangan. Aplikasi ini berbasis web dengan menggunakan framework Laravel.
 
 ## Proses Bisnis
+
 Inventory & Money Management
 
 ## Teknologi yang Digunakan
-- Bahasa Pemrograman: PHP v8.x
-- Framework: Laravel v8.x
-- Database: MySQL v8.x
-- UI: Bootstrap v5.x
+
+-   Bahasa Pemrograman: PHP v8.1.x
+-   Framework: Laravel v8.x
+-   Database: MySQL v8.x
+-   UI: Bootstrap v5.x
 
 ## Fitur yang Ditawarkan
-- Pengelolaan Bahan Mentah
-- Pengelolaan Bahan dalam Proses
-- Pengelolaan Barang Jadi
-- Pengelolaan Pemasukan / Order
-- Pencarian Data Pemasukan Berdasarkan Produk Terjual
-- Pengelolaan Pengeluaran
-- Pengelolaan Hutang
-- Laporan Keuangan (Pemasukan, Pengeluaran, dan Hutang)
-- Pengaturan Profil Perusahaan
-- Login & Logout
-- Pengelolaan Pengguna (Admin dan Staff)
-- Pengaturan Profil Pengguna
+
+-   Pengelolaan Bahan Mentah
+-   Pengelolaan Bahan dalam Proses
+-   Pengelolaan Barang Jadi
+-   Pengelolaan Pemasukan / Order
+-   Pencarian Data Pemasukan Berdasarkan Produk Terjual
+-   Pengelolaan Pengeluaran
+-   Pengelolaan Hutang
+-   Laporan Keuangan (Pemasukan, Pengeluaran, dan Hutang)
+-   Pengaturan Profil Perusahaan
+-   Login & Logout
+-   Pengelolaan Pengguna (Admin dan Staff)
+-   Pengaturan Profil Pengguna
 
 ## Alur Penggunaan Fitur pada Aplikasi Moneytory
 
 ### Bahan Mentah
+
     1. Menambah bahan mentah
         1. Memilih menu liat bahan mentah
         2. menekan tombol tambah baru
@@ -52,7 +58,7 @@ Inventory & Money Management
     4. Menghapus bahan mentah
         1. Memilih menu lihat bahan mentah
         2. Menekan tombol hapus salah satu dari data bahan mentah yang ada
-        3. Akan muncul popup konfirmasi 
+        3. Akan muncul popup konfirmasi
         4. Jika yakin, maka tekan konfirmasi
     5. Mencari bahan mentah
         1. Memilih menu lihat bahan mentah
@@ -60,6 +66,7 @@ Inventory & Money Management
         3. Akan muncul data dalam daftar bahan jika ditemukan
 
 ### Bahan dalam Proses
+
     1. Menambah bahan dalam proses
         1. Pada form tambah bahan dalam proses, terdapat relasi dengan data pada tabel bahan mentah, saat menambahkan bahan dalam proses maka jumlah pada bahan mentah akan berkurang
         2. Memilih menu lihat bahan dalam proses
@@ -92,6 +99,7 @@ Inventory & Money Management
         2. Data bahan dalam proses akan muncul
 
 ### Barang Jadi
+
     1. Menambah barang jadi
         1. Memilih menu tambah barang jadi
         2. Menambahkan data barang jadi seperti (nama_barang, stok, harga_jual, harga_modal, aktif, gambar), nama barang harus unik
@@ -120,6 +128,7 @@ Inventory & Money Management
         3. Jika ditemukan maka barang jadi akan ditampilkan
 
 ### Pemasukan
+
     1. Menambah pemasukan
         1. Memilih menu tambah pemasukan
         2. Mengisi data pemasukan seperti (nama, id_barang_jadi, jumlah, total, atas_nama, no_hp, deskripsi)
@@ -146,6 +155,7 @@ Inventory & Money Management
         3. Jika ditemukan maka datanya akan ditampilkan
 
 ### Pengeluaran
+
     1. Menambah pengeluaran
         1. Memilih menu tambah pengeluaran
         2. Mengisi data pengeluaran seperti (nama, deskripsi, cost, gambar bon/nota)
@@ -172,6 +182,7 @@ Inventory & Money Management
         3. Jika ditemukan maka datanya akan ditampilkan
 
 ### Hutang
+
     1. Menambah hutang
         1. Memilih menu tambah hutang
         2. Mengisi data hutang seperti (nama, jumlah(harga), deskripsi, atas_nama(penghutang/terhutang), no_telp, jenis(memberi/menerima), status(selesai/belum))
@@ -198,40 +209,43 @@ Inventory & Money Management
         3. Jika ditemukan maka datanya akan ditampilkan
 
 ## Instalasi (Windows 10)
-=== BAHAN-BAHAN ===
-- aplikasi XAMPP versi terbaru (link: https://www.apachefriends.org/index.html lalu klik tombol XAMPP for Windows)
-- file projek moneytory dalam bentuk file .zip, contoh: moneytory.zip
-- aplikasi Composer versi terbaru (link: https://getcomposer.org/Composer-Setup.exe)
 
+=== BAHAN-BAHAN ===
+
+-   aplikasi XAMPP versi terbaru (link: https://www.apachefriends.org/index.html lalu klik tombol XAMPP for Windows)
+-   file projek moneytory dalam bentuk file .zip, contoh: moneytory.zip
+-   aplikasi Composer versi terbaru (link: https://getcomposer.org/Composer-Setup.exe)
 
 === PERSIAPAN ===
-- buat folder baru di drive C:\ dengan nama folder yang diinginkan, misalkan moneytory
-- download aplikasi XAMPP lalu simpan ke folder moneytory
-- download aplikasi Composer lalu simpan ke folder moneytory
-- Simpan file proyek ke folder moneytory
 
+-   buat folder baru di drive C:\ dengan nama folder yang diinginkan, misalkan moneytory
+-   download aplikasi XAMPP lalu simpan ke folder moneytory
+-   download aplikasi Composer lalu simpan ke folder moneytory
+-   Simpan file proyek ke folder moneytory
 
 === INSTALASI ===
+
 1. Mengekstrak file proyek
     - ekstrak file proyek yang berbentuk .zip pada folder yang diinginkan, misalkan di C:\moneytory\
 2. Menginstall XAMPP, [video tutorial](https://www.youtube.com/watch?v=Y7Eg3oM6mCk)
     - install aplikasi XAMPP ke direktori C:\xampp\
     - buka aplikasi xampp dan jalankan service Apache dan MySQL dengan menekan tombol [Start] pada masing-masing service
 3. Menginstall Composer, [video tutorial](https://www.youtube.com/watch?v=LHgDEUkbuew)
-2. Membuat database, [video tutorial](https://www.youtube.com/watch?v=j1WVRtcauqw)
+4. Membuat database, [video tutorial](https://www.youtube.com/watch?v=j1WVRtcauqw)
     - Klik tombol [Admin] pada bagian service MySQL, maka akan terbuka tab pada web browser yang akan mengarahkan pada halaman phpmyadmin
     - tekan menu [New] yang ada pada bagian kiri atas
     - isi kolom [Database name] dengan nama moneytory lalu tekan Create
-4. Menambahkan data awal ke database
+5. Menambahkan data awal ke database
     - masuk ke folder C:\moneytory\backup\database
     - terdapat file bernama moneytory.sql lalu drag and drop ke halaman phpmyadmin, jika ada , jika berhasil maka database akan ditambahkan beberapa tabel
-5. Menginstall package yang diperlukan
+6. Menginstall package yang diperlukan
     - pindah ke direktori C:\moneytory\
     - tekan tombol Shift + Klik Kanan lalu pilih menu Open PowerShell menu here
     - ketikkan perintah "composer install" tanpa kutip dua, maka aplikasi composer akan menginstall beberapa package (semacam plugin) pada proyek, tunggu saja beberapa saat
+    - ada file bernama .env.example, duplikat file tersebut dengan melakukan copy dan paste, akan terbuat file baru bernama .env copy.example, ganti nama menjadi .env
     - ketikkan "php artisan key:generate"
     - ketikkan "php artisan storage:link"
-6. Menjalankan aplikasi
+7. Menjalankan aplikasi
     - masih pada direktori yang sama di PowerShell, ketikkan perintah "php artisan serve" tanpa kutip dua, untuk menjalankan proyek
     - buka web browser favoritmu dan ketikkan 127.0.0.1:8000 pada kolom pencarian
     - jika berhasil maka aplikasi berhasil diinstall
